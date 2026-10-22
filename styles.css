@@ -1,0 +1,112 @@
+/* Workout app look. Section colors come from the workout documents:
+   warm-up FCE4D6 / F4B183, workout DDEBF7 / 9DC3E6, cool-down E2EFDA / A9D18E */
+:root{
+  --bg:#f6f3ee; --ink:#1b1b1b; --muted:#555; --card:#ffffff; --line:#cfc8b8;
+  --warm-fill:#FCE4D6; --warm-line:#F4B183;
+  --work-fill:#DDEBF7; --work-line:#9DC3E6;
+  --cool-fill:#E2EFDA; --cool-line:#A9D18E;
+  --fill:var(--work-fill); --edge:var(--work-line);
+  --btn:#1c2633; --btn-ink:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;line-height:1.35}
+body{min-height:100vh;min-height:100dvh}
+button{font:inherit;color:inherit;cursor:pointer}
+input{font:inherit}
+[hidden]{display:none!important}
+
+/* ---------- generic ---------- */
+.screen{max-width:980px;margin:0 auto;padding:16px 16px calc(24px + env(safe-area-inset-bottom))}
+h1{font-size:26px;margin:4px 0 2px}
+.sub{margin:0 0 14px;color:var(--muted)}
+.btn{min-height:52px;padding:10px 18px;border:2px solid var(--btn);border-radius:12px;background:var(--btn);color:var(--btn-ink);font-weight:700;font-size:18px}
+.btn.alt{background:#fff;color:var(--btn)}
+.btn.small{min-height:44px;font-size:16px;padding:8px 14px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible,input:focus-visible,.row:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.link{background:none;border:0;padding:8px 0;color:#1d4ed8;text-decoration:underline;font-size:16px}
+
+/* ---------- safety screen ---------- */
+.safety ol{padding-left:22px;font-size:20px}
+.safety li{margin:10px 0}
+
+/* ---------- home ---------- */
+.slots{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+@media (min-width:640px){.slots{grid-template-columns:1fr 1fr}}
+.slot{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px}
+.slot h2{font-size:16px;margin:0 0 8px;color:var(--muted);text-transform:none}
+.slot label{display:block;font-size:14px;color:var(--muted);margin:8px 0 2px}
+.slot input[type=text]{width:100%;min-height:46px;padding:8px 10px;border:2px solid var(--line);border-radius:10px;font-size:18px}
+.seg{display:flex;gap:8px;margin-top:6px}
+.seg .btn{flex:1}
+.seg .btn[aria-pressed=true]{background:var(--btn);color:#fff}
+.seg .btn[aria-pressed=false]{background:#fff;color:var(--btn)}
+.stepper{display:flex;align-items:center;gap:10px;margin-top:4px}
+.stepper b{min-width:64px;text-align:center;font-size:18px}
+
+.sec{border:2px solid var(--edge);background:var(--fill);border-radius:14px;padding:10px 12px;margin:12px 0}
+.sec.warm{--fill:var(--warm-fill);--edge:var(--warm-line)}
+.sec.work{--fill:var(--work-fill);--edge:var(--work-line)}
+.sec.cool{--fill:var(--cool-fill);--edge:var(--cool-line)}
+.sec h2{font-size:20px;margin:0 0 6px}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;min-height:48px;padding:8px 10px;background:rgba(255,255,255,.75);border:1px solid var(--edge);border-radius:10px}
+.row .n{font-weight:700;min-width:1.6em}
+.row .who{display:block;font-size:14px;color:var(--muted)}
+.row .t{flex:1}
+.toggle{display:flex;align-items:center;gap:10px;margin:2px 0 8px;font-size:17px}
+.toggle .btn{min-height:44px;font-size:16px}
+.start{width:100%;margin:12px 0}
+.verse{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;margin:12px 0;font-style:italic}
+.verse .btn{margin-top:8px;font-style:normal}
+
+/* ---------- play ---------- */
+#play{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;background:var(--bg);
+  padding-bottom:env(safe-area-inset-bottom)}
+#play.warm{--fill:var(--warm-fill);--edge:var(--warm-line)}
+#play.work{--fill:var(--work-fill);--edge:var(--work-line)}
+#play.cool{--fill:var(--cool-fill);--edge:var(--cool-line)}
+.band{background:var(--fill);border-bottom:4px solid var(--edge);padding:10px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.band .secname{font-size:22px;font-weight:800}
+.band .prog{font-size:17px}
+.phase{text-align:center;font-size:22px;font-weight:700;padding:8px 16px 0}
+.cards{flex:1;display:flex;flex-direction:column;gap:12px;padding:12px 16px}
+@media (orientation:landscape) and (min-width:560px){.cards{flex-direction:row}}
+.card{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:var(--card);border:3px solid var(--edge);border-radius:16px;padding:12px;min-width:0}
+.card.dim{opacity:.55}
+.card .who{font-size:20px;font-weight:700}
+.card .mv{font-size:24px;font-weight:800;margin:2px 0}
+.card .amt{font-size:18px;color:var(--muted)}
+.card .big{font-size:clamp(52px,17vw,128px);font-weight:800;line-height:1.05;margin:6px 0;font-variant-numeric:tabular-nums}
+@media (orientation:landscape){.card .big{font-size:clamp(44px,15vh,110px)}}
+.card .st{font-size:20px;min-height:1.4em}
+.bar{width:100%;max-width:420px;height:10px;background:#e5e0d2;border-radius:6px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;width:0;background:var(--edge)}
+.card .btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+.easier{margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px;background:#faf8f3;text-align:left;font-size:16px;max-width:560px}
+.easier p{margin:0 0 6px}
+.mot{text-align:center;min-height:1.6em;padding:0 16px;font-size:20px;font-style:italic}
+.ctrls{display:flex;gap:10px;padding:10px 16px 16px}
+.ctrls .btn{flex:1}
+
+.finish{text-align:center;padding-top:15vh}
+.finish h1{font-size:34px}
+
+/* ---------- keep controls reachable; line cards up ---------- */
+.card{justify-content:flex-start}
+.card .btns{min-height:44px}
+.ctrls{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line)}
+@media (orientation:landscape) and (max-height:520px){
+  .band{padding:6px 16px}.band .secname{font-size:18px}.band .prog{font-size:15px}
+  .phase{font-size:18px;padding:4px 16px 0}
+  .cards{padding:8px 16px;gap:8px}
+  .card{padding:6px}
+  .card .who{font-size:16px}.card .mv{font-size:18px}.card .amt{font-size:15px}
+  .card .big{font-size:clamp(36px,16vh,72px);margin:2px 0}
+  .card .st{font-size:16px}.bar{margin:4px 0}
+  .btn{min-height:44px;font-size:16px;padding:6px 14px}
+  .ctrls{padding:6px 16px 8px}
+}

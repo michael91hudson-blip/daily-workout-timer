@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cue list</title>
+<style>
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;margin:0;padding:16px;background:#f6f3ee;color:#1b1b1b;line-height:1.4}
+  h1{font-size:22px;margin:0 0 6px}
+  p{margin:0 0 12px;max-width:70ch}
+  table{border-collapse:collapse;width:100%;background:#fff}
+  th,td{border:1px solid #cfc8b8;padding:8px 10px;text-align:left;vertical-align:top;font-size:15px}
+  th{background:#e9e3d4;position:sticky;top:0}
+  td.f{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;word-break:break-all}
+  .wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<h1>Cue list</h1>
+<p>Record each cue as an .m4a file, name it exactly as shown in the Filename column, and put it in the Voices folder. The app plays your recording instead of the phone voice. Cues without a recording keep the phone voice. Names typed in the app are always spoken by the phone voice.</p>
+<div class="wrap"><table><thead><tr><th>Filename</th><th>Words to record</th><th>Used for</th><th>Whose</th></tr></thead><tbody id="rows"></tbody></table></div>
+<script src="content.js"></script>
+<script>
+(function(){
+  var rows = document.getElementById('rows');
+  window.CONTENT.cues.forEach(function(c){
+    var tr = document.createElement('tr');
+    [['f','Voices/' + c.id + '.m4a'],['',c.text],['',c.where],['',c.who]].forEach(function(p){
+      var td = document.createElement('td');
+      if (p[0]) td.className = p[0];
+      td.textContent = p[1];
+      tr.appendChild(td);
+    });
+    rows.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
