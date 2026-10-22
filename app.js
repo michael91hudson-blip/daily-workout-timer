@@ -264,6 +264,7 @@
     c.barFill = h('i');
     c.bar = h('div', { class: 'bar' }, c.barFill);
     c.btns = h('div', { class: 'btns' });
+    c.timing = h('div', { class: 'timing' }, o.timing || '');
     c.doneBtn = null;
     if (o.done) { c.doneBtn = h('button', { class: 'btn small', type: 'button', onclick: o.done }, 'Done'); c.btns.appendChild(c.doneBtn); }
     c.easierBox = null;
@@ -273,11 +274,23 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.big, c.st, c.bar, c.btns, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.big, c.st, c.bar, c.btns, c.timing, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
 
+  /* seconds line under the buttons, from the document numbers (reps moves only) */
+  function timingText(m, pid) {
+    var c = m[pid].cfg;
+    if (c.kind !== 'reps') return '';
+    var up = N.bridgeUp, down = N.bridgeDown;
+    if (c.bridge) return 'Up ' + up + ' sec \u00b7 Hold ' + S.bridge + ' sec \u00b7 Down ' + down + ' sec';
+    if (c.yt) {
+      var rs = pid === 'his' ? N.ytHisRepSec : N.repSec, hold = rs - up - down;
+      return 'Up ' + up + ' sec \u00b7 ' + (hold > 0 ? 'Hold ' + hold + ' sec \u00b7 ' : '') + 'Down ' + down + ' sec';
+    }
+    return 'Down ' + down + ' sec \u00b7 Up ' + up + ' sec';
+  }
   function easierOf(m, pid) {
     var x = m[pid];
     return x.easier ? { text: x.easier, how: x.easierHow, howName: x.easierHowName } : null;
@@ -288,6 +301,7 @@
     function set(v) {
       S.bridge = Math.max(N.bridgeHoldMin, Math.min(N.bridgeHoldMax, v));
       store.set('her_bridge', S.bridge); val.textContent = S.bridge + ' sec';
+      card.timing.textContent = timingText(C.moves[3], 'her');
     }
     card.root.insertBefore(h('div', { class: 'stepper' }, h('span', {}, 'Top hold:'),
       h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Shorter hold', onclick: function () { set(S.bridge - 1); } }, '−'),
@@ -494,7 +508,7 @@
       var act = activeIn(s.set);
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0;
-        var card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: on ? easierOf(m, pid) : null });
+        var card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: on ? easierOf(m, pid) : null, timing: on ? timingText(m, pid) : '' });
         if (!on) card.root.className += ' dim';
         if (on && pid === 'her' && s.n === 4) bridgeStepper(card);
         s.cardsList.push({ card: card, on: on });
@@ -549,7 +563,7 @@
         t = mkTrack(pid, m);
         var c = m[pid].cfg;
         card = makeCard({
-          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid),
+          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid), timing: timingText(m, pid),
           done: c.done ? function () { trackDone(s, t); } : null
         });
         s.tracks.push(t);

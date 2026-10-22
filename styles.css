@@ -110,3 +110,6 @@ h1{font-size:26px;margin:4px 0 2px}
   .btn{min-height:44px;font-size:16px;padding:6px 14px}
   .ctrls{padding:6px 16px 8px}
 }
+
+/* timing line under the buttons */
+.card .timing{font-size:16px;color:var(--muted);margin-top:6px;min-height:1.2em}
