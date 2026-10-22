@@ -259,13 +259,12 @@
     c.who = h('div', { class: 'who' }, o.who || '');
     c.mv = h('div', { class: 'mv' }, o.mv || '');
     c.amt = h('div', { class: 'amt' }, o.amt || '');
-    c.cue = h('div', { class: 'cue' }, '');
     c.big = h('div', { class: 'big' }, '');
     c.st = h('div', { class: 'st' }, '');
     c.barFill = h('i');
     c.bar = h('div', { class: 'bar' }, c.barFill);
     c.btns = h('div', { class: 'btns' });
-    c.timing = h('div', { class: 'timing' }, o.timing || '');
+    c.strip = h('div', { class: o.rep ? 'strip' : 'strip none' }, '');
     c.doneBtn = null;
     if (o.done) { c.doneBtn = h('button', { class: 'btn small', type: 'button', onclick: o.done }, 'Done'); c.btns.appendChild(c.doneBtn); }
     c.easierBox = null;
@@ -275,23 +274,11 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.cue, c.big, c.st, c.bar, c.btns, c.timing, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
 
-  /* seconds line under the buttons, from the document numbers (reps moves only) */
-  function timingText(m, pid) {
-    var c = m[pid].cfg;
-    if (c.kind !== 'reps') return '';
-    var up = N.bridgeUp, down = N.bridgeDown;
-    if (c.bridge) return 'Up ' + up + ' sec \u00b7 Hold ' + S.bridge + ' sec \u00b7 Down ' + down + ' sec';
-    if (c.yt) {
-      var rs = pid === 'his' ? N.ytHisRepSec : N.repSec, hold = rs - up - down;
-      return 'Up ' + up + ' sec \u00b7 ' + (hold > 0 ? 'Hold ' + hold + ' sec \u00b7 ' : '') + 'Down ' + down + ' sec';
-    }
-    return 'Down ' + down + ' sec \u00b7 Up ' + up + ' sec';
-  }
   function easierOf(m, pid) {
     var x = m[pid];
     return x.easier ? { text: x.easier, how: x.easierHow, howName: x.easierHowName } : null;
@@ -302,7 +289,6 @@
     function set(v) {
       S.bridge = Math.max(N.bridgeHoldMin, Math.min(N.bridgeHoldMax, v));
       store.set('her_bridge', S.bridge); val.textContent = S.bridge + ' sec';
-      card.timing.textContent = timingText(C.moves[3], 'her');
     }
     card.root.insertBefore(h('div', { class: 'stepper' }, h('span', {}, 'Top hold:'),
       h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Shorter hold', onclick: function () { set(S.bridge - 1); } }, '−'),
@@ -376,10 +362,11 @@
       if (t.el >= p.dur) nextPhase(s, t);
     }
   }
+  function clearStrip(c) { c.strip.textContent = ''; c.strip.className = c.strip.className.indexOf('none') >= 0 ? 'strip none' : 'strip'; }
   function renderTrack(s, t, c, inactive) {
-    if (inactive) { c.cue.textContent = ''; c.big.textContent = 'Done'; c.st.textContent = 'Done — rest'; c.barFill.style.width = '100%'; return; }
+    if (inactive) { clearStrip(c); c.big.textContent = 'Done'; c.st.textContent = 'Done — rest'; c.barFill.style.width = '100%'; return; }
     if (t.fin) {
-      c.cue.textContent = ''; c.big.textContent = 'Hold'; c.st.textContent = 'Finished — wait for the others'; c.barFill.style.width = '100%';
+      clearStrip(c); c.big.textContent = 'Hold'; c.st.textContent = 'Finished — wait for the others'; c.barFill.style.width = '100%';
       if (c.doneBtn) c.doneBtn.disabled = true;
       return;
     }
@@ -395,13 +382,14 @@
           if (inRep < acc + p.seq[q][1]) { word = p.seq[q][0]; left = acc + p.seq[q][1] - inRep; break; }
           acc += p.seq[q][1];
         }
-        c.cue.textContent = word;
-        c.big.textContent = String(Math.max(1, Math.ceil(left - 0.001)));
-      } else { c.cue.textContent = ''; c.big.textContent = (ri + 1) + ' / ' + p.n; }
+        c.strip.textContent = word + ' ' + Math.max(1, Math.ceil(left - 0.001));
+        c.strip.className = 'strip ' + word.toLowerCase();
+      } else { clearStrip(c); }
+      c.big.textContent = (ri + 1) + ' / ' + p.n;
       c.st.textContent = lab + repTxt;
       frac = (t.el - ri * p.repSec) / p.repSec;
     } else {
-      c.cue.textContent = '';
+      clearStrip(c);
       c.big.textContent = String(Math.max(0, Math.ceil(p.dur - t.el)));
       c.st.textContent = p.label; frac = t.el / p.dur;
     }
@@ -519,7 +507,7 @@
       var act = activeIn(s.set);
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0;
-        var card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: on ? easierOf(m, pid) : null, timing: on ? timingText(m, pid) : '' });
+        var card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: on ? easierOf(m, pid) : null, rep: on && m[pid].cfg.kind === 'reps' });
         if (!on) card.root.className += ' dim';
         if (on && pid === 'her' && s.n === 4) bridgeStepper(card);
         s.cardsList.push({ card: card, on: on });
@@ -574,7 +562,7 @@
         t = mkTrack(pid, m);
         var c = m[pid].cfg;
         card = makeCard({
-          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid), timing: timingText(m, pid),
+          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid), rep: m[pid].cfg.kind === 'reps',
           done: c.done ? function () { trackDone(s, t); } : null
         });
         s.tracks.push(t);

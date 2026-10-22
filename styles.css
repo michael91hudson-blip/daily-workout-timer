@@ -111,9 +111,19 @@ h1{font-size:26px;margin:4px 0 2px}
   .ctrls{padding:6px 16px 8px}
 }
 
-/* timing line under the buttons */
-.card .timing{font-size:16px;color:var(--muted);margin-top:6px;min-height:1.2em}
-
-/* what to do right now, above the countdown */
-.card .cue{font-size:24px;font-weight:800;letter-spacing:.06em;min-height:1.2em}
-@media (orientation:landscape) and (max-height:520px){.card .cue{font-size:18px}}
+/* live countdown strip under the buttons */
+.card .strip{width:100%;max-width:420px;margin-top:8px;padding:8px 12px;border-radius:12px;min-height:56px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.card .strip.none{display:none}
+.card .strip.down{background:#BFDBFE;color:#1E3A8A}
+.card .strip.up{background:#FED7AA;color:#7C2D12}
+.card .strip.hold{background:#BBF7D0;color:#14532D}
+@media (orientation:landscape) and (max-height:520px){.card .strip{font-size:24px;min-height:40px;padding:4px 10px;margin-top:4px}}
+@media (orientation:landscape) and (max-height:520px){
+  .phase{display:none}
+  .card .who{font-size:14px}.card .mv{font-size:16px;margin:0}.card .amt{font-size:13px}
+  .card .big{font-size:clamp(30px,12vh,48px);margin:0}
+  .card .st{font-size:14px;min-height:1.2em}
+  .card .btns{margin-top:2px;min-height:0}.card .btns .btn{min-height:34px;font-size:14px;padding:4px 10px}
+  .bar{height:8px;margin:2px 0}
+  .cards{padding:6px 16px}
+}
