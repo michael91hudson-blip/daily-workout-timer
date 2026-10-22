@@ -111,7 +111,7 @@
     say: function (parts, o) {
       o = o || {};
       var self = this;
-      var it = { parts: parts, urgent: !!o.urgent, blocking: !!o.blocking, fits: o.fits || null, onDone: o.onDone || null, cancelled: false };
+      var it = { parts: parts, urgent: !!o.urgent, blocking: !!o.blocking, nocap: !!o.nocap, fits: o.fits || null, onDone: o.onDone || null, cancelled: false };
       it.estTotal = parts.reduce(function (a, p) { return a + self.estFit(p.text); }, 0);
       this.q.push(it);
       TESTLOG('queue', parts.map(function (p) { return p.text; }).join(' | '));
@@ -147,12 +147,24 @@
       if (idx < 0) return;
       this.play(this.q.splice(idx, 1)[0]);
     },
+    capTimer: null,
+    showCap: function (it) {
+      clearTimeout(this.capTimer);
+      if (!G.ui || !G.ui.cap) return;
+      if (it.nocap) { G.ui.cap.textContent = ''; return; }
+      G.ui.cap.textContent = it.parts.map(function (p) { return p.text; }).join(' ');
+    },
+    hideCapSoon: function () {
+      clearTimeout(this.capTimer);
+      this.capTimer = setTimeout(function () { if (G.ui && G.ui.cap) G.ui.cap.textContent = ''; }, 1500);
+    },
     play: function (it) {
       var self = this;
       this.cur = it;
+      this.showCap(it);
       (function run(i) {
         if (it.cancelled || i >= it.parts.length) {
-          self.cur = null; self.lastEnd = nowMs();
+          self.cur = null; self.lastEnd = nowMs(); self.hideCapSoon();
           if (!it.cancelled && it.onDone) { try { it.onDone(); } catch (e) { /* ignore */ } }
           return;
         }
@@ -252,13 +264,14 @@
     ui.phase = h('div', { class: 'phase' }, '');
     ui.cards = h('div', { class: 'cards' });
     ui.mot = h('div', { class: 'mot' }, '');
+    ui.cap = h('div', { class: 'cap' }, '');
     ui.skip = h('button', { class: 'btn', type: 'button', onclick: function () { advance(); } }, 'Skip');
     ui.plus = h('button', { class: 'btn alt', type: 'button', onclick: function () { plus10(); } }, '+10 sec');
     ui.home = h('button', { class: 'btn alt', type: 'button', onclick: function () { goHome(); } }, 'Home');
     ui.root = h('div', { id: 'play', class: sec },
       h('div', { class: 'band' }, ui.secname, ui.prog),
       ui.phase, ui.cards, ui.mot,
-      h('div', { class: 'ctrls' }, ui.skip, ui.plus, ui.home));
+      h('div', { class: 'dock' }, ui.cap, h('div', { class: 'ctrls' }, ui.skip, ui.plus, ui.home)));
     appEl.appendChild(ui.root);
     G.ui = ui;
     return ui;
@@ -376,8 +389,8 @@
       if (ri > t.repIdx) { t.repIdx = ri; t.upSaid = false; t.downSaid = false; if (!p.bridge) Snd.tick(); }
       if (p.bridge) {
         var inRep = t.el - ri * p.repSec;
-        if (!t.upSaid) { t.upSaid = true; Voice.say([{ id: 'up', text: 'Up.' }], { urgent: true }); }
-        if (!t.downSaid && inRep >= N.bridgeUp + p.hold) { t.downSaid = true; Voice.say([{ id: 'down', text: 'Down.' }], { urgent: true }); }
+        if (!t.upSaid) { t.upSaid = true; Voice.say([{ id: 'up', text: 'Up.' }], { urgent: true, nocap: true }); }
+        if (!t.downSaid && inRep >= N.bridgeUp + p.hold) { t.downSaid = true; Voice.say([{ id: 'down', text: 'Down.' }], { urgent: true, nocap: true }); }
       }
       if (t.el >= p.dur) nextPhase(s, t);
     } else {
@@ -493,7 +506,7 @@
     var m = nextMot();
     if (Voice.est(m.text) + 1 > windowEnd) { G.motPos--; return; }
     G.lastMot = n;
-    Voice.say([{ id: m.id, text: m.text }]);
+    Voice.say([{ id: m.id, text: m.text }], { nocap: true });
     G.ui.mot.textContent = m.text + (m.ref ? ' — ' + m.ref : '');
     s.motUntil = s.age + 7;
   }
@@ -516,13 +529,25 @@
     ];
     var who = namedList().map(shownName).join(' & ');
     s.card = makeCard({ who: who, mv: C.warmup.label, amt: C.warmup.spoken, rep: true });
-    ui.phase.textContent = 'Warm-up';
-    if (G.mode === 'day') Voice.say([{ id: 'safety', text: C.safety[1] }]);
-    Voice.say([{ id: 'section-warmup', text: 'Warm-up.' }]);
-    Voice.say([{ id: 'warmup-how', text: C.warmup.spoken }]);
+    ui.phase.textContent = 'Listen';
+    s.listenWait = 0;
+    if (G.mode === 'day') Voice.say([{ id: 'safety', text: C.safety[1] }], { blocking: true });
+    Voice.say([{ id: 'section-warmup', text: 'Warm-up.' }], { blocking: true });
+    Voice.say([{ id: 'warmup-how', text: C.warmup.spoken }], { blocking: true });
   };
   stepTick.warmup = function (s, dt) {
     s.age += dt;
+    if (s.listenWait !== null && s.listenWait !== undefined) {
+      if (Voice.blockingPending() && s.listenWait < 120) {
+        s.listenWait += dt;
+        G.ui.phase.textContent = 'Listen';
+        s.card.big.textContent = 'LISTEN'; s.card.barFill.style.width = '0%';
+        s.card.strip.textContent = 'LISTEN'; s.card.strip.className = 'strip wswitch';
+        s.card.st.textContent = 'Listen to the instructions';
+        return;
+      }
+      s.listenWait = null; G.ui.phase.textContent = 'Warm-up';
+    }
     var p = s.parts[s.pi], before = p.sec - s.pel;
     s.pel += dt;
     beepCross(before, p.sec - s.pel);
@@ -542,7 +567,7 @@
   /* ---------- step: get ready ---------- */
   stepEnter.ready = function (s) {
     var ui, isMove = s.what === 'move', ts = totalSets();
-    s.dur = N.ready; s.el = 0; s.age = 0; s.holdWait = 0; s.cardsList = [];
+    s.dur = N.ready; s.el = 0; s.age = 0; s.listenWait = 0; s.listen = false; s.cardsList = [];
     if (isMove) {
       var m = curMoves()[s.n - 1];
       ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + curMoves().length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
@@ -555,40 +580,46 @@
         if (on && m[pid].cfg.lower) lowerStepper(card);
         s.cardsList.push({ card: card, on: on });
       });
+      s.listen = (s.set === 1);
       // voice
-      if (!s.single && s.n === 1 && s.set === 1) Voice.say([{ id: 'section-workout', text: 'Workout.' }], { blocking: true });
-      if (!s.single && s.n === 1 && s.set === 2) Voice.say([{ id: 'set-2', text: 'Set two.' }], { blocking: true });
-      if (!s.single && s.n === 1 && s.set === 3) Voice.say([{ id: 'set-3', text: 'Set three.' }], { blocking: true });
-      Voice.say([{ id: 'move-' + s.n, text: 'Move ' + s.n }], { blocking: true });
+      if (!s.single && s.n === 1 && s.set === 1) Voice.say([{ id: 'section-workout', text: 'Workout.' }], { blocking: s.listen });
+      if (!s.single && s.n === 1 && s.set === 2) Voice.say([{ id: 'set-2', text: 'Set two.' }], { blocking: s.listen });
+      if (!s.single && s.n === 1 && s.set === 3) Voice.say([{ id: 'set-3', text: 'Set three.' }], { blocking: s.listen });
+      Voice.say([{ id: 'move-' + s.n, text: 'Move ' + s.n }], { blocking: s.listen });
       if (s.set === 1) queueCueGroups(act, function (pid, typ) { return m[pid].cues[typ]; }, ['how'], { blocking: true });
     } else {
       ui = scaffold('cool', 'Cool-down', 'Stretch ' + (s.k + 1) + ' of ' + s.total + ' · Round ' + s.round + ' of ' + N.stretchRounds);
+      s.listen = (s.round === 1);
       var who = namedList().map(shownName).join(' & ');
       var c2 = makeCard({ who: who, mv: s.st.name, amt: s.st.targets });
       s.cardsList.push({ card: c2, on: true });
-      if (!s.single && s.k === 0 && s.round === 1) Voice.say([{ id: 'section-cooldown', text: 'Cool-down.' }], { blocking: true });
-      if (!s.single && s.k === 0 && s.round === 2) Voice.say([{ id: 'round-2', text: 'Round two.' }], { blocking: true });
+      if (!s.single && s.k === 0 && s.round === 1) Voice.say([{ id: 'section-cooldown', text: 'Cool-down.' }], { blocking: s.listen });
+      if (!s.single && s.k === 0 && s.round === 2) Voice.say([{ id: 'round-2', text: 'Round two.' }], { blocking: s.listen });
       if (s.round === 1) Voice.say([{ id: s.st.cues.how.id, text: s.st.cues.how.text }], { blocking: true });
     }
-    ui.phase.textContent = 'Get ready';
+    ui.phase.textContent = s.listen ? 'Listen' : 'Get ready';
   };
   stepTick.ready = function (s, dt) {
     s.age += dt;
-    var rem = s.dur - s.el, shown;
-    if (rem <= 3.3 && Voice.blockingPending() && s.holdWait < 90) {
-      s.holdWait += dt;
-      shown = '…';
-      G.ui.phase.textContent = 'Get ready — listen';
-    } else {
-      var before = s.dur - s.el;
-      s.el += dt;
-      beepCross(before, s.dur - s.el);
-      shown = String(Math.max(0, Math.ceil(s.dur - s.el)));
-      G.ui.phase.textContent = 'Get ready';
+    var shown;
+    if (s.listen && Voice.blockingPending() && s.listenWait < 120) {
+      s.listenWait += dt;
+      G.ui.phase.textContent = 'Listen';
+      s.cardsList.forEach(function (x) {
+        x.card.big.textContent = x.on ? 'LISTEN' : 'Done';
+        x.card.st.textContent = x.on ? 'Listen to how to do it' : 'Done \u2014 rest';
+        x.card.barFill.style.width = '0%';
+      });
+      return;
     }
+    var before = s.dur - s.el;
+    s.el += dt;
+    beepCross(before, s.dur - s.el);
+    shown = String(Math.max(0, Math.ceil(s.dur - s.el)));
+    G.ui.phase.textContent = 'Get ready';
     s.cardsList.forEach(function (x) {
       x.card.big.textContent = x.on ? shown : 'Done';
-      x.card.st.textContent = x.on ? 'Get into position' : 'Done — rest';
+      x.card.st.textContent = x.on ? 'Get into position' : 'Done \u2014 rest';
       x.card.barFill.style.width = Math.min(1, s.el / s.dur) * 100 + '%';
     });
     if (s.el >= s.dur) advance();
@@ -639,7 +670,7 @@
     s.dur = N.rest; s.el = 0; s.age = 0;
     s.card = makeCard({ who: namedList().map(shownName).join(' & '), mv: 'Rest', amt: 'Next: set ' + (s.set + 1) });
     ui.phase.textContent = 'Rest';
-    Voice.say([{ id: 'rest', text: 'Rest.' }]);
+    Voice.say([{ id: 'rest', text: 'Rest.' }], { nocap: true });
   };
   stepTick.rest = function (s, dt) {
     s.age += dt; clearMot(s);
@@ -677,7 +708,7 @@
     appEl.appendChild(h('div', { class: 'screen finish' },
       h('h1', {}, s.msg || 'Done'),
       h('button', { class: 'btn start', type: 'button', onclick: function () { goHome(); } }, 'Home')));
-    if (s.voice) Voice.say([{ id: DONE_CUE[S.day], text: curDay().title.split(':')[0] + ' complete.' }]);
+    if (s.voice) Voice.say([{ id: DONE_CUE[S.day], text: curDay().title.split(':')[0] + ' complete.' }], { nocap: true });
   };
   stepTick.finish = function () {};
 

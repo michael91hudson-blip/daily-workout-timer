@@ -89,6 +89,10 @@ h1{font-size:26px;margin:4px 0 2px}
 .easier{margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px;background:#faf8f3;text-align:left;font-size:16px;max-width:560px}
 .easier p{margin:0 0 6px}
 .mot{text-align:center;min-height:1.6em;padding:0 16px;font-size:20px;font-style:italic}
+.cap{margin:6px 16px;padding:12px 14px;border-radius:12px;background:#111827;color:#fff;font-size:24px;line-height:1.35;text-align:left;max-height:30vh;overflow-y:auto}
+.cap:empty{display:none}
+.dock{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line)}
+.dock .ctrls{position:static;border-top:0}
 .ctrls{display:flex;gap:10px;padding:10px 16px 16px}
 .ctrls .btn{flex:1}
 
@@ -117,6 +121,7 @@ h1{font-size:26px;margin:4px 0 2px}
 .card .strip.down{background:#BFDBFE;color:#1E3A8A}
 .card .strip.up{background:#FED7AA;color:#7C2D12}
 .card .strip.hold{background:#BBF7D0;color:#14532D}
+@media (orientation:landscape) and (max-height:520px){.cap{font-size:18px;padding:6px 10px;margin:4px 16px;max-height:34vh}}
 @media (orientation:landscape) and (max-height:520px){.card .strip{font-size:24px;min-height:40px;padding:4px 10px;margin-top:4px}}
 @media (orientation:landscape) and (max-height:520px){
   .phase{display:none}
