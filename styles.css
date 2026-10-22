@@ -113,3 +113,7 @@ h1{font-size:26px;margin:4px 0 2px}
 
 /* timing line under the buttons */
 .card .timing{font-size:16px;color:var(--muted);margin-top:6px;min-height:1.2em}
+
+/* what to do right now, above the countdown */
+.card .cue{font-size:24px;font-weight:800;letter-spacing:.06em;min-height:1.2em}
+@media (orientation:landscape) and (max-height:520px){.card .cue{font-size:18px}}

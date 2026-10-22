@@ -259,6 +259,7 @@
     c.who = h('div', { class: 'who' }, o.who || '');
     c.mv = h('div', { class: 'mv' }, o.mv || '');
     c.amt = h('div', { class: 'amt' }, o.amt || '');
+    c.cue = h('div', { class: 'cue' }, '');
     c.big = h('div', { class: 'big' }, '');
     c.st = h('div', { class: 'st' }, '');
     c.barFill = h('i');
@@ -274,7 +275,7 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.big, c.st, c.bar, c.btns, c.timing, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.cue, c.big, c.st, c.bar, c.btns, c.timing, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
@@ -320,7 +321,11 @@
     var c = m[pid].cfg, ph = [];
     function rep(label) {
       var repSec = c.bridge ? (N.bridgeUp + S.bridge + N.bridgeDown) : c.repSec;
-      return { k: 'reps', n: c.top, repSec: repSec, dur: c.top * repSec, label: label, done: !!c.done, bridge: !!c.bridge, hold: S.bridge };
+      var up = N.bridgeUp, down = N.bridgeDown, seq;
+      if (c.bridge) seq = [['UP', up], ['HOLD', S.bridge], ['DOWN', down]];
+      else if (c.yt) { var hd = c.repSec - up - down; seq = [['UP', up]]; if (hd > 0) seq.push(['HOLD', hd]); seq.push(['DOWN', down]); }
+      else seq = [['DOWN', down], ['UP', up]];
+      return { k: 'reps', n: c.top, repSec: repSec, dur: c.top * repSec, label: label, done: !!c.done, bridge: !!c.bridge, hold: S.bridge, seq: seq };
     }
     if (c.kind === 'hold') ph.push({ k: 'hold', dur: c.sec, beep: true, label: 'Hold' });
     else if (c.perSide) ph.push(rep('Side 1'), { k: 'pause', dur: N.pause, beep: true, label: 'Switch sides', cue: 'switch-sides' }, rep('Side 2'));
@@ -372,9 +377,9 @@
     }
   }
   function renderTrack(s, t, c, inactive) {
-    if (inactive) { c.big.textContent = 'Done'; c.st.textContent = 'Done — rest'; c.barFill.style.width = '100%'; return; }
+    if (inactive) { c.cue.textContent = ''; c.big.textContent = 'Done'; c.st.textContent = 'Done — rest'; c.barFill.style.width = '100%'; return; }
     if (t.fin) {
-      c.big.textContent = 'Hold'; c.st.textContent = 'Finished — wait for the others'; c.barFill.style.width = '100%';
+      c.cue.textContent = ''; c.big.textContent = 'Hold'; c.st.textContent = 'Finished — wait for the others'; c.barFill.style.width = '100%';
       if (c.doneBtn) c.doneBtn.disabled = true;
       return;
     }
@@ -383,14 +388,20 @@
       var ri = Math.max(0, Math.min(Math.floor(t.el / p.repSec), p.n - 1));
       var repTxt = 'Rep ' + (ri + 1) + ' of ' + p.n;
       var lab = p.label ? p.label + ' · ' : '';
-      if (p.bridge) {
-        var inRep = t.el - ri * p.repSec;
-        if (inRep < N.bridgeUp) { c.big.textContent = (ri + 1) + ' / ' + p.n; c.st.textContent = lab + repTxt + ' · Up'; }
-        else if (inRep < N.bridgeUp + p.hold) { c.big.textContent = String(Math.ceil(N.bridgeUp + p.hold - inRep)); c.st.textContent = lab + repTxt + ' · Hold'; }
-        else { c.big.textContent = (ri + 1) + ' / ' + p.n; c.st.textContent = lab + repTxt + ' · Down'; }
-      } else { c.big.textContent = (ri + 1) + ' / ' + p.n; c.st.textContent = lab + repTxt; }
+      var inRep = t.el - ri * p.repSec;
+      if (p.seq) {
+        var acc = 0, word = p.seq[p.seq.length - 1][0], left = 1, q;
+        for (q = 0; q < p.seq.length; q++) {
+          if (inRep < acc + p.seq[q][1]) { word = p.seq[q][0]; left = acc + p.seq[q][1] - inRep; break; }
+          acc += p.seq[q][1];
+        }
+        c.cue.textContent = word;
+        c.big.textContent = String(Math.max(1, Math.ceil(left - 0.001)));
+      } else { c.cue.textContent = ''; c.big.textContent = (ri + 1) + ' / ' + p.n; }
+      c.st.textContent = lab + repTxt;
       frac = (t.el - ri * p.repSec) / p.repSec;
     } else {
+      c.cue.textContent = '';
       c.big.textContent = String(Math.max(0, Math.ceil(p.dur - t.el)));
       c.st.textContent = p.label; frac = t.el / p.dur;
     }
