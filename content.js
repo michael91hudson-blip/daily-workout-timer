@@ -1212,8 +1212,8 @@ window.CONTENT = {
  ],
  "warmup": {
   "label": "Warm-up (5 min)",
-  "sentence": "Warm-up (5 min): walk in place, then do arm circles and leg swings.",
-  "spoken": "Walk in place, then do arm circles and leg swings."
+  "sentence": "Warm-up (5 min): walk in place for 3 minutes, then do arm circles for 30 seconds and leg swings for 30 seconds per leg.",
+  "spoken": "Walk in place for 3 minutes, then do arm circles for 30 seconds and leg swings for 30 seconds per leg."
  },
  "safety": [
   "Check with your doctor before starting.",
@@ -1616,8 +1616,26 @@ window.CONTENT = {
   },
   {
    "id": "warmup-how",
-   "text": "Walk in place, then do arm circles and leg swings.",
+   "text": "Walk in place for 3 minutes, then do arm circles for 30 seconds and leg swings for 30 seconds per leg.",
    "where": "Warm-up instructions",
+   "who": "Both"
+  },
+  {
+   "id": "warmup-arms",
+   "text": "Arm circles.",
+   "where": "Warm-up: switch to arm circles",
+   "who": "Both"
+  },
+  {
+   "id": "warmup-legs",
+   "text": "Leg swings.",
+   "where": "Warm-up: switch to leg swings",
+   "who": "Both"
+  },
+  {
+   "id": "switch-legs",
+   "text": "Switch legs.",
+   "where": "Warm-up: switch legs",
    "who": "Both"
   },
   {
@@ -2498,7 +2516,11 @@ window.CONTENT = {
   "pause": 5,
   "hold": 30,
   "plus": 10,
-  "warmup": 300,
+  "warmWalk": 180,
+  "warmArms": 30,
+  "warmLeg": 30,
+  "warmSwitch": 10,
+  "warmLegSwitch": 5,
   "repSec": 4,
   "ytHisRepSec": 6,
   "catCowRounds": 8,

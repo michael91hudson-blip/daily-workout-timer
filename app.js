@@ -504,20 +504,39 @@
 
   stepEnter.warmup = function (s) {
     var ui = scaffold('warm', 'Warm-up', C.warmup.label);
-    s.dur = N.warmup; s.el = 0; s.age = 0;
+    s.age = 0; s.pi = 0; s.pel = 0;
+    s.parts = [
+      { part: 1, name: 'WALK IN PLACE', sec: N.warmWalk },
+      { gap: true, next: 'Arm circles', cue: { id: 'warmup-arms', text: 'Arm circles.' }, sec: N.warmSwitch },
+      { part: 2, name: 'ARM CIRCLES', sec: N.warmArms },
+      { gap: true, next: 'Leg swings', cue: { id: 'warmup-legs', text: 'Leg swings.' }, sec: N.warmSwitch },
+      { part: 3, name: 'LEG SWINGS \u00b7 LEG 1', sec: N.warmLeg },
+      { gap: true, next: 'Leg 2', cue: { id: 'switch-legs', text: 'Switch legs.' }, sec: N.warmLegSwitch },
+      { part: 4, name: 'LEG SWINGS \u00b7 LEG 2', sec: N.warmLeg }
+    ];
     var who = namedList().map(shownName).join(' & ');
-    s.card = makeCard({ who: who, mv: C.warmup.label, amt: C.warmup.spoken });
+    s.card = makeCard({ who: who, mv: C.warmup.label, amt: C.warmup.spoken, rep: true });
     ui.phase.textContent = 'Warm-up';
-    var parts = [];
     if (G.mode === 'day') Voice.say([{ id: 'safety', text: C.safety[1] }]);
     Voice.say([{ id: 'section-warmup', text: 'Warm-up.' }]);
     Voice.say([{ id: 'warmup-how', text: C.warmup.spoken }]);
   };
   stepTick.warmup = function (s, dt) {
-    s.age += dt; s.el += dt;
-    s.card.big.textContent = fmtClock(s.dur - s.el);
-    s.card.barFill.style.width = Math.min(1, s.el / s.dur) * 100 + '%';
-    if (s.el >= s.dur) advance();
+    s.age += dt;
+    var p = s.parts[s.pi], before = p.sec - s.pel;
+    s.pel += dt;
+    beepCross(before, p.sec - s.pel);
+    var card = s.card;
+    card.big.textContent = fmtClock(p.sec - s.pel);
+    card.barFill.style.width = Math.min(1, s.pel / p.sec) * 100 + '%';
+    if (p.gap) { card.strip.textContent = 'SWITCH'; card.strip.className = 'strip wswitch'; card.st.textContent = 'Next: ' + p.next; }
+    else { card.strip.textContent = p.name; card.strip.className = 'strip wpart'; card.st.textContent = 'Part ' + p.part + ' of 4'; }
+    if (s.pel >= p.sec) {
+      s.pi++; s.pel = 0;
+      if (s.pi >= s.parts.length) { advance(); return; }
+      var q = s.parts[s.pi];
+      if (q.gap) Voice.say([q.cue], { urgent: true });
+    }
   };
 
   /* ---------- step: get ready ---------- */
@@ -680,7 +699,8 @@
   function plus10() {
     var s = G.step;
     if (!s) return;
-    if (s.t === 'ready' || s.t === 'warmup') s.dur += N.plus;
+    if (s.t === 'ready') s.dur += N.plus;
+    else if (s.t === 'warmup') s.parts[s.pi].sec += N.plus;
     else if (s.t === 'rest') { if (s.dur + N.plus <= N.restMax) s.dur += N.plus; }
     else if (s.frozen !== undefined) s.frozen += N.plus;
     TESTLOG('plus10');
