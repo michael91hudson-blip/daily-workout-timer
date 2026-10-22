@@ -1,9 +1,1215 @@
 /* All words and numbers for the app. Text copied from the workout documents (Oct 22, 2026). */
 window.CONTENT = {
- "day": {
-  "title": "Day B: Legs + Back",
-  "subtitle": "Works thighs, glutes, calves, and upper and lower back."
- },
+ "days": [
+  {
+   "key": "A",
+   "title": "Day A: Push + Core",
+   "subtitle": "Works chest, shoulders, arms, and abs.",
+   "moves": [
+    {
+     "her": {
+      "name": "Knee Pushups",
+      "amount": "8–12",
+      "how": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+      "easier": "Hands on the counter",
+      "easierHow": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
+      "easierHowName": "Counter Pushup",
+      "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
+      "feel": "Chest, arms, shoulders, and abs",
+      "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m1-her-how",
+        "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up."
+       },
+       "feel": {
+        "id": "daya-m1-both-feel",
+        "text": "You should feel it in: Chest, arms, shoulders, and abs"
+       },
+       "fix": {
+        "id": "daya-m1-both-fix",
+        "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide."
+       }
+      }
+     },
+     "his": {
+      "name": "Slow Floor Pushups",
+      "amount": "8–12",
+      "how": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag.",
+      "easier": "Knee pushups",
+      "easierHow": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+      "easierHowName": "Knee Pushup",
+      "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
+      "feel": "Chest, arms, shoulders, and abs",
+      "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 3,
+       "down": 2,
+       "lower": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m1-his-how",
+        "text": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag."
+       },
+       "feel": {
+        "id": "daya-m1-both-feel",
+        "text": "You should feel it in: Chest, arms, shoulders, and abs"
+       },
+       "fix": {
+        "id": "daya-m1-both-fix",
+        "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide."
+       }
+      }
+     },
+     "n": 1
+    },
+    {
+     "her": {
+      "name": "Wall Scapular Pushups",
+      "amount": "8–12",
+      "how": "Hands on the wall, arms straight. Let your chest sink toward the wall by squeezing your shoulder blades together, then spread them apart. Keep your elbows locked.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Serratus anterior (along your ribs, under your armpits)",
+      "feel": "Muscles along your ribs",
+      "fix": "Elbows bending. Keep them locked.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m2-her-how",
+        "text": "Hands on the wall, arms straight. Let your chest sink toward the wall by squeezing your shoulder blades together, then spread them apart. Keep your elbows locked."
+       },
+       "feel": {
+        "id": "daya-m2-both-feel",
+        "text": "You should feel it in: Muscles along your ribs"
+       },
+       "fix": {
+        "id": "daya-m2-both-fix",
+        "text": "Should not feel, or fix: Elbows bending. Keep them locked."
+       }
+      }
+     },
+     "his": {
+      "name": "Scapular Pushups",
+      "amount": "10",
+      "how": "Hold a high plank with arms straight. Let your chest sink by squeezing your shoulder blades together, then push the floor away to spread them. Keep your elbows locked.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Serratus anterior (along your ribs, under your armpits)",
+      "feel": "Muscles along your ribs",
+      "fix": "Elbows bending. Keep them locked.",
+      "cfg": {
+       "kind": "reps",
+       "top": 10,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m2-his-how",
+        "text": "Hold a high plank with arms straight. Let your chest sink by squeezing your shoulder blades together, then push the floor away to spread them. Keep your elbows locked."
+       },
+       "feel": {
+        "id": "daya-m2-both-feel",
+        "text": "You should feel it in: Muscles along your ribs"
+       },
+       "fix": {
+        "id": "daya-m2-both-fix",
+        "text": "Should not feel, or fix: Elbows bending. Keep them locked."
+       }
+      }
+     },
+     "n": 2
+    },
+    {
+     "her": {
+      "name": "Floor Plank",
+      "amount": "20 sec",
+      "how": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+      "easier": "Knees-down plank",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis (front of belly), transverse abdominis (deep core, under the rectus abdominis), glutes (buttocks)",
+      "feel": "Abs, shoulders, and arms",
+      "fix": "Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m3-both-how",
+        "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing."
+       },
+       "feel": {
+        "id": "daya-m3-both-feel",
+        "text": "You should feel it in: Abs, shoulders, and arms"
+       },
+       "fix": {
+        "id": "daya-m3-both-fix",
+        "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful."
+       }
+      }
+     },
+     "his": {
+      "name": "Floor Plank",
+      "amount": "20 sec",
+      "how": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+      "easier": "Knees-down plank",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis (front of belly), transverse abdominis (deep core, under the rectus abdominis), glutes (buttocks)",
+      "feel": "Abs, shoulders, and arms",
+      "fix": "Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m3-both-how",
+        "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing."
+       },
+       "feel": {
+        "id": "daya-m3-both-feel",
+        "text": "You should feel it in: Abs, shoulders, and arms"
+       },
+       "fix": {
+        "id": "daya-m3-both-fix",
+        "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful."
+       }
+      }
+     },
+     "n": 3
+    },
+    {
+     "her": {
+      "name": "Crunches",
+      "amount": "20 sec",
+      "how": "On your back, knees bent at about 90° and feet flat on the floor, arms crossed over your chest. Slowly lift your shoulder blades off the floor, without sitting all the way up, then lower. Breathe easily.",
+      "easier": "Shorter set",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Abdominal muscles (front of belly)",
+      "feel": "Your abs",
+      "fix": "Neck strain. Keep your arms crossed and don't pull on your head.",
+      "cfg": {
+       "kind": "timed",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m4-both-how",
+        "text": "On your back, knees bent at about 90° and feet flat on the floor, arms crossed over your chest. Slowly lift your shoulder blades off the floor, without sitting all the way up, then lower. Breathe easily."
+       },
+       "feel": {
+        "id": "daya-m4-both-feel",
+        "text": "You should feel it in: Your abs"
+       },
+       "fix": {
+        "id": "daya-m4-both-fix",
+        "text": "Should not feel, or fix: Neck strain. Keep your arms crossed and don't pull on your head."
+       }
+      }
+     },
+     "his": {
+      "name": "Crunches",
+      "amount": "30 sec",
+      "how": "On your back, knees bent at about 90° and feet flat on the floor, arms crossed over your chest. Slowly lift your shoulder blades off the floor, without sitting all the way up, then lower. Breathe easily.",
+      "easier": "Shorter set",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Abdominal muscles (front of belly)",
+      "feel": "Your abs",
+      "fix": "Neck strain. Keep your arms crossed and don't pull on your head.",
+      "cfg": {
+       "kind": "timed",
+       "sec": 30
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m4-both-how",
+        "text": "On your back, knees bent at about 90° and feet flat on the floor, arms crossed over your chest. Slowly lift your shoulder blades off the floor, without sitting all the way up, then lower. Breathe easily."
+       },
+       "feel": {
+        "id": "daya-m4-both-feel",
+        "text": "You should feel it in: Your abs"
+       },
+       "fix": {
+        "id": "daya-m4-both-fix",
+        "text": "Should not feel, or fix: Neck strain. Keep your arms crossed and don't pull on your head."
+       }
+      }
+     },
+     "n": 4
+    },
+    {
+     "her": {
+      "name": "Heel Taps",
+      "amount": "20 sec",
+      "how": "On your back, knees bent and feet flat, chin slightly tucked, shoulders slightly lifted, lower back flat on the floor. Bend sideways to reach one hand to the same-side heel, then switch.",
+      "easier": "Shorter set",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Obliques (sides of your waist), rectus abdominis, transverse abdominis",
+      "feel": "Abs along the sides of your waist",
+      "fix": "Chin dropping back or lower back lifting. Stop if it hurts.",
+      "cfg": {
+       "kind": "timed",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m5-both-how",
+        "text": "On your back, knees bent and feet flat, chin slightly tucked, shoulders slightly lifted, lower back flat on the floor. Bend sideways to reach one hand to the same-side heel, then switch."
+       },
+       "feel": {
+        "id": "daya-m5-both-feel",
+        "text": "You should feel it in: Abs along the sides of your waist"
+       },
+       "fix": {
+        "id": "daya-m5-both-fix",
+        "text": "Should not feel, or fix: Chin dropping back or lower back lifting. Stop if it hurts."
+       }
+      }
+     },
+     "his": {
+      "name": "Heel Taps",
+      "amount": "30 sec",
+      "how": "On your back, knees bent and feet flat, chin slightly tucked, shoulders slightly lifted, lower back flat on the floor. Bend sideways to reach one hand to the same-side heel, then switch.",
+      "easier": "Shorter set",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Obliques (sides of your waist), rectus abdominis, transverse abdominis",
+      "feel": "Abs along the sides of your waist",
+      "fix": "Chin dropping back or lower back lifting. Stop if it hurts.",
+      "cfg": {
+       "kind": "timed",
+       "sec": 30
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m5-both-how",
+        "text": "On your back, knees bent and feet flat, chin slightly tucked, shoulders slightly lifted, lower back flat on the floor. Bend sideways to reach one hand to the same-side heel, then switch."
+       },
+       "feel": {
+        "id": "daya-m5-both-feel",
+        "text": "You should feel it in: Abs along the sides of your waist"
+       },
+       "fix": {
+        "id": "daya-m5-both-fix",
+        "text": "Should not feel, or fix: Chin dropping back or lower back lifting. Stop if it hurts."
+       }
+      }
+     },
+     "n": 5
+    },
+    {
+     "her": null,
+     "his": {
+      "name": "Pike Pushups (feet far back)",
+      "amount": "6",
+      "how": "Start in an upside-down V: hands shoulder-width apart on the floor, hips high, and feet far back so the V is wide and shallow. Bend your elbows to lower your head toward the floor just in front of your hands, only as far as you can control, then press back up.",
+      "easier": "Bend your arms less",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Anterior and medial deltoids (front and side of shoulder), triceps (back of upper arm)",
+      "feel": "Shoulders, arms, and neck muscles working",
+      "fix": "Elbows flaring out to the sides. Keep them slightly angled in.",
+      "cfg": {
+       "kind": "reps",
+       "top": 6,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m6-his-how",
+        "text": "Start in an upside-down V: hands shoulder-width apart on the floor, hips high, and feet far back so the V is wide and shallow. Bend your elbows to lower your head toward the floor just in front of your hands, only as far as you can control, then press back up."
+       },
+       "feel": {
+        "id": "daya-m6-his-feel",
+        "text": "You should feel it in: Shoulders, arms, and neck muscles working"
+       },
+       "fix": {
+        "id": "daya-m6-his-fix",
+        "text": "Should not feel, or fix: Elbows flaring out to the sides. Keep them slightly angled in."
+       }
+      }
+     },
+     "n": 6
+    },
+    {
+     "her": null,
+     "his": {
+      "name": "Side-Staggered Pushups",
+      "amount": "5/side",
+      "how": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm.",
+      "easier": "Bring the outside hand closer to your body",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "The same muscles as pushups, with more work for the arm under your chest",
+      "feel": "Mostly the arm under your chest",
+      "fix": "Body sagging. Keep it straight from head to heels.",
+      "cfg": {
+       "kind": "reps",
+       "top": 5,
+       "repSec": 5,
+       "perSide": true,
+       "pauseSec": 1,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "daya-m7-his-how",
+        "text": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm."
+       },
+       "feel": {
+        "id": "daya-m7-his-feel",
+        "text": "You should feel it in: Mostly the arm under your chest"
+       },
+       "fix": {
+        "id": "daya-m7-his-fix",
+        "text": "Should not feel, or fix: Body sagging. Keep it straight from head to heels."
+       }
+      }
+     },
+     "n": 7
+    }
+   ],
+   "shortSentence": "Short on time: chest, shoulder, and cat-cow.",
+   "shortKeys": [
+    "doorway-chest",
+    "cross-body-shoulder",
+    "cat-cow"
+   ]
+  },
+  {
+   "key": "B",
+   "title": "Day B: Legs + Back",
+   "subtitle": "Works thighs, glutes, calves, and upper and lower back.",
+   "moves": [
+    {
+     "her": {
+      "name": "Tempo Squats",
+      "amount": "8–12",
+      "how": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
+      "easier": "Chair Sit-to-Stands",
+      "easierHow": "Sit on a sturdy chair that isn't on wheels, feet flat and apart, hands together in front of your chest. Push through your feet to stand up fully and pause. Sit down slowly, taking about 3 seconds to go down (no hold at the bottom). Use your hands only if needed.",
+      "easierHowName": "Chair Sit-to-Stand",
+      "muscles": "Quadriceps (front of thigh, main muscle), glutes, hamstrings, adductors (inner thigh)",
+      "feel": "Thighs and hips",
+      "fix": "Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m1-both-how",
+        "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand."
+       },
+       "feel": {
+        "id": "dayb-m1-both-feel",
+        "text": "You should feel it in: Thighs and hips"
+       },
+       "fix": {
+        "id": "dayb-m1-both-fix",
+        "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep."
+       }
+      }
+     },
+     "his": {
+      "name": "Tempo Squats",
+      "amount": "8–12",
+      "how": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Quadriceps (front of thigh, main muscle), glutes, hamstrings, adductors (inner thigh)",
+      "feel": "Thighs and hips",
+      "fix": "Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m1-both-how",
+        "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand."
+       },
+       "feel": {
+        "id": "dayb-m1-both-feel",
+        "text": "You should feel it in: Thighs and hips"
+       },
+       "fix": {
+        "id": "dayb-m1-both-fix",
+        "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep."
+       }
+      }
+     },
+     "n": 1
+    },
+    {
+     "her": {
+      "name": "Wall Sit",
+      "amount": "15 sec",
+      "how": "Back and shoulders against the wall, feet a couple of steps out. Slide down to any knee bend you can manage, keeping your knees over your ankles, then hold.",
+      "easier": "Higher wall sit",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Quadriceps (front of thighs), hamstrings (back of thighs), gluteus maximus (buttocks)",
+      "feel": "Thighs, hips, and glutes",
+      "fix": "Knees drifting past your ankles. If your knees hurt, don't slide as far down.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 15
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m2-her-how",
+        "text": "Back and shoulders against the wall, feet a couple of steps out. Slide down to any knee bend you can manage, keeping your knees over your ankles, then hold."
+       },
+       "feel": {
+        "id": "dayb-m2-her-feel",
+        "text": "You should feel it in: Thighs, hips, and glutes"
+       },
+       "fix": {
+        "id": "dayb-m2-her-fix",
+        "text": "Should not feel, or fix: Knees drifting past your ankles. If your knees hurt, don't slide as far down."
+       }
+      }
+     },
+     "his": {
+      "name": "Reverse Lunges",
+      "amount": "8–12/side",
+      "how": "Step one foot back, landing on the ball of that foot (the padded part just behind your toes) with that heel lifted, and lower until your front knee is bent about 90°. Keep most of your weight in your front leg, with the front knee over your ankle, not past your toes. Push through your front foot to return.",
+      "easier": "Hold the counter",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Quadriceps (front of thigh), glutes (buttocks), hamstrings (back of thigh)",
+      "feel": "Thighs, legs, and hips",
+      "fix": "Front knee pushing past your toes. Sharp knee pain means stop.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m2-his-how",
+        "text": "Step one foot back, landing on the ball of that foot (the padded part just behind your toes) with that heel lifted, and lower until your front knee is bent about 90°. Keep most of your weight in your front leg, with the front knee over your ankle, not past your toes. Push through your front foot to return."
+       },
+       "feel": {
+        "id": "dayb-m2-his-feel",
+        "text": "You should feel it in: Thighs, legs, and hips"
+       },
+       "fix": {
+        "id": "dayb-m2-his-fix",
+        "text": "Should not feel, or fix: Front knee pushing past your toes. Sharp knee pain means stop."
+       }
+      }
+     },
+     "n": 2
+    },
+    {
+     "her": {
+      "name": "Calf Raises",
+      "amount": "12",
+      "how": "Stand holding the counter. Rise onto your toes, pause, then lower slowly.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Gastrocnemius (rounded top part of the calf), soleus (flat muscle beneath it)",
+      "feel": "Calf muscles",
+      "fix": "A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": false
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m3-her-how",
+        "text": "Stand holding the counter. Rise onto your toes, pause, then lower slowly."
+       },
+       "feel": {
+        "id": "dayb-m3-both-feel",
+        "text": "You should feel it in: Calf muscles"
+       },
+       "fix": {
+        "id": "dayb-m3-both-fix",
+        "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far."
+       }
+      }
+     },
+     "his": {
+      "name": "Single-Leg Calf Raises",
+      "amount": "8–12/side",
+      "how": "Hold the counter and stand on one foot. Rise onto your toes, pause, then lower slowly.",
+      "easier": "Two-leg calf raise",
+      "easierHow": "Stand holding the counter. Rise onto your toes, pause, then lower slowly.",
+      "easierHowName": "Calf Raise",
+      "muscles": "Gastrocnemius (rounded top part of the calf), soleus (flat muscle beneath it)",
+      "feel": "Calf muscles",
+      "fix": "A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m3-his-how",
+        "text": "Hold the counter and stand on one foot. Rise onto your toes, pause, then lower slowly."
+       },
+       "feel": {
+        "id": "dayb-m3-both-feel",
+        "text": "You should feel it in: Calf muscles"
+       },
+       "fix": {
+        "id": "dayb-m3-both-fix",
+        "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far."
+       }
+      }
+     },
+     "n": 3
+    },
+    {
+     "her": {
+      "name": "Glute Bridges",
+      "amount": "10–12",
+      "how": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower.",
+      "easier": "Smaller lift, or shorter hold",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
+      "feel": "Glutes and the back of your thighs",
+      "fix": "Cramp in the back of your legs. Move your feet farther from your hips.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "bridge": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m4-her-how",
+        "text": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower."
+       },
+       "feel": {
+        "id": "dayb-m4-her-feel",
+        "text": "You should feel it in: Glutes and the back of your thighs"
+       },
+       "fix": {
+        "id": "dayb-m4-her-fix",
+        "text": "Should not feel, or fix: Cramp in the back of your legs. Move your feet farther from your hips."
+       }
+      }
+     },
+     "his": {
+      "name": "Single-Leg Glute Bridges",
+      "amount": "8–12/side",
+      "how": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower.",
+      "easier": "Two-leg bridge",
+      "easierHow": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze, pause, then lower.",
+      "easierHowName": "Glute Bridge",
+      "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
+      "feel": "Glutes and the back of your thigh",
+      "fix": "Cramp in the back of your leg. Move your foot farther from your hips.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m4-his-how",
+        "text": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower."
+       },
+       "feel": {
+        "id": "dayb-m4-his-feel",
+        "text": "You should feel it in: Glutes and the back of your thigh"
+       },
+       "fix": {
+        "id": "dayb-m4-his-fix",
+        "text": "Should not feel, or fix: Cramp in the back of your leg. Move your foot farther from your hips."
+       }
+      }
+     },
+     "n": 4
+    },
+    {
+     "her": {
+      "name": "Superman Hold",
+      "amount": "10 sec",
+      "how": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold.",
+      "easier": "Arms at your sides",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Erector spinae (along both sides of the spine), glutes, hamstrings, trapezius and deltoids (upper back and shoulders)",
+      "feel": "Back, hips, and arms",
+      "fix": "Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 10
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m5-both-how",
+        "text": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold."
+       },
+       "feel": {
+        "id": "dayb-m5-both-feel",
+        "text": "You should feel it in: Back, hips, and arms"
+       },
+       "fix": {
+        "id": "dayb-m5-both-fix",
+        "text": "Should not feel, or fix: Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain."
+       }
+      }
+     },
+     "his": {
+      "name": "Superman Hold",
+      "amount": "20 sec",
+      "how": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold.",
+      "easier": "Arms at your sides",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Erector spinae (along both sides of the spine), glutes, hamstrings, trapezius and deltoids (upper back and shoulders)",
+      "feel": "Back, hips, and arms",
+      "fix": "Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m5-both-how",
+        "text": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold."
+       },
+       "feel": {
+        "id": "dayb-m5-both-feel",
+        "text": "You should feel it in: Back, hips, and arms"
+       },
+       "fix": {
+        "id": "dayb-m5-both-fix",
+        "text": "Should not feel, or fix: Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain."
+       }
+      }
+     },
+     "n": 5
+    },
+    {
+     "her": {
+      "name": "Prone Y-T Raises",
+      "amount": "8 each",
+      "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
+      "feel": "Mid-back and the back of your shoulders",
+      "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+      "cfg": {
+       "kind": "reps",
+       "top": 8,
+       "repSec": 4,
+       "yt": true,
+       "done": false
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m6-her-how",
+        "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
+       },
+       "feel": {
+        "id": "dayb-m6-both-feel",
+        "text": "You should feel it in: Mid-back and the back of your shoulders"
+       },
+       "fix": {
+        "id": "dayb-m6-both-fix",
+        "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
+       }
+      }
+     },
+     "his": {
+      "name": "Prone Y-T Raises",
+      "amount": "8–12 each",
+      "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
+      "feel": "Mid-back and the back of your shoulders",
+      "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 6,
+       "yt": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayb-m6-his-how",
+        "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
+       },
+       "feel": {
+        "id": "dayb-m6-both-feel",
+        "text": "You should feel it in: Mid-back and the back of your shoulders"
+       },
+       "fix": {
+        "id": "dayb-m6-both-fix",
+        "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
+       }
+      }
+     },
+     "n": 6
+    }
+   ],
+   "shortSentence": "Short on time: quad, hamstring, calf, hip flexor, figure-4, and cat-cow.",
+   "shortKeys": [
+    "standing-quad",
+    "seated-hamstring",
+    "wall-calf",
+    "kneeling-hip-flexor",
+    "seated-figure-4",
+    "cat-cow"
+   ]
+  },
+  {
+   "key": "C",
+   "title": "Day C: Full Body",
+   "subtitle": "Works chest, arms, legs, glutes, upper back, and abs.",
+   "moves": [
+    {
+     "her": {
+      "name": "Knee Pushups",
+      "amount": "8–12",
+      "how": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+      "easier": "Hands on the counter",
+      "easierHow": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
+      "easierHowName": "Counter Pushup",
+      "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
+      "feel": "Chest, arms, shoulders, and abs",
+      "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m1-her-how",
+        "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up."
+       },
+       "feel": {
+        "id": "dayc-m1-both-feel",
+        "text": "You should feel it in: Chest, arms, shoulders, and abs"
+       },
+       "fix": {
+        "id": "dayc-m1-both-fix",
+        "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide."
+       }
+      }
+     },
+     "his": {
+      "name": "Slow Floor Pushups",
+      "amount": "8–12",
+      "how": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag.",
+      "easier": "Knee pushups",
+      "easierHow": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+      "easierHowName": "Knee Pushup",
+      "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
+      "feel": "Chest, arms, shoulders, and abs",
+      "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 3,
+       "down": 2,
+       "lower": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m1-his-how",
+        "text": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag."
+       },
+       "feel": {
+        "id": "dayc-m1-both-feel",
+        "text": "You should feel it in: Chest, arms, shoulders, and abs"
+       },
+       "fix": {
+        "id": "dayc-m1-both-fix",
+        "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide."
+       }
+      }
+     },
+     "n": 1
+    },
+    {
+     "her": {
+      "name": "Tempo Squats",
+      "amount": "8–12",
+      "how": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
+      "easier": "Chair Sit-to-Stands",
+      "easierHow": "Sit on a sturdy chair that isn't on wheels, feet flat and apart, hands together in front of your chest. Push through your feet to stand up fully and pause. Sit down slowly, taking about 3 seconds to go down (no hold at the bottom). Use your hands only if needed.",
+      "easierHowName": "Chair Sit-to-Stand",
+      "muscles": "Quadriceps (front of thigh, main muscle), glutes, hamstrings, adductors (inner thigh)",
+      "feel": "Thighs and hips",
+      "fix": "Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m2-her-how",
+        "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand."
+       },
+       "feel": {
+        "id": "dayc-m2-her-feel",
+        "text": "You should feel it in: Thighs and hips"
+       },
+       "fix": {
+        "id": "dayc-m2-her-fix",
+        "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep."
+       }
+      }
+     },
+     "his": {
+      "name": "Split Squats",
+      "amount": "8–12/side",
+      "how": "Step one foot back into a split stance, back heel lifted. Keep your torso upright and lower straight down, bending both knees until your back knee hovers just above the floor and both knees are about 90°. Keep your front knee over your ankle. Push through your front foot to rise back to the split stance without fully straightening your legs. Stay in the stance for every rep on that side, then switch.",
+      "easier": "Smaller step, or hold the counter",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Quadriceps (front of thigh), glutes (buttocks)",
+      "feel": "Thighs, legs, and hips",
+      "fix": "Front knee drifting past your ankle. Sharp knee pain means stop.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m2-his-how",
+        "text": "Step one foot back into a split stance, back heel lifted. Keep your torso upright and lower straight down, bending both knees until your back knee hovers just above the floor and both knees are about 90°. Keep your front knee over your ankle. Push through your front foot to rise back to the split stance without fully straightening your legs. Stay in the stance for every rep on that side, then switch."
+       },
+       "feel": {
+        "id": "dayc-m2-his-feel",
+        "text": "You should feel it in: Thighs, legs, and hips"
+       },
+       "fix": {
+        "id": "dayc-m2-his-fix",
+        "text": "Should not feel, or fix: Front knee drifting past your ankle. Sharp knee pain means stop."
+       }
+      }
+     },
+     "n": 2
+    },
+    {
+     "her": {
+      "name": "Floor Plank",
+      "amount": "20 sec",
+      "how": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+      "easier": "Knees-down plank",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis (front of belly), transverse abdominis (deep core, under the rectus abdominis), glutes (buttocks)",
+      "feel": "Abs, shoulders, and arms",
+      "fix": "Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m3-both-how",
+        "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing."
+       },
+       "feel": {
+        "id": "dayc-m3-both-feel",
+        "text": "You should feel it in: Abs, shoulders, and arms"
+       },
+       "fix": {
+        "id": "dayc-m3-both-fix",
+        "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful."
+       }
+      }
+     },
+     "his": {
+      "name": "Floor Plank",
+      "amount": "20 sec",
+      "how": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+      "easier": "Knees-down plank",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis (front of belly), transverse abdominis (deep core, under the rectus abdominis), glutes (buttocks)",
+      "feel": "Abs, shoulders, and arms",
+      "fix": "Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+      "cfg": {
+       "kind": "hold",
+       "sec": 20
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m3-both-how",
+        "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing."
+       },
+       "feel": {
+        "id": "dayc-m3-both-feel",
+        "text": "You should feel it in: Abs, shoulders, and arms"
+       },
+       "fix": {
+        "id": "dayc-m3-both-fix",
+        "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful."
+       }
+      }
+     },
+     "n": 3
+    },
+    {
+     "her": {
+      "name": "Glute Bridges",
+      "amount": "10–12",
+      "how": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower.",
+      "easier": "Smaller lift, or shorter hold",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
+      "feel": "Glutes and the back of your thighs",
+      "fix": "Cramp in the back of your legs. Move your feet farther from your hips.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "bridge": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m4-her-how",
+        "text": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower."
+       },
+       "feel": {
+        "id": "dayc-m4-her-feel",
+        "text": "You should feel it in: Glutes and the back of your thighs"
+       },
+       "fix": {
+        "id": "dayc-m4-her-fix",
+        "text": "Should not feel, or fix: Cramp in the back of your legs. Move your feet farther from your hips."
+       }
+      }
+     },
+     "his": {
+      "name": "Single-Leg Glute Bridges",
+      "amount": "8–12/side",
+      "how": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower.",
+      "easier": "Two-leg bridge",
+      "easierHow": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze, pause, then lower.",
+      "easierHowName": "Glute Bridge",
+      "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
+      "feel": "Glutes and the back of your thigh",
+      "fix": "Cramp in the back of your leg. Move your foot farther from your hips.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m4-his-how",
+        "text": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower."
+       },
+       "feel": {
+        "id": "dayc-m4-his-feel",
+        "text": "You should feel it in: Glutes and the back of your thigh"
+       },
+       "fix": {
+        "id": "dayc-m4-his-fix",
+        "text": "Should not feel, or fix: Cramp in the back of your leg. Move your foot farther from your hips."
+       }
+      }
+     },
+     "n": 4
+    },
+    {
+     "her": {
+      "name": "Dead Bugs",
+      "amount": "6/side",
+      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+      "easier": "Lower your arm and leg less",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis, transverse abdominis (deep core that supports your lower back), obliques (sides of your waist)",
+      "feel": "Your abs",
+      "fix": "Lower back arching up. Lower your arm and leg less.",
+      "cfg": {
+       "kind": "reps",
+       "top": 6,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m5-both-how",
+        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides."
+       },
+       "feel": {
+        "id": "dayc-m5-both-feel",
+        "text": "You should feel it in: Your abs"
+       },
+       "fix": {
+        "id": "dayc-m5-both-fix",
+        "text": "Should not feel, or fix: Lower back arching up. Lower your arm and leg less."
+       }
+      }
+     },
+     "his": {
+      "name": "Dead Bugs",
+      "amount": "8–12/side",
+      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+      "easier": "Lower your arm and leg less",
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Rectus abdominis, transverse abdominis (deep core that supports your lower back), obliques (sides of your waist)",
+      "feel": "Your abs",
+      "fix": "Lower back arching up. Lower your arm and leg less.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 4,
+       "perSide": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m5-both-how",
+        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides."
+       },
+       "feel": {
+        "id": "dayc-m5-both-feel",
+        "text": "You should feel it in: Your abs"
+       },
+       "fix": {
+        "id": "dayc-m5-both-fix",
+        "text": "Should not feel, or fix: Lower back arching up. Lower your arm and leg less."
+       }
+      }
+     },
+     "n": 5
+    },
+    {
+     "her": {
+      "name": "Prone Y-T Raises",
+      "amount": "8 each",
+      "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
+      "feel": "Mid-back and the back of your shoulders",
+      "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+      "cfg": {
+       "kind": "reps",
+       "top": 8,
+       "repSec": 4,
+       "yt": true,
+       "done": false
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m6-her-how",
+        "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
+       },
+       "feel": {
+        "id": "dayc-m6-both-feel",
+        "text": "You should feel it in: Mid-back and the back of your shoulders"
+       },
+       "fix": {
+        "id": "dayc-m6-both-fix",
+        "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
+       }
+      }
+     },
+     "his": {
+      "name": "Prone Y-T Raises",
+      "amount": "8–12 each",
+      "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
+      "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
+      "feel": "Mid-back and the back of your shoulders",
+      "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+      "cfg": {
+       "kind": "reps",
+       "top": 12,
+       "repSec": 6,
+       "yt": true,
+       "done": true
+      },
+      "cues": {
+       "how": {
+        "id": "dayc-m6-his-how",
+        "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
+       },
+       "feel": {
+        "id": "dayc-m6-both-feel",
+        "text": "You should feel it in: Mid-back and the back of your shoulders"
+       },
+       "fix": {
+        "id": "dayc-m6-both-fix",
+        "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
+       }
+      }
+     },
+     "n": 6
+    }
+   ],
+   "shortSentence": null,
+   "shortKeys": null
+  }
+ ],
  "warmup": {
   "label": "Warm-up (5 min)",
   "sentence": "Warm-up (5 min): walk in place, then do arm circles and leg swings.",
@@ -16,397 +1222,6 @@ window.CONTENT = {
   "Don't do rows using tables or doors, because they can fail under your weight."
  ],
  "generalRule": "A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
- "moves": [
-  {
-   "her": {
-    "name": "Tempo Squats",
-    "amount": "8–12",
-    "how": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
-    "easier": "Chair Sit-to-Stands",
-    "easierHow": "Sit on a sturdy chair that isn't on wheels, feet flat and apart, hands together in front of your chest. Push through your feet to stand up fully and pause. Sit down slowly, taking about 3 seconds to go down (no hold at the bottom). Use your hands only if needed.",
-    "easierHowName": "Chair Sit-to-Stand",
-    "muscles": "Quadriceps (front of thigh, main muscle), glutes, hamstrings, adductors (inner thigh)",
-    "feel": "Thighs and hips",
-    "fix": "Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m1-both-how",
-      "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand."
-     },
-     "feel": {
-      "id": "dayb-m1-both-feel",
-      "text": "You should feel it in: Thighs and hips"
-     },
-     "fix": {
-      "id": "dayb-m1-both-fix",
-      "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep."
-     }
-    }
-   },
-   "his": {
-    "name": "Tempo Squats",
-    "amount": "8–12",
-    "how": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
-    "easier": null,
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Quadriceps (front of thigh, main muscle), glutes, hamstrings, adductors (inner thigh)",
-    "feel": "Thighs and hips",
-    "fix": "Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m1-both-how",
-      "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand."
-     },
-     "feel": {
-      "id": "dayb-m1-both-feel",
-      "text": "You should feel it in: Thighs and hips"
-     },
-     "fix": {
-      "id": "dayb-m1-both-fix",
-      "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep."
-     }
-    }
-   },
-   "n": 1
-  },
-  {
-   "her": {
-    "name": "Wall Sit",
-    "amount": "15 sec",
-    "how": "Back and shoulders against the wall, feet a couple of steps out. Slide down to any knee bend you can manage, keeping your knees over your ankles, then hold.",
-    "easier": "Higher wall sit",
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Quadriceps (front of thighs), hamstrings (back of thighs), gluteus maximus (buttocks)",
-    "feel": "Thighs, hips, and glutes",
-    "fix": "Knees drifting past your ankles. If your knees hurt, don't slide as far down.",
-    "cfg": {
-     "kind": "hold",
-     "sec": 15
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m2-her-how",
-      "text": "Back and shoulders against the wall, feet a couple of steps out. Slide down to any knee bend you can manage, keeping your knees over your ankles, then hold."
-     },
-     "feel": {
-      "id": "dayb-m2-her-feel",
-      "text": "You should feel it in: Thighs, hips, and glutes"
-     },
-     "fix": {
-      "id": "dayb-m2-her-fix",
-      "text": "Should not feel, or fix: Knees drifting past your ankles. If your knees hurt, don't slide as far down."
-     }
-    }
-   },
-   "his": {
-    "name": "Reverse Lunges",
-    "amount": "8–12/side",
-    "how": "Step one foot back, landing on the ball of that foot (the padded part just behind your toes) with that heel lifted, and lower until your front knee is bent about 90°. Keep most of your weight in your front leg, with the front knee over your ankle, not past your toes. Push through your front foot to return.",
-    "easier": "Hold the counter",
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Quadriceps (front of thigh), glutes (buttocks), hamstrings (back of thigh)",
-    "feel": "Thighs, legs, and hips",
-    "fix": "Front knee pushing past your toes. Sharp knee pain means stop.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "perSide": true,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m2-his-how",
-      "text": "Step one foot back, landing on the ball of that foot (the padded part just behind your toes) with that heel lifted, and lower until your front knee is bent about 90°. Keep most of your weight in your front leg, with the front knee over your ankle, not past your toes. Push through your front foot to return."
-     },
-     "feel": {
-      "id": "dayb-m2-his-feel",
-      "text": "You should feel it in: Thighs, legs, and hips"
-     },
-     "fix": {
-      "id": "dayb-m2-his-fix",
-      "text": "Should not feel, or fix: Front knee pushing past your toes. Sharp knee pain means stop."
-     }
-    }
-   },
-   "n": 2
-  },
-  {
-   "her": {
-    "name": "Calf Raises",
-    "amount": "12",
-    "how": "Stand holding the counter. Rise onto your toes, pause, then lower slowly.",
-    "easier": null,
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Gastrocnemius (rounded top part of the calf), soleus (flat muscle beneath it)",
-    "feel": "Calf muscles",
-    "fix": "A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "done": false
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m3-her-how",
-      "text": "Stand holding the counter. Rise onto your toes, pause, then lower slowly."
-     },
-     "feel": {
-      "id": "dayb-m3-both-feel",
-      "text": "You should feel it in: Calf muscles"
-     },
-     "fix": {
-      "id": "dayb-m3-both-fix",
-      "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far."
-     }
-    }
-   },
-   "his": {
-    "name": "Single-Leg Calf Raises",
-    "amount": "8–12/side",
-    "how": "Hold the counter and stand on one foot. Rise onto your toes, pause, then lower slowly.",
-    "easier": "Two-leg calf raise",
-    "easierHow": "Stand holding the counter. Rise onto your toes, pause, then lower slowly.",
-    "easierHowName": "Calf Raise",
-    "muscles": "Gastrocnemius (rounded top part of the calf), soleus (flat muscle beneath it)",
-    "feel": "Calf muscles",
-    "fix": "A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "perSide": true,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m3-his-how",
-      "text": "Hold the counter and stand on one foot. Rise onto your toes, pause, then lower slowly."
-     },
-     "feel": {
-      "id": "dayb-m3-both-feel",
-      "text": "You should feel it in: Calf muscles"
-     },
-     "fix": {
-      "id": "dayb-m3-both-fix",
-      "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far."
-     }
-    }
-   },
-   "n": 3
-  },
-  {
-   "her": {
-    "name": "Glute Bridges",
-    "amount": "10–12",
-    "how": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower.",
-    "easier": "Smaller lift, or shorter hold",
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
-    "feel": "Glutes and the back of your thighs",
-    "fix": "Cramp in the back of your legs. Move your feet farther from your hips.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "bridge": true,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m4-her-how",
-      "text": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower."
-     },
-     "feel": {
-      "id": "dayb-m4-her-feel",
-      "text": "You should feel it in: Glutes and the back of your thighs"
-     },
-     "fix": {
-      "id": "dayb-m4-her-fix",
-      "text": "Should not feel, or fix: Cramp in the back of your legs. Move your feet farther from your hips."
-     }
-    }
-   },
-   "his": {
-    "name": "Single-Leg Glute Bridges",
-    "amount": "8–12/side",
-    "how": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower.",
-    "easier": "Two-leg bridge",
-    "easierHow": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze, pause, then lower.",
-    "easierHowName": "Glute Bridge",
-    "muscles": "Glutes (buttocks), hamstrings (back of thigh)",
-    "feel": "Glutes and the back of your thigh",
-    "fix": "Cramp in the back of your leg. Move your foot farther from your hips.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 4,
-     "perSide": true,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m4-his-how",
-      "text": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower."
-     },
-     "feel": {
-      "id": "dayb-m4-his-feel",
-      "text": "You should feel it in: Glutes and the back of your thigh"
-     },
-     "fix": {
-      "id": "dayb-m4-his-fix",
-      "text": "Should not feel, or fix: Cramp in the back of your leg. Move your foot farther from your hips."
-     }
-    }
-   },
-   "n": 4
-  },
-  {
-   "her": {
-    "name": "Superman Hold",
-    "amount": "10 sec",
-    "how": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold.",
-    "easier": "Arms at your sides",
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Erector spinae (along both sides of the spine), glutes, hamstrings, trapezius and deltoids (upper back and shoulders)",
-    "feel": "Back, hips, and arms",
-    "fix": "Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain.",
-    "cfg": {
-     "kind": "hold",
-     "sec": 10
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m5-both-how",
-      "text": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold."
-     },
-     "feel": {
-      "id": "dayb-m5-both-feel",
-      "text": "You should feel it in: Back, hips, and arms"
-     },
-     "fix": {
-      "id": "dayb-m5-both-fix",
-      "text": "Should not feel, or fix: Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain."
-     }
-    }
-   },
-   "his": {
-    "name": "Superman Hold",
-    "amount": "20 sec",
-    "how": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold.",
-    "easier": "Arms at your sides",
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Erector spinae (along both sides of the spine), glutes, hamstrings, trapezius and deltoids (upper back and shoulders)",
-    "feel": "Back, hips, and arms",
-    "fix": "Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain.",
-    "cfg": {
-     "kind": "hold",
-     "sec": 20
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m5-both-how",
-      "text": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold."
-     },
-     "feel": {
-      "id": "dayb-m5-both-feel",
-      "text": "You should feel it in: Back, hips, and arms"
-     },
-     "fix": {
-      "id": "dayb-m5-both-fix",
-      "text": "Should not feel, or fix: Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain."
-     }
-    }
-   },
-   "n": 5
-  },
-  {
-   "her": {
-    "name": "Prone Y-T Raises",
-    "amount": "8 each",
-    "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
-    "easier": null,
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
-    "feel": "Mid-back and the back of your shoulders",
-    "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
-    "cfg": {
-     "kind": "reps",
-     "top": 8,
-     "repSec": 4,
-     "yt": true,
-     "done": false
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m6-her-how",
-      "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
-     },
-     "feel": {
-      "id": "dayb-m6-both-feel",
-      "text": "You should feel it in: Mid-back and the back of your shoulders"
-     },
-     "fix": {
-      "id": "dayb-m6-both-fix",
-      "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
-     }
-    }
-   },
-   "his": {
-    "name": "Prone Y-T Raises",
-    "amount": "8–12 each",
-    "how": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
-    "easier": null,
-    "easierHow": null,
-    "easierHowName": null,
-    "muscles": "Lower trapezius (lower part of the upper back), rear deltoids (back of shoulder)",
-    "feel": "Mid-back and the back of your shoulders",
-    "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
-    "cfg": {
-     "kind": "reps",
-     "top": 12,
-     "repSec": 6,
-     "yt": true,
-     "done": true
-    },
-    "cues": {
-     "how": {
-      "id": "dayb-m6-his-how",
-      "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides."
-     },
-     "feel": {
-      "id": "dayb-m6-both-feel",
-      "text": "You should feel it in: Mid-back and the back of your shoulders"
-     },
-     "fix": {
-      "id": "dayb-m6-both-fix",
-      "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
-     }
-    }
-   },
-   "n": 6
-  }
- ],
  "stretches": [
   {
    "key": "doorway-chest",
@@ -601,15 +1416,6 @@ window.CONTENT = {
    }
   }
  ],
- "shortKeys": [
-  "standing-quad",
-  "seated-hamstring",
-  "wall-calf",
-  "kneeling-hip-flexor",
-  "seated-figure-4",
-  "cat-cow"
- ],
- "shortSentence": "Short on time: quad, hamstring, calf, hip flexor, figure-4, and cat-cow.",
  "verses": [
   {
    "ref": "Psalm 28:7",
@@ -869,9 +1675,21 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "move-7",
+   "text": "Move 7",
+   "where": "Start of move 7",
+   "who": "Both"
+  },
+  {
    "id": "set-2",
    "text": "Set two.",
    "where": "Start of set 2",
+   "who": "Both"
+  },
+  {
+   "id": "set-3",
+   "text": "Set three.",
+   "where": "Start of set 3",
    "who": "Both"
   },
   {
@@ -911,165 +1729,471 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "day-complete-a",
+   "text": "Day A complete.",
+   "where": "End of Day A",
+   "who": "Both"
+  },
+  {
    "id": "day-complete",
    "text": "Day B complete.",
-   "where": "End of the workout",
+   "where": "End of Day B",
    "who": "Both"
+  },
+  {
+   "id": "day-complete-c",
+   "text": "Day C complete.",
+   "where": "End of Day C",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m1-her-how",
+   "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+   "where": "Day A, Move 1, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "daya-m1-his-how",
+   "text": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag.",
+   "where": "Day A, Move 1, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m1-both-feel",
+   "text": "You should feel it in: Chest, arms, shoulders, and abs",
+   "where": "Day A, Move 1, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m1-both-fix",
+   "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+   "where": "Day A, Move 1, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m2-her-how",
+   "text": "Hands on the wall, arms straight. Let your chest sink toward the wall by squeezing your shoulder blades together, then spread them apart. Keep your elbows locked.",
+   "where": "Day A, Move 2, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "daya-m2-his-how",
+   "text": "Hold a high plank with arms straight. Let your chest sink by squeezing your shoulder blades together, then push the floor away to spread them. Keep your elbows locked.",
+   "where": "Day A, Move 2, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m2-both-feel",
+   "text": "You should feel it in: Muscles along your ribs",
+   "where": "Day A, Move 2, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m2-both-fix",
+   "text": "Should not feel, or fix: Elbows bending. Keep them locked.",
+   "where": "Day A, Move 2, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m3-both-how",
+   "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+   "where": "Day A, Move 3, How (read before the move, set 1)",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m3-both-feel",
+   "text": "You should feel it in: Abs, shoulders, and arms",
+   "where": "Day A, Move 3, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m3-both-fix",
+   "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+   "where": "Day A, Move 3, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m4-both-how",
+   "text": "On your back, knees bent at about 90° and feet flat on the floor, arms crossed over your chest. Slowly lift your shoulder blades off the floor, without sitting all the way up, then lower. Breathe easily.",
+   "where": "Day A, Move 4, How (read before the move, set 1)",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m4-both-feel",
+   "text": "You should feel it in: Your abs",
+   "where": "Day A, Move 4, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m4-both-fix",
+   "text": "Should not feel, or fix: Neck strain. Keep your arms crossed and don't pull on your head.",
+   "where": "Day A, Move 4, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m5-both-how",
+   "text": "On your back, knees bent and feet flat, chin slightly tucked, shoulders slightly lifted, lower back flat on the floor. Bend sideways to reach one hand to the same-side heel, then switch.",
+   "where": "Day A, Move 5, How (read before the move, set 1)",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m5-both-feel",
+   "text": "You should feel it in: Abs along the sides of your waist",
+   "where": "Day A, Move 5, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m5-both-fix",
+   "text": "Should not feel, or fix: Chin dropping back or lower back lifting. Stop if it hurts.",
+   "where": "Day A, Move 5, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "daya-m6-his-how",
+   "text": "Start in an upside-down V: hands shoulder-width apart on the floor, hips high, and feet far back so the V is wide and shallow. Bend your elbows to lower your head toward the floor just in front of your hands, only as far as you can control, then press back up.",
+   "where": "Day A, Move 6, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m6-his-feel",
+   "text": "You should feel it in: Shoulders, arms, and neck muscles working",
+   "where": "Day A, Move 6, You should feel it in",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m6-his-fix",
+   "text": "Should not feel, or fix: Elbows flaring out to the sides. Keep them slightly angled in.",
+   "where": "Day A, Move 6, Should not feel, or fix",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m7-his-how",
+   "text": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm.",
+   "where": "Day A, Move 7, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m7-his-feel",
+   "text": "You should feel it in: Mostly the arm under your chest",
+   "where": "Day A, Move 7, You should feel it in",
+   "who": "His workout"
+  },
+  {
+   "id": "daya-m7-his-fix",
+   "text": "Should not feel, or fix: Body sagging. Keep it straight from head to heels.",
+   "where": "Day A, Move 7, Should not feel, or fix",
+   "who": "His workout"
   },
   {
    "id": "dayb-m1-both-how",
    "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
-   "where": "Move 1, How (read before the move, set 1)",
+   "where": "Day B, Move 1, How (read before the move, set 1)",
    "who": "Both"
   },
   {
    "id": "dayb-m1-both-feel",
    "text": "You should feel it in: Thighs and hips",
-   "where": "Move 1, You should feel it in",
+   "where": "Day B, Move 1, You should feel it in",
    "who": "Both"
   },
   {
    "id": "dayb-m1-both-fix",
    "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
-   "where": "Move 1, Should not feel, or fix",
+   "where": "Day B, Move 1, Should not feel, or fix",
    "who": "Both"
   },
   {
    "id": "dayb-m2-her-how",
    "text": "Back and shoulders against the wall, feet a couple of steps out. Slide down to any knee bend you can manage, keeping your knees over your ankles, then hold.",
-   "where": "Move 2, How (read before the move, set 1)",
+   "where": "Day B, Move 2, How (read before the move, set 1)",
    "who": "Her workout"
   },
   {
    "id": "dayb-m2-his-how",
    "text": "Step one foot back, landing on the ball of that foot (the padded part just behind your toes) with that heel lifted, and lower until your front knee is bent about 90°. Keep most of your weight in your front leg, with the front knee over your ankle, not past your toes. Push through your front foot to return.",
-   "where": "Move 2, How (read before the move, set 1)",
+   "where": "Day B, Move 2, How (read before the move, set 1)",
    "who": "His workout"
   },
   {
    "id": "dayb-m2-her-feel",
    "text": "You should feel it in: Thighs, hips, and glutes",
-   "where": "Move 2, You should feel it in",
+   "where": "Day B, Move 2, You should feel it in",
    "who": "Her workout"
   },
   {
    "id": "dayb-m2-his-feel",
    "text": "You should feel it in: Thighs, legs, and hips",
-   "where": "Move 2, You should feel it in",
+   "where": "Day B, Move 2, You should feel it in",
    "who": "His workout"
   },
   {
    "id": "dayb-m2-her-fix",
    "text": "Should not feel, or fix: Knees drifting past your ankles. If your knees hurt, don't slide as far down.",
-   "where": "Move 2, Should not feel, or fix",
+   "where": "Day B, Move 2, Should not feel, or fix",
    "who": "Her workout"
   },
   {
    "id": "dayb-m2-his-fix",
    "text": "Should not feel, or fix: Front knee pushing past your toes. Sharp knee pain means stop.",
-   "where": "Move 2, Should not feel, or fix",
+   "where": "Day B, Move 2, Should not feel, or fix",
    "who": "His workout"
   },
   {
    "id": "dayb-m3-her-how",
    "text": "Stand holding the counter. Rise onto your toes, pause, then lower slowly.",
-   "where": "Move 3, How (read before the move, set 1)",
+   "where": "Day B, Move 3, How (read before the move, set 1)",
    "who": "Her workout"
   },
   {
    "id": "dayb-m3-his-how",
    "text": "Hold the counter and stand on one foot. Rise onto your toes, pause, then lower slowly.",
-   "where": "Move 3, How (read before the move, set 1)",
+   "where": "Day B, Move 3, How (read before the move, set 1)",
    "who": "His workout"
   },
   {
    "id": "dayb-m3-both-feel",
    "text": "You should feel it in: Calf muscles",
-   "where": "Move 3, You should feel it in",
+   "where": "Day B, Move 3, You should feel it in",
    "who": "Both"
   },
   {
    "id": "dayb-m3-both-fix",
    "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
-   "where": "Move 3, Should not feel, or fix",
+   "where": "Day B, Move 3, Should not feel, or fix",
    "who": "Both"
   },
   {
    "id": "dayb-m4-her-how",
    "text": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower.",
-   "where": "Move 4, How (read before the move, set 1)",
+   "where": "Day B, Move 4, How (read before the move, set 1)",
    "who": "Her workout"
   },
   {
    "id": "dayb-m4-his-how",
    "text": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower.",
-   "where": "Move 4, How (read before the move, set 1)",
+   "where": "Day B, Move 4, How (read before the move, set 1)",
    "who": "His workout"
   },
   {
    "id": "dayb-m4-her-feel",
    "text": "You should feel it in: Glutes and the back of your thighs",
-   "where": "Move 4, You should feel it in",
+   "where": "Day B, Move 4, You should feel it in",
    "who": "Her workout"
   },
   {
    "id": "dayb-m4-his-feel",
    "text": "You should feel it in: Glutes and the back of your thigh",
-   "where": "Move 4, You should feel it in",
+   "where": "Day B, Move 4, You should feel it in",
    "who": "His workout"
   },
   {
    "id": "dayb-m4-her-fix",
    "text": "Should not feel, or fix: Cramp in the back of your legs. Move your feet farther from your hips.",
-   "where": "Move 4, Should not feel, or fix",
+   "where": "Day B, Move 4, Should not feel, or fix",
    "who": "Her workout"
   },
   {
    "id": "dayb-m4-his-fix",
    "text": "Should not feel, or fix: Cramp in the back of your leg. Move your foot farther from your hips.",
-   "where": "Move 4, Should not feel, or fix",
+   "where": "Day B, Move 4, Should not feel, or fix",
    "who": "His workout"
   },
   {
    "id": "dayb-m5-both-how",
    "text": "Lie face down, arms forward. Brace your abs, then lift your arms, chest, and legs a few inches. Look at the floor, squeeze your back and glutes, and hold.",
-   "where": "Move 5, How (read before the move, set 1)",
+   "where": "Day B, Move 5, How (read before the move, set 1)",
    "who": "Both"
   },
   {
    "id": "dayb-m5-both-feel",
    "text": "You should feel it in: Back, hips, and arms",
-   "where": "Move 5, You should feel it in",
+   "where": "Day B, Move 5, You should feel it in",
    "who": "Both"
   },
   {
    "id": "dayb-m5-both-fix",
    "text": "Should not feel, or fix: Neck strain from looking up, so look at the floor. Stop for numbness, tingling, or leg pain.",
-   "where": "Move 5, Should not feel, or fix",
+   "where": "Day B, Move 5, Should not feel, or fix",
    "who": "Both"
   },
   {
    "id": "dayb-m6-her-how",
    "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
-   "where": "Move 6, How (read before the move, set 1)",
+   "where": "Day B, Move 6, How (read before the move, set 1)",
    "who": "Her workout"
   },
   {
    "id": "dayb-m6-his-how",
    "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
-   "where": "Move 6, How (read before the move, set 1)",
+   "where": "Day B, Move 6, How (read before the move, set 1)",
    "who": "His workout"
   },
   {
    "id": "dayb-m6-both-feel",
    "text": "You should feel it in: Mid-back and the back of your shoulders",
-   "where": "Move 6, You should feel it in",
+   "where": "Day B, Move 6, You should feel it in",
    "who": "Both"
   },
   {
    "id": "dayb-m6-both-fix",
    "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
-   "where": "Move 6, Should not feel, or fix",
+   "where": "Day B, Move 6, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m1-her-how",
+   "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+   "where": "Day C, Move 1, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m1-his-how",
+   "text": "Hands slightly wider than shoulder-width, under your shoulders. On your toes, body straight from head to heels. Take 2 seconds to lower your chest, building to 3 (that's the time it takes to go down, with no hold at the bottom), with your elbows angled about 45° from your body. Push up at normal speed. Don't let your hips sag.",
+   "where": "Day C, Move 1, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m1-both-feel",
+   "text": "You should feel it in: Chest, arms, shoulders, and abs",
+   "where": "Day C, Move 1, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m1-both-fix",
+   "text": "Should not feel, or fix: Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
+   "where": "Day C, Move 1, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m2-her-how",
+   "text": "Feet shoulder-width apart. Sit back as if into a chair, taking 3 seconds to lower (the time it takes to go down, with no hold at the bottom) to about 90° at the knees, with your knees above your heels. Reach your arms forward for balance. Press through your heels to stand.",
+   "where": "Day C, Move 2, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m2-his-how",
+   "text": "Step one foot back into a split stance, back heel lifted. Keep your torso upright and lower straight down, bending both knees until your back knee hovers just above the floor and both knees are about 90°. Keep your front knee over your ankle. Push through your front foot to rise back to the split stance without fully straightening your legs. Stay in the stance for every rep on that side, then switch.",
+   "where": "Day C, Move 2, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m2-her-feel",
+   "text": "You should feel it in: Thighs and hips",
+   "where": "Day C, Move 2, You should feel it in",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m2-his-feel",
+   "text": "You should feel it in: Thighs, legs, and hips",
+   "where": "Day C, Move 2, You should feel it in",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m2-her-fix",
+   "text": "Should not feel, or fix: Knees drifting forward past your heels. Knee or back discomfort means change your stance or go less deep.",
+   "where": "Day C, Move 2, Should not feel, or fix",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m2-his-fix",
+   "text": "Should not feel, or fix: Front knee drifting past your ankle. Sharp knee pain means stop.",
+   "where": "Day C, Move 2, Should not feel, or fix",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m3-both-how",
+   "text": "Forearms under your shoulders, body straight from head to heels. Squeeze your abs and glutes, look at the floor, and keep breathing.",
+   "where": "Day C, Move 3, How (read before the move, set 1)",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m3-both-feel",
+   "text": "You should feel it in: Abs, shoulders, and arms",
+   "where": "Day C, Move 3, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m3-both-fix",
+   "text": "Should not feel, or fix: Low-back pain. End the hold, since it means your hips are sagging or rising. A plank should not be painful.",
+   "where": "Day C, Move 3, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m4-her-how",
+   "text": "On your back, knees bent, feet flat. Push through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze your glutes and hold 5 seconds at the top, building to 10, then lower.",
+   "where": "Day C, Move 4, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m4-his-how",
+   "text": "On your back, one foot flat and the other leg straight and lifted off the floor. Push through the planted heel to lift your hips, squeeze your glutes at the top, then lower.",
+   "where": "Day C, Move 4, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m4-her-feel",
+   "text": "You should feel it in: Glutes and the back of your thighs",
+   "where": "Day C, Move 4, You should feel it in",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m4-his-feel",
+   "text": "You should feel it in: Glutes and the back of your thigh",
+   "where": "Day C, Move 4, You should feel it in",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m4-her-fix",
+   "text": "Should not feel, or fix: Cramp in the back of your legs. Move your feet farther from your hips.",
+   "where": "Day C, Move 4, Should not feel, or fix",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m4-his-fix",
+   "text": "Should not feel, or fix: Cramp in the back of your leg. Move your foot farther from your hips.",
+   "where": "Day C, Move 4, Should not feel, or fix",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m5-both-how",
+   "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+   "where": "Day C, Move 5, How (read before the move, set 1)",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m5-both-feel",
+   "text": "You should feel it in: Your abs",
+   "where": "Day C, Move 5, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m5-both-fix",
+   "text": "Should not feel, or fix: Lower back arching up. Lower your arm and leg less.",
+   "where": "Day C, Move 5, Should not feel, or fix",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m6-her-how",
+   "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+   "where": "Day C, Move 6, How (read before the move, set 1)",
+   "who": "Her workout"
+  },
+  {
+   "id": "dayc-m6-his-how",
+   "text": "Lie face down with your forehead on a towel. Pull your shoulder blades down and back, then raise both arms overhead in a Y with thumbs up. Keep your chest on the floor and don't shrug. Hold 1–2 seconds at the top, then lower slowly. Do all your Y reps, then all your T reps with your arms out to the sides.",
+   "where": "Day C, Move 6, How (read before the move, set 1)",
+   "who": "His workout"
+  },
+  {
+   "id": "dayc-m6-both-feel",
+   "text": "You should feel it in: Mid-back and the back of your shoulders",
+   "where": "Day C, Move 6, You should feel it in",
+   "who": "Both"
+  },
+  {
+   "id": "dayc-m6-both-fix",
+   "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+   "where": "Day C, Move 6, Should not feel, or fix",
    "who": "Both"
   },
   {
@@ -1384,6 +2508,9 @@ window.CONTENT = {
   "bridgeHoldDefault": 5,
   "bridgeHoldMin": 5,
   "bridgeHoldMax": 10,
-  "stretchRounds": 2
+  "stretchRounds": 2,
+  "pushupDownDefault": 2,
+  "pushupDownMax": 3,
+  "pauseRep": 1
  }
 };

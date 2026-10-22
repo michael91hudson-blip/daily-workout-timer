@@ -127,3 +127,10 @@ h1{font-size:26px;margin:4px 0 2px}
   .bar{height:8px;margin:2px 0}
   .cards{padding:6px 16px}
 }
+
+/* day picker, sets, pause color */
+.days{display:grid;grid-template-columns:1fr;gap:8px;margin:4px 0 10px}
+@media (min-width:640px){.days{grid-template-columns:repeat(3,1fr)}}
+.btn.day[aria-pressed=true]{background:var(--btn);color:#fff}
+.btn.day[aria-pressed=false]{background:#fff;color:var(--btn)}
+.card .strip.pause{background:#FEF08A;color:#713F12}

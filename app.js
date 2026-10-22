@@ -41,11 +41,17 @@
     his: { name: store.get('his_name', ''), say: store.get('his_say', '') },
     her: { name: store.get('her_name', ''), say: store.get('her_say', '') },
     setsHer: store.get('her_sets', 2),
+    setsHis: store.get('his_sets', 2),
+    lower: store.get('his_lower', N.pushupDownDefault),
+    day: store.get('day', 'B'),
     bridge: store.get('her_bridge', N.bridgeHoldDefault),
     short: false,
     verse: store.get('verse', 0)
   };
-  if (S.setsHer !== 1 && S.setsHer !== 2) S.setsHer = 2;
+  if (S.setsHer !== 1 && S.setsHer !== 2 && S.setsHer !== 3) S.setsHer = 2;
+  if (S.setsHis !== 2 && S.setsHis !== 3) S.setsHis = 2;
+  if (S.lower !== N.pushupDownDefault && S.lower !== N.pushupDownMax) S.lower = N.pushupDownDefault;
+  if (!C.days.some(function (d) { return d.key === S.day; })) S.day = 'B';
   if (!(S.bridge >= N.bridgeHoldMin && S.bridge <= N.bridgeHoldMax)) S.bridge = N.bridgeHoldDefault;
   if (!(S.verse >= 0 && S.verse < C.verses.length)) S.verse = 0;
 
@@ -54,8 +60,11 @@
   function sayName(pid) { return (S[pid].say.trim() || S[pid].name.trim()); }
   function slotLabel(pid) { return pid === 'her' ? 'Her workout' : 'His workout'; }
   function namedList() { return ['her', 'his'].filter(named); }
-  function maxSetsFor(pid) { return pid === 'her' ? S.setsHer : 2; }
-  function activeIn(set) { return namedList().filter(function (p) { return set <= maxSetsFor(p); }); }
+  function maxSetsFor(pid) { return pid === 'her' ? S.setsHer : S.setsHis; }
+  function activeIn(set, m) { return namedList().filter(function (p) { return set <= maxSetsFor(p) && (!m || m[p]); }); }
+  function curDay() { return C.days.filter(function (d) { return d.key === S.day; })[0]; }
+  function curMoves() { return curDay().moves; }
+  var DONE_CUE = { A: 'day-complete-a', B: 'day-complete', C: 'day-complete-c' };
   function totalSets() { return Math.max.apply(null, namedList().map(maxSetsFor)); }
   function joinNames(pids, fn) { return pids.map(fn).join(' and '); }
 
@@ -212,14 +221,15 @@
   var G = { running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
 
   function strList() {
-    return S.short ? C.stretches.filter(function (s) { return C.shortKeys.indexOf(s.key) >= 0; }) : C.stretches;
+    var keys = curDay().shortKeys;
+    return (S.short && keys) ? C.stretches.filter(function (s) { return keys.indexOf(s.key) >= 0; }) : C.stretches;
   }
 
   function buildDay() {
     var p = [{ t: 'warmup' }];
     var ts = totalSets(), s, n, r;
     for (s = 1; s <= ts; s++) {
-      for (n = 1; n <= C.moves.length; n++) { p.push({ t: 'ready', what: 'move', n: n, set: s }); p.push({ t: 'move', n: n, set: s }); }
+      for (n = 1; n <= curMoves().length; n++) { p.push({ t: 'ready', what: 'move', n: n, set: s }); p.push({ t: 'move', n: n, set: s }); }
       if (s < ts) p.push({ t: 'rest', set: s });
     }
     var L = strList();
@@ -229,7 +239,7 @@
         p.push({ t: 'stretch', st: st, k: k, total: L.length, round: r });
       });
     }
-    p.push({ t: 'finish', msg: C.day.title.split(':')[0] + ' complete', voice: true });
+    p.push({ t: 'finish', msg: curDay().title.split(':')[0] + ' complete', voice: true });
     return p;
   }
 
@@ -296,6 +306,18 @@
       h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Longer hold', onclick: function () { set(S.bridge + 1); } }, '+')), card.btns);
   }
 
+  function lowerStepper(card) {
+    var val = h('b', {}, S.lower + ' sec');
+    function set(v) {
+      S.lower = Math.max(N.pushupDownDefault, Math.min(N.pushupDownMax, v));
+      store.set('his_lower', S.lower); val.textContent = S.lower + ' sec';
+    }
+    card.root.insertBefore(h('div', { class: 'stepper' }, h('span', {}, 'Lowering:'),
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Shorter lowering', onclick: function () { set(S.lower - 1); } }, '\u2212'),
+      val,
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Longer lowering', onclick: function () { set(S.lower + 1); } }, '+')), card.btns);
+  }
+
   function fmtClock(sec) {
     sec = Math.max(0, Math.ceil(sec));
     var m = Math.floor(sec / 60), s = sec % 60;
@@ -306,14 +328,15 @@
   function mkTrack(pid, m) {
     var c = m[pid].cfg, ph = [];
     function rep(label) {
-      var repSec = c.bridge ? (N.bridgeUp + S.bridge + N.bridgeDown) : c.repSec;
-      var up = N.bridgeUp, down = N.bridgeDown, seq;
-      if (c.bridge) seq = [['UP', up], ['HOLD', S.bridge], ['DOWN', down]];
-      else if (c.yt) { var hd = c.repSec - up - down; seq = [['UP', up]]; if (hd > 0) seq.push(['HOLD', hd]); seq.push(['DOWN', down]); }
-      else seq = [['DOWN', down], ['UP', up]];
+      var up = N.bridgeUp, down = c.lower ? S.lower : N.bridgeDown, seq, repSec;
+      if (c.bridge) { repSec = up + S.bridge + down; seq = [['UP', up], ['HOLD', S.bridge], ['DOWN', down]]; }
+      else if (c.yt) { repSec = c.repSec; var hd = c.repSec - up - down; seq = [['UP', up]]; if (hd > 0) seq.push(['HOLD', hd]); seq.push(['DOWN', down]); }
+      else if (c.pauseSec) { repSec = down + c.pauseSec + up; seq = [['DOWN', down], ['PAUSE', c.pauseSec], ['UP', up]]; }
+      else { repSec = down + up; seq = [['DOWN', down], ['UP', up]]; }
       return { k: 'reps', n: c.top, repSec: repSec, dur: c.top * repSec, label: label, done: !!c.done, bridge: !!c.bridge, hold: S.bridge, seq: seq };
     }
     if (c.kind === 'hold') ph.push({ k: 'hold', dur: c.sec, beep: true, label: 'Hold' });
+    else if (c.kind === 'timed') ph.push({ k: 'hold', dur: c.sec, beep: true, label: 'Timed set' });
     else if (c.perSide) ph.push(rep('Side 1'), { k: 'pause', dur: N.pause, beep: true, label: 'Switch sides', cue: 'switch-sides' }, rep('Side 2'));
     else if (c.yt) ph.push(rep('Y'), { k: 'pause', dur: N.pause, beep: true, label: 'Now T', cue: 'now-t', named: true }, rep('T'));
     else ph.push(rep(''));
@@ -502,19 +525,21 @@
     var ui, isMove = s.what === 'move', ts = totalSets();
     s.dur = N.ready; s.el = 0; s.age = 0; s.holdWait = 0; s.cardsList = [];
     if (isMove) {
-      var m = C.moves[s.n - 1];
-      ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + C.moves.length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
-      var act = activeIn(s.set);
+      var m = curMoves()[s.n - 1];
+      ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + curMoves().length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
+      var act = activeIn(s.set, m);
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0;
-        var card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: on ? easierOf(m, pid) : null, rep: on && m[pid].cfg.kind === 'reps' });
+        var card = makeCard({ who: shownName(pid), mv: m[pid] ? m[pid].name : '', amt: m[pid] ? m[pid].amount : '', easier: on ? easierOf(m, pid) : null, rep: on && m[pid].cfg.kind === 'reps' });
         if (!on) card.root.className += ' dim';
-        if (on && pid === 'her' && s.n === 4) bridgeStepper(card);
+        if (on && m[pid].cfg.bridge) bridgeStepper(card);
+        if (on && m[pid].cfg.lower) lowerStepper(card);
         s.cardsList.push({ card: card, on: on });
       });
       // voice
       if (!s.single && s.n === 1 && s.set === 1) Voice.say([{ id: 'section-workout', text: 'Workout.' }], { blocking: true });
       if (!s.single && s.n === 1 && s.set === 2) Voice.say([{ id: 'set-2', text: 'Set two.' }], { blocking: true });
+      if (!s.single && s.n === 1 && s.set === 3) Voice.say([{ id: 'set-3', text: 'Set three.' }], { blocking: true });
       Voice.say([{ id: 'move-' + s.n, text: 'Move ' + s.n }], { blocking: true });
       if (s.set === 1) queueCueGroups(act, function (pid, typ) { return m[pid].cues[typ]; }, ['how'], { blocking: true });
     } else {
@@ -552,9 +577,9 @@
 
   /* ---------- step: a move ---------- */
   stepEnter.move = function (s) {
-    var m = C.moves[s.n - 1], ts = totalSets();
-    var ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + C.moves.length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
-    var act = activeIn(s.set);
+    var m = curMoves()[s.n - 1], ts = totalSets();
+    var ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + curMoves().length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
+    var act = activeIn(s.set, m);
     s.age = 0; s.frozen = 0; s.tracks = []; s.cardsList = []; s.activeCount = act.length;
     namedList().forEach(function (pid) {
       var on = act.indexOf(pid) >= 0, t = null, card;
@@ -567,7 +592,7 @@
         });
         s.tracks.push(t);
       } else {
-        card = makeCard({ who: shownName(pid), mv: m[pid].name, amt: m[pid].amount });
+        card = makeCard({ who: shownName(pid), mv: m[pid] ? m[pid].name : '', amt: m[pid] ? m[pid].amount : '' });
         card.root.className += ' dim';
       }
       s.cardsList.push({ card: card, t: t, on: on });
@@ -633,7 +658,7 @@
     appEl.appendChild(h('div', { class: 'screen finish' },
       h('h1', {}, s.msg || 'Done'),
       h('button', { class: 'btn start', type: 'button', onclick: function () { goHome(); } }, 'Home')));
-    if (s.voice) Voice.say([{ id: 'day-complete', text: C.day.title.split(':')[0] + ' complete.' }]);
+    if (s.voice) Voice.say([{ id: DONE_CUE[S.day], text: curDay().title.split(':')[0] + ' complete.' }]);
   };
   stepTick.finish = function () {};
 
@@ -713,13 +738,28 @@
     var box = h('div', { class: 'slot' }, h('h2', {}, slotLabel(pid)),
       h('label', { for: pid + '-name' }, 'Name'), nameIn,
       h('label', { for: pid + '-say' }, 'Say it as'), sayIn);
+    function segSets(values, get, put) {
+      var wrap = h('div', { class: 'seg' }), btns = [];
+      values.forEach(function (v) {
+        var b = h('button', { class: 'btn small', type: 'button', 'aria-pressed': get() === v ? 'true' : 'false' }, v + (v === 1 ? ' set' : ' sets'));
+        b.onclick = function () { put(v); btns.forEach(function (x) { x.b.setAttribute('aria-pressed', get() === x.v ? 'true' : 'false'); }); };
+        btns.push({ b: b, v: v }); wrap.appendChild(b);
+      });
+      return wrap;
+    }
+    if (pid === 'his') {
+      box.appendChild(h('label', {}, 'Sets (weeks 1\u20132: 2. Weeks 3\u20134: 3)'));
+      box.appendChild(segSets([2, 3], function () { return S.setsHis; }, function (v) { S.setsHis = v; store.set('his_sets', v); }));
+      var lval = h('b', {}, S.lower + ' sec');
+      function setLower(v) { S.lower = Math.max(N.pushupDownDefault, Math.min(N.pushupDownMax, v)); store.set('his_lower', S.lower); lval.textContent = S.lower + ' sec'; }
+      box.appendChild(h('label', {}, 'Slow Floor Pushups: lowering'));
+      box.appendChild(h('div', { class: 'stepper' },
+        h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Shorter lowering', onclick: function () { setLower(S.lower - 1); } }, '\u2212'), lval,
+        h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Longer lowering', onclick: function () { setLower(S.lower + 1); } }, '+')));
+    }
     if (pid === 'her') {
-      var b1 = h('button', { class: 'btn small', type: 'button', 'aria-pressed': S.setsHer === 1 ? 'true' : 'false' }, '1 set');
-      var b2 = h('button', { class: 'btn small', type: 'button', 'aria-pressed': S.setsHer === 2 ? 'true' : 'false' }, '2 sets');
-      function setSets(v) { S.setsHer = v; store.set('her_sets', v); b1.setAttribute('aria-pressed', v === 1 ? 'true' : 'false'); b2.setAttribute('aria-pressed', v === 2 ? 'true' : 'false'); }
-      b1.onclick = function () { setSets(1); }; b2.onclick = function () { setSets(2); };
-      box.appendChild(h('label', {}, 'Sets (2, or 1 if 2 is too hard)'));
-      box.appendChild(h('div', { class: 'seg' }, b1, b2));
+      box.appendChild(h('label', {}, 'Sets (weeks 1\u20132: 2, or 1 if 2 is too hard. Weeks 3\u20134: 3)'));
+      box.appendChild(segSets([1, 2, 3], function () { return S.setsHer; }, function (v) { S.setsHer = v; store.set('her_sets', v); }));
       var val = h('b', {}, S.bridge + ' sec');
       function setHold(v) { S.bridge = Math.max(N.bridgeHoldMin, Math.min(N.bridgeHoldMax, v)); store.set('her_bridge', S.bridge); val.textContent = S.bridge + ' sec'; }
       box.appendChild(h('label', {}, 'Glute Bridge top hold'));
@@ -740,8 +780,8 @@
     var who = namedList(), i;
     var pids = who.length ? who : ['her', 'his'];
     workBox.rows.textContent = '';
-    C.moves.forEach(function (m) {
-      var lines = pids.map(function (pid) {
+    curMoves().forEach(function (m) {
+      var lines = pids.filter(function (pid) { return m[pid]; }).map(function (pid) {
         return h('span', { class: 'who' }, (who.length ? shownName(pid) : slotLabel(pid)) + ': ' + m[pid].name + ' · ' + m[pid].amount);
       });
       workBox.rows.appendChild(rowBtn(String(m.n), lines, function () { startSingle('move', m.n); }));
@@ -757,8 +797,13 @@
   function renderHome() {
     appEl.textContent = '';
     var root = h('div', { class: 'screen' });
-    root.appendChild(h('h1', {}, C.day.title));
-    root.appendChild(h('p', { class: 'sub' }, C.day.subtitle));
+    var picker = h('div', { class: 'days', role: 'group', 'aria-label': 'Choose a day' });
+    C.days.forEach(function (d) {
+      picker.appendChild(h('button', { class: 'btn day', type: 'button', 'aria-pressed': d.key === S.day ? 'true' : 'false',
+        onclick: function () { S.day = d.key; store.set('day', d.key); S.short = false; renderHome(); } }, d.title));
+    });
+    root.appendChild(picker);
+    root.appendChild(h('p', { class: 'sub' }, curDay().subtitle));
     root.appendChild(h('div', { class: 'slots' }, slotBox('her'), slotBox('his')));
     msgEl = h('p', { class: 'msg', role: 'alert', hidden: true });
     msgEl.style.fontWeight = '700'; msgEl.style.color = '#b42318';
@@ -780,17 +825,17 @@
     var cr = h('div', { class: 'rows' });
     coolBox = { rows: cr };
     var tgl = h('button', { class: 'btn alt small', type: 'button', 'aria-pressed': S.short ? 'true' : 'false' }, S.short ? 'On' : 'Off');
-    var note = h('p', { class: 'sub', hidden: !S.short }, C.shortSentence);
+    var note = h('p', { class: 'sub', hidden: !S.short }, curDay().shortSentence || '');
     tgl.onclick = function () {
       S.short = !S.short;
       tgl.setAttribute('aria-pressed', S.short ? 'true' : 'false'); tgl.textContent = S.short ? 'On' : 'Off';
       note.hidden = !S.short; renderCoolRows();
     };
     root.appendChild(h('section', { class: 'sec cool' }, h('h2', {}, 'Cool-down'),
-      h('div', { class: 'toggle' }, h('span', {}, 'Short on time'), tgl), note, cr));
+      curDay().shortKeys ? [h('div', { class: 'toggle' }, h('span', {}, 'Short on time'), tgl), note] : null, cr));
     renderCoolRows();
 
-    root.appendChild(h('button', { class: 'btn start', type: 'button', onclick: startDay }, 'Start ' + C.day.title.split(':')[0]));
+    root.appendChild(h('button', { class: 'btn start', type: 'button', onclick: startDay }, 'Start ' + curDay().title.split(':')[0]));
 
     // verse
     var vtxt = h('div', {}, C.verses[S.verse].text);
