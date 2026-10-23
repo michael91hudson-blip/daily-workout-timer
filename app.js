@@ -262,7 +262,7 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && G.running && !wl) lockScreen(); });
 
   /* ---------- session state ---------- */
-  var G = { finishSay: false, paused: false, running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
+  var G = { activeSec: 0, finishSay: false, paused: false, running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
 
   function strList() {
     var keys = curDay().shortKeys;
@@ -364,6 +364,37 @@
       h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Longer lowering', onclick: function () { set(S.lower + 1); } }, '+')), card.btns);
   }
 
+  /* ---------- reps range (from the amount shown) ---------- */
+  function repRange(m, pid) {
+    var x = m[pid];
+    if (!x || x.cfg.kind !== 'reps') return null;
+    var r = /^(\d+)\s*[\u2013-]\s*(\d+)/.exec(x.amount || '');
+    if (!r) return null;
+    var lo = parseInt(r[1], 10), hi = parseInt(r[2], 10);
+    if (!(hi > lo) || x.cfg.top !== hi) return null;
+    return { min: lo, max: hi };
+  }
+  function repsKey(m, pid) { return 'reps_' + S.day + '_' + m.n + '_' + pid; }
+  function repsFor(m, pid) {
+    var rg = repRange(m, pid), top = m[pid].cfg.top;
+    if (!rg) return top;
+    var v = store.get(repsKey(m, pid), rg.max);
+    return (v >= rg.min && v <= rg.max) ? v : rg.max;
+  }
+  function repsStepper(card, m, pid) {
+    var rg = repRange(m, pid);
+    if (!rg) return;
+    var val = h('b', {}, String(repsFor(m, pid)));
+    function set(v) {
+      v = Math.max(rg.min, Math.min(rg.max, v));
+      store.set(repsKey(m, pid), v); val.textContent = String(v);
+    }
+    card.root.insertBefore(h('div', { class: 'stepper' }, h('span', {}, 'Reps:'),
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Fewer reps', onclick: function () { set(repsFor(m, pid) - 1); } }, '\u2212'),
+      val,
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'More reps', onclick: function () { set(repsFor(m, pid) + 1); } }, '+')), card.btns);
+  }
+
   function fmtClock(sec) {
     sec = Math.max(0, Math.ceil(sec));
     var m = Math.floor(sec / 60), s = sec % 60;
@@ -372,14 +403,14 @@
 
   /* ---------- tracks (one per person per move) ---------- */
   function mkTrack(pid, m) {
-    var c = m[pid].cfg, ph = [];
+    var c = m[pid].cfg, ph = [], top = repsFor(m, pid);
     function rep(label) {
       var up = N.bridgeUp, down = c.lower ? S.lower : N.bridgeDown, seq, repSec;
       if (c.bridge) { repSec = up + S.bridge + down; seq = [['UP', up], ['HOLD', S.bridge], ['DOWN', down]]; }
       else if (c.yt) { repSec = c.repSec; var hd = c.repSec - up - down; seq = [['UP', up]]; if (hd > 0) seq.push(['HOLD', hd]); seq.push(['DOWN', down]); }
       else if (c.pauseSec) { repSec = down + c.pauseSec + up; seq = [['DOWN', down], ['PAUSE', c.pauseSec], ['UP', up]]; }
       else { repSec = down + up; seq = [['DOWN', down], ['UP', up]]; }
-      return { k: 'reps', n: c.top, repSec: repSec, dur: c.top * repSec, label: label, done: !!c.done, bridge: !!c.bridge, hold: S.bridge, seq: seq };
+      return { k: 'reps', n: top, repSec: repSec, dur: top * repSec, label: label, done: !!c.done, bridge: !!c.bridge, hold: S.bridge, seq: seq };
     }
     if (c.kind === 'hold') ph.push({ k: 'hold', dur: c.sec, beep: true, label: 'Hold' });
     else if (c.kind === 'timed') ph.push({ k: 'hold', dur: c.sec, beep: true, label: 'Timed set' });
@@ -647,6 +678,7 @@
         if (!on) card.root.className += ' dim';
         if (on && m[pid].cfg.bridge) bridgeStepper(card);
         if (on && m[pid].cfg.lower) lowerStepper(card);
+        if (on) repsStepper(card, m, pid);
         s.cardsList.push({ card: card, on: on });
       });
       s.listen = (s.set === 1);
@@ -785,6 +817,7 @@
     appEl.textContent = '';
     G.ui = null;
     unlockScreen();
+    if (s.voice) recordSession();
     G.running = false;
     appEl.appendChild(h('div', { class: 'screen finish' },
       h('h1', {}, s.msg || 'Done'),
@@ -840,7 +873,7 @@
     if (!namedList().length) { showMsg('Type a name to begin.'); return; }
     Snd.unlock(); Voice.unlock(); lockScreen();
     Voice.clear();
-    G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.lastMot = nowMs();
+    G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.lastMot = nowMs(); G.activeSec = 0;
     enter(G.plan[0]);
   }
   function startDay() { startPlan(buildDay(), 'day'); }
@@ -866,6 +899,7 @@
     lastT = n;
     Voice.pump();
     if (G.paused) return;
+    if (G.running) G.activeSec = (G.activeSec || 0) + dt;
     if (G.running && G.step && stepTick[G.step.t]) stepTick[G.step.t](G.step, dt);
   }, 100);
 
@@ -980,6 +1014,7 @@
         onclick: function () { S.day = d.key; store.set('day', d.key); S.short = false; renderHome(); } }, d.title));
     });
     root.appendChild(picker);
+    root.appendChild(h('p', { class: 'hist' }, histLine()));
     root.appendChild(h('p', { class: 'sub' }, curDay().subtitle));
     root.appendChild(h('div', { class: 'slots' }, slotBox('her'), slotBox('his')));
     msgEl = h('p', { class: 'msg', role: 'alert', hidden: true });
@@ -1022,10 +1057,65 @@
         S.verse = (S.verse + 1) % C.verses.length; store.set('verse', S.verse); vtxt.textContent = C.verses[S.verse].text;
       } }, 'Next verse')));
     root.appendChild(h('button', { class: 'link', type: 'button', onclick: renderSafety }, 'Before You Start'));
+    root.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: renderHistory }, 'Past sessions')));
     appEl.appendChild(root);
   }
 
+  /* ---------- history (on this phone only, no names) ---------- */
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function histCounts() {
+    var c = store.get('hist_counts', {});
+    return (c && typeof c === 'object' && !Array.isArray(c)) ? c : {};
+  }
+  function histList() { var l = store.get('hist', []); return Array.isArray(l) ? l : []; }
+  function dayLabel(iso, withYear) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return MON[d.getMonth()] + ' ' + d.getDate() + (withYear ? ', ' + d.getFullYear() : '');
+  }
+  function recordSession() {
+    try {
+      var now = new Date().toISOString();
+      var e = { d: now, day: S.day, min: Math.max(1, Math.round((G.activeSec || 0) / 60)) };
+      if (named('her')) e.her = S.setsHer;
+      if (named('his')) e.his = S.setsHis;
+      var l = histList(); l.unshift(e); store.set('hist', l.slice(0, 30));
+      var c = histCounts(), k = c[S.day] || { n: 0, last: '' };
+      c[S.day] = { n: (k.n || 0) + 1, last: now };
+      store.set('hist_counts', c);
+    } catch (e2) { /* ignore */ }
+  }
+  function histLine() {
+    var k = histCounts()[S.day];
+    if (!k || !k.n) return 'Not done yet';
+    return 'Done ' + k.n + (k.n === 1 ? ' time' : ' times') + ' \u00b7 Last: ' + dayLabel(k.last, false);
+  }
+  function renderHistory() {
+    appEl.textContent = '';
+    var l = histList(), armed = false, tm = null;
+    var rows = h('div', { class: 'rows' });
+    if (!l.length) rows.appendChild(h('p', { class: 'sub' }, 'No sessions yet.'));
+    l.forEach(function (e) {
+      var bits = [dayLabel(e.d, true), 'Day ' + e.day, e.min + ' min'];
+      if (e.her) bits.push('Her ' + e.her + (e.her === 1 ? ' set' : ' sets'));
+      if (e.his) bits.push('His ' + e.his + (e.his === 1 ? ' set' : ' sets'));
+      rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, bits.join(' \u00b7 '))));
+    });
+    var clr = h('button', { class: 'btn alt', type: 'button' }, 'Clear history');
+    clr.onclick = function () {
+      if (!armed) {
+        armed = true; clr.textContent = 'Tap again to clear';
+        tm = setTimeout(function () { armed = false; clr.textContent = 'Clear history'; }, 4000);
+        return;
+      }
+      clearTimeout(tm); store.set('hist', []); store.set('hist_counts', {}); renderHistory();
+    };
+    appEl.appendChild(h('div', { class: 'screen' },
+      h('h1', {}, 'Past sessions'), h('p', { class: 'sub' }, 'Your last 30 full sessions, on this phone only.'), rows,
+      h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'), l.length ? clr : null)));
+  }
+
   /* ---------- go ---------- */
-  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, togglePause: togglePause, startSingle: startSingle, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
+  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, repsFor: repsFor, histLine: histLine, togglePause: togglePause, startSingle: startSingle, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();
