@@ -315,6 +315,7 @@
     c.who = h('div', { class: 'who' }, o.who || '');
     c.mv = h('div', { class: 'mv' }, o.mv || '');
     c.amt = h('div', { class: 'amt' }, o.amt || '');
+    c.repsTxt = o.repsN ? h('div', { class: 'amt reps' }, 'Reps: ' + o.repsN) : null;
     c.big = h('div', { class: 'big' }, '');
     c.st = h('div', { class: 'st' }, '');
     c.barFill = h('i');
@@ -330,7 +331,7 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
@@ -381,18 +382,18 @@
     var v = store.get(repsKey(m, pid), rg.max);
     return (v >= rg.min && v <= rg.max) ? v : rg.max;
   }
-  function repsStepper(card, m, pid) {
+  function repsControl(m, pid, label) {
     var rg = repRange(m, pid);
-    if (!rg) return;
+    if (!rg) return null;
     var val = h('b', {}, String(repsFor(m, pid)));
     function set(v) {
       v = Math.max(rg.min, Math.min(rg.max, v));
       store.set(repsKey(m, pid), v); val.textContent = String(v);
     }
-    card.root.insertBefore(h('div', { class: 'stepper' }, h('span', {}, 'Reps:'),
-      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Fewer reps', onclick: function () { set(repsFor(m, pid) - 1); } }, '\u2212'),
+    return h('div', { class: 'stepper repsline' }, h('span', {}, label + ' reps:'),
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'Fewer reps for ' + label, onclick: function () { set(repsFor(m, pid) - 1); } }, '\u2212'),
       val,
-      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'More reps', onclick: function () { set(repsFor(m, pid) + 1); } }, '+')), card.btns);
+      h('button', { class: 'btn alt small', type: 'button', 'aria-label': 'More reps for ' + label, onclick: function () { set(repsFor(m, pid) + 1); } }, '+'));
   }
 
   function fmtClock(sec) {
@@ -674,11 +675,10 @@
       var act = activeIn(s.set, m);
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0;
-        var card = makeCard({ who: shownName(pid), mv: m[pid] ? m[pid].name : '', amt: m[pid] ? m[pid].amount : '', easier: on ? easierOf(m, pid) : null, rep: on && m[pid].cfg.kind === 'reps' });
+        var card = makeCard({ who: shownName(pid), mv: m[pid] ? m[pid].name : '', amt: m[pid] ? m[pid].amount : '', easier: on ? easierOf(m, pid) : null, rep: on && m[pid].cfg.kind === 'reps', repsN: (on && repRange(m, pid)) ? repsFor(m, pid) : null });
         if (!on) card.root.className += ' dim';
         if (on && m[pid].cfg.bridge) bridgeStepper(card);
         if (on && m[pid].cfg.lower) lowerStepper(card);
-        if (on) repsStepper(card, m, pid);
         s.cardsList.push({ card: card, on: on });
       });
       s.listen = (s.set === 1);
@@ -746,7 +746,7 @@
         t = mkTrack(pid, m);
         var c = m[pid].cfg;
         card = makeCard({
-          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid), rep: m[pid].cfg.kind === 'reps',
+          who: shownName(pid), mv: m[pid].name, amt: m[pid].amount, easier: easierOf(m, pid), rep: m[pid].cfg.kind === 'reps', repsN: repRange(m, pid) ? repsFor(m, pid) : null,
           done: c.done ? function () { trackDone(s, t); } : null
         });
         s.tracks.push(t);
@@ -972,6 +972,10 @@
         return h('span', { class: 'who' }, (who.length ? shownName(pid) : slotLabel(pid)) + ': ' + m[pid].name + ' · ' + m[pid].amount);
       });
       workBox.rows.appendChild(rowBtn(String(m.n), lines, function () { startSingle('move', m.n); }));
+      var ctl = pids.filter(function (pid) { return m[pid] && repRange(m, pid); }).map(function (pid) {
+        return repsControl(m, pid, who.length ? shownName(pid) : (pid === 'her' ? 'Her' : 'His'));
+      });
+      if (ctl.length) workBox.rows.appendChild(h('div', { class: 'repsrow' }, ctl));
     });
   }
   function renderCoolRows() {

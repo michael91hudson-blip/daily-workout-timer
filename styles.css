@@ -161,3 +161,8 @@ h1{font-size:26px;margin:4px 0 2px}
 .hrow{cursor:default}
 .hbtns{display:flex;gap:10px;margin-top:14px}
 .hbtns .btn{flex:1}
+
+/* reps on the home screen and on cards */
+.repsrow{display:flex;flex-wrap:wrap;gap:6px 18px;padding:0 10px 4px}
+.repsline{margin-top:0}
+.card .amt.reps{font-weight:700}
