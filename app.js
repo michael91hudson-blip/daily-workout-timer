@@ -120,13 +120,23 @@
     busy: function () { return !!this.cur || this.q.length > 0; },
     blockingPending: function () { return !!(this.cur && this.cur.blocking) || this.q.some(function (i) { return i.blocking; }); },
     clear: function () { this.q = []; this.cancelCur(); },
+    pauseNow: function () {
+      this.paused = true;
+      var old = this.cur;
+      if (old) {
+        this.cancelCur();
+        if (!old.urgent) { old.cancelled = false; this.q.unshift(old); }
+      }
+    },
     cancelCur: function () {
       if (this.cur) this.cur.cancelled = true;
       try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
       try { if (this.aud) this.aud.pause(); } catch (e) { /* ignore */ }
       if (this.partFin) this.partFin();
     },
+    paused: false,
     pump: function () {
+      if (this.paused) return;
       if (this.cur && !this.cur.urgent && this.q.some(function (i) { return i.urgent; })) {
         var old = this.cur;
         this.cancelCur();
@@ -230,7 +240,7 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && G.running && !wl) lockScreen(); });
 
   /* ---------- session state ---------- */
-  var G = { running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
+  var G = { paused: false, running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
 
   function strList() {
     var keys = curDay().shortKeys;
@@ -265,13 +275,14 @@
     ui.cards = h('div', { class: 'cards' });
     ui.mot = h('div', { class: 'mot' }, '');
     ui.cap = h('div', { class: 'cap' }, '');
+    ui.pause = h('button', { class: 'btn alt', type: 'button', onclick: function () { togglePause(); } }, 'Pause');
     ui.skip = h('button', { class: 'btn', type: 'button', onclick: function () { advance(); } }, 'Skip');
     ui.plus = h('button', { class: 'btn alt', type: 'button', onclick: function () { plus10(); } }, '+10 sec');
     ui.home = h('button', { class: 'btn alt', type: 'button', onclick: function () { goHome(); } }, 'Home');
     ui.root = h('div', { id: 'play', class: sec },
       h('div', { class: 'band' }, ui.secname, ui.prog),
       ui.phase, ui.cards, ui.mot,
-      h('div', { class: 'dock' }, ui.cap, h('div', { class: 'ctrls' }, ui.skip, ui.plus, ui.home)));
+      h('div', { class: 'dock' }, ui.cap, h('div', { class: 'ctrls' }, ui.pause, ui.skip, ui.plus, ui.home)));
     appEl.appendChild(ui.root);
     G.ui = ui;
     return ui;
@@ -718,8 +729,25 @@
     TESTLOG('step', step.t + (step.n ? ' m' + step.n : '') + (step.set ? ' s' + step.set : '') + (step.st ? ' ' + step.st.key : '') + (step.round ? ' r' + step.round : ''));
     stepEnter[step.t](step);
   }
+  function setPaused(on) {
+    G.paused = on; Voice.paused = on;
+    var ui = G.ui;
+    if (!ui) return;
+    ui.pause.textContent = on ? 'Resume' : 'Pause';
+    ui.pause.className = on ? 'btn' : 'btn alt';
+    ui.root.className = ui.root.className.replace(/ ?\bpaused\b/, '') + (on ? ' paused' : '');
+    ui.plus.disabled = on;
+    Array.prototype.forEach.call(ui.root.querySelectorAll('.card button'), function (b) { b.disabled = on; });
+    if (on) ui.phase.textContent = 'Paused';
+    TESTLOG(on ? 'pause' : 'resume');
+  }
+  function togglePause() {
+    if (!G.running || !G.step || G.step.t === 'finish') return;
+    if (G.paused) { setPaused(false); } else { Voice.pauseNow(); setPaused(true); }
+  }
   function advance() {
     if (!G.running || !G.step) return;
+    G.paused = false; Voice.paused = false;
     var prev = G.step;
     Voice.clear();
     if (prev.t === 'warmup') Voice.say([{ id: 'warmup-done', text: 'Warm-up done.' }]);
@@ -755,6 +783,7 @@
     startPlan(p, 'single');
   }
   function goHome() {
+    G.paused = false; Voice.paused = false;
     G.running = false; G.step = null; G.ui = null;
     Voice.clear(); unlockScreen();
     renderHome();
@@ -764,6 +793,7 @@
     var n = nowMs(), dt = Math.min(0.5, (n - lastT) / 1000);
     lastT = n;
     Voice.pump();
+    if (G.paused) return;
     if (G.running && G.step && stepTick[G.step.t]) stepTick[G.step.t](G.step, dt);
   }, 100);
 
@@ -899,6 +929,6 @@
   }
 
   /* ---------- go ---------- */
-  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, startSingle: startSingle, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
+  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, togglePause: togglePause, startSingle: startSingle, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();

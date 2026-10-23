@@ -8,12 +8,12 @@ window.CONTENT = {
    "moves": [
     {
      "her": {
-      "name": "Knee Pushups",
+      "name": "Counter Pushups",
       "amount": "8–12",
-      "how": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
-      "easier": "Hands on the counter",
-      "easierHow": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
-      "easierHowName": "Counter Pushup",
+      "how": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
       "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
       "feel": "Chest, arms, shoulders, and abs",
       "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
@@ -26,7 +26,7 @@ window.CONTENT = {
       "cues": {
        "how": {
         "id": "daya-m1-her-how",
-        "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up."
+        "text": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag."
        },
        "feel": {
         "id": "daya-m1-both-feel",
@@ -813,12 +813,12 @@ window.CONTENT = {
    "moves": [
     {
      "her": {
-      "name": "Knee Pushups",
+      "name": "Counter Pushups",
       "amount": "8–12",
-      "how": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
-      "easier": "Hands on the counter",
-      "easierHow": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
-      "easierHowName": "Counter Pushup",
+      "how": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
+      "easier": null,
+      "easierHow": null,
+      "easierHowName": null,
       "muscles": "Pectoralis major (chest), triceps (back of upper arm), anterior deltoid (front of shoulder), serratus anterior (along your ribs)",
       "feel": "Chest, arms, shoulders, and abs",
       "fix": "Lower-back strain means your hips are sagging. Shoulder discomfort means your elbows are flared, so keep them about 45°. Wrist discomfort means your hands are too far forward or too wide.",
@@ -831,7 +831,7 @@ window.CONTENT = {
       "cues": {
        "how": {
         "id": "dayc-m1-her-how",
-        "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up."
+        "text": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag."
        },
        "feel": {
         "id": "dayc-m1-both-feel",
@@ -1766,7 +1766,7 @@ window.CONTENT = {
   },
   {
    "id": "daya-m1-her-how",
-   "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+   "text": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
    "where": "Day A, Move 1, How (read before the move, set 1)",
    "who": "Her workout"
   },
@@ -2060,7 +2060,7 @@ window.CONTENT = {
   },
   {
    "id": "dayc-m1-her-how",
-   "text": "On your knees with hands shoulder-width, body straight from knees to head. Lower your chest toward the floor, then push back up.",
+   "text": "Hands on the counter, slightly wider than shoulder-width. Walk your feet back until your arms are straight under your shoulders and your body is straight from head to heels. Bend your elbows, angled about 45° from your body, to bring your chest toward the counter, then push back. Don't let your hips sag.",
    "where": "Day C, Move 1, How (read before the move, set 1)",
    "who": "Her workout"
   },

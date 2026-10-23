@@ -143,3 +143,8 @@ h1{font-size:26px;margin:4px 0 2px}
 /* warm-up parts */
 .card .strip.wpart{background:#F4B183;color:#431407}
 .card .strip.wswitch{background:#E5E7EB;color:#1F2937}
+
+/* pause button */
+.dock .ctrls{gap:6px}
+.dock .ctrls .btn{padding:10px 4px;font-size:16px}
+#play.paused .phase{display:block !important}
