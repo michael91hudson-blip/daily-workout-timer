@@ -46,8 +46,14 @@
     day: store.get('day', 'B'),
     bridge: store.get('her_bridge', N.bridgeHoldDefault),
     short: false,
-    verse: store.get('verse', 0)
+    verse: store.get('verse', 0),
+    vspeed: store.get('vspeed', 2),
+    vgender: store.get('vgender', 'woman')
   };
+  var RATES = [0.7, 0.85, 1, 1.2, 1.4];
+  var SPEEDNAMES = ['Slowest', 'Slow', 'Normal', 'Fast', 'Faster'];
+  if (!(S.vspeed >= 0 && S.vspeed < RATES.length)) S.vspeed = 2;
+  if (S.vgender !== 'woman' && S.vgender !== 'man') S.vgender = 'woman';
   if (S.setsHer !== 1 && S.setsHer !== 2 && S.setsHer !== 3) S.setsHer = 2;
   if (S.setsHis !== 2 && S.setsHis !== 3) S.setsHis = 2;
   if (S.lower !== N.pushupDownDefault && S.lower !== N.pushupDownMax) S.lower = N.pushupDownDefault;
@@ -106,12 +112,13 @@
         if ('speechSynthesis' in window) { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); }
       } catch (e) { /* ignore */ }
     },
-    est: function (text) { return text.trim().split(/\s+/).length / 2.4 + 0.6; },
-    estFit: function (text) { return text.trim().split(/\s+/).length / 2.9 + 0.2; },
+    rate: function () { return RATES[S.vspeed] || 1; },
+    est: function (text) { return (text.trim().split(/\s+/).length / 2.4 + 0.6) / this.rate(); },
+    estFit: function (text) { return (text.trim().split(/\s+/).length / 2.9 + 0.2) / this.rate(); },
     say: function (parts, o) {
       o = o || {};
       var self = this;
-      var it = { parts: parts, urgent: !!o.urgent, blocking: !!o.blocking, nocap: !!o.nocap, fits: o.fits || null, onDone: o.onDone || null, cancelled: false };
+      var it = { parts: parts, urgent: !!o.urgent, blocking: !!o.blocking, nocap: !!o.nocap, dropIfCut: !!o.dropIfCut, fits: o.fits || null, onDone: o.onDone || null, cancelled: false };
       it.estTotal = parts.reduce(function (a, p) { return a + self.estFit(p.text); }, 0);
       this.q.push(it);
       TESTLOG('queue', parts.map(function (p) { return p.text; }).join(' | '));
@@ -140,7 +147,7 @@
       if (this.cur && !this.cur.urgent && this.q.some(function (i) { return i.urgent; })) {
         var old = this.cur;
         this.cancelCur();
-        if ((old.restarts || 0) < 2) { old.restarts = (old.restarts || 0) + 1; old.cancelled = false; this.q.unshift(old); }
+        if ((old.restarts || 0) < 2 && !old.dropIfCut) { old.restarts = (old.restarts || 0) + 1; old.cancelled = false; this.q.unshift(old); }
       }
       if (this.cur) return;
       var idx = -1, i;
@@ -181,14 +188,28 @@
         self.playPart(it.parts[i], function () { run(i + 1); });
       })(0);
     },
+    genderOk: true,
     voice: function () {
-      if (this.picked) return this.picked;
+      if (this.picked && this.pickedFor === S.vgender) return this.picked;
+      this.genderOk = true;
       try {
         var vs = window.speechSynthesis.getVoices() || [];
         var en = vs.filter(function (v) { return /^en[-_]US/i.test(v.lang); });
         if (!en.length) en = vs.filter(function (v) { return /^en/i.test(v.lang); });
-        var pref = en.filter(function (v) { return /samantha|google us|natural|aria|jenny|zira/i.test(v.name); });
-        this.picked = (pref[0] || en[0] || null);
+        var fem = /female|samantha|victoria|karen|moira|tessa|fiona|zira|jenny|aria|susan|hazel|catherine|serena|allison|ava\b|nicky|kathy|heather|linda/i;
+        var mal = /(^|[^e])male|daniel|alex\b|fred|david|mark\b|guy\b|george|ryan|james|oliver|aaron|arthur|christopher|eric|roger|steffan|tom\b|matthew/i;
+        function nm(v) { return (v.name || '') + ' ' + (v.voiceURI || ''); }
+        var pick = null;
+        if (S.vgender === 'man') {
+          pick = en.filter(function (v) { return !/female/i.test(nm(v)) && mal.test(nm(v)); })[0] || null;
+          if (!pick) this.genderOk = false;
+        } else {
+          pick = en.filter(function (v) { return fem.test(nm(v)); })[0] || en.filter(function (v) { return /google us|natural/i.test(v.name); })[0] || null;
+        }
+        if (!pick && !this.genderOk) pick = en.filter(function (v) { return /samantha|google us|natural|aria|jenny|zira/i.test(v.name); })[0] || en[0] || null;
+        if (!pick && this.genderOk) pick = en[0] || null;
+        this.picked = pick; this.pickedFor = S.vgender;
+        if (!vs.length) this.picked = null;
       } catch (e) { this.picked = null; }
       return this.picked;
     },
@@ -209,7 +230,7 @@
         if (!('speechSynthesis' in window)) { setTimeout(fin, 300); return; }
         try {
           var u = new SpeechSynthesisUtterance(part.text);
-          u.lang = 'en-US';
+          u.lang = 'en-US'; u.rate = self.rate();
           var v = self.voice(); if (v) u.voice = v;
           u.onend = fin; u.onerror = fin;
           window.speechSynthesis.speak(u);
@@ -219,6 +240,7 @@
         self.aud.onended = fin;
         self.aud.onerror = function () { self.missing[part.id] = true; useTts(); };
         try {
+          self.aud.defaultPlaybackRate = self.rate(); self.aud.playbackRate = self.rate();
           self.aud.src = 'Voices/' + part.id + '.m4a';
           var p = self.aud.play();
           if (p && p.catch) p.catch(function () { self.missing[part.id] = true; useTts(); });
@@ -240,7 +262,7 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && G.running && !wl) lockScreen(); });
 
   /* ---------- session state ---------- */
-  var G = { paused: false, running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
+  var G = { finishSay: false, paused: false, running: false, plan: [], i: -1, step: null, mode: 'day', ui: null, lastMot: 0, motOrder: [], motPos: 0 };
 
   function strList() {
     var keys = curDay().shortKeys;
@@ -374,6 +396,24 @@
     return { pid: null, ph: ph, pi: 0, el: 0, fin: false, repIdx: -1, upSaid: false, downSaid: false };
   }
 
+  function sayUpDown(s, t, word) {
+    var mode = s.udMode;
+    if (!mode || mode.silent.indexOf(t) >= 0) return;
+    var parts = [];
+    if (mode.names && t.pid) parts.push({ text: sayName(t.pid) + '.' });
+    parts.push(word === 'UP' ? { id: 'up', text: 'Up.' } : { id: 'down', text: 'Down.' });
+    Voice.say(parts, { urgent: true, nocap: true });
+  }
+  function setUpDownMode(s) {
+    var rt = s.tracks.filter(function (t) { return t.ph.some(function (p) { return p.seq; }); });
+    var sig = function (t) { return JSON.stringify(t.ph.map(function (p) { return [p.k, p.seq || null, p.repSec || 0, p.dur]; })); };
+    var mode = { names: false, silent: [] };
+    if (rt.length > 1) {
+      if (rt.every(function (t) { return sig(t) === sig(rt[0]); })) mode.silent = rt.slice(1);
+      else mode.names = true;
+    }
+    s.udMode = mode;
+  }
   function announcePause(s, t, p) {
     var parts = [];
     if (p.named && s.activeCount > 1) parts.push({ text: sayName(t.pid) + '.' });
@@ -381,7 +421,7 @@
     Voice.say(parts, { urgent: true });
   }
   function nextPhase(s, t) {
-    t.pi++; t.el = 0; t.repIdx = -1; t.upSaid = false; t.downSaid = false;
+    t.pi++; t.el = 0; t.repIdx = -1; t.upSaid = false; t.downSaid = false; t.lastSeq = null;
     if (t.pi >= t.ph.length) { t.fin = true; return; }
     var p = t.ph[t.pi];
     if (p.k === 'pause') announcePause(s, t, p);
@@ -398,10 +438,18 @@
     if (p.k === 'reps') {
       var ri = Math.min(Math.floor(t.el / p.repSec), p.n - 1);
       if (ri > t.repIdx) { t.repIdx = ri; t.upSaid = false; t.downSaid = false; if (!p.bridge) Snd.tick(); }
-      if (p.bridge) {
-        var inRep = t.el - ri * p.repSec;
-        if (!t.upSaid) { t.upSaid = true; Voice.say([{ id: 'up', text: 'Up.' }], { urgent: true, nocap: true }); }
-        if (!t.downSaid && inRep >= N.bridgeUp + p.hold) { t.downSaid = true; Voice.say([{ id: 'down', text: 'Down.' }], { urgent: true, nocap: true }); }
+      if (p.seq) {
+        var inRep = t.el - ri * p.repSec, acc = 0, qi = p.seq.length - 1, q;
+        for (q = 0; q < p.seq.length; q++) {
+          if (inRep < acc + p.seq[q][1]) { qi = q; break; }
+          acc += p.seq[q][1];
+        }
+        var key = ri + ':' + qi;
+        if (t.lastSeq !== key) {
+          t.lastSeq = key;
+          var word = p.seq[qi][0];
+          if (word === 'UP' || word === 'DOWN') sayUpDown(s, t, word);
+        }
       }
       if (t.el >= p.dur) nextPhase(s, t);
     } else {
@@ -464,10 +512,13 @@
     var p = t.ph[t.pi], rem = p.dur - t.el, best = Infinity;
     var nextIsPause = !!(t.ph[t.pi + 1] && t.ph[t.pi + 1].k === 'pause');
     if (p.k === 'reps') {
-      if (p.bridge) {
-        var ri = Math.min(Math.floor(t.el / p.repSec), p.n - 1), inRep = t.el - ri * p.repSec, downAt = N.bridgeUp + p.hold;
-        if (!t.downSaid && inRep < downAt) best = Math.min(best, downAt - inRep);
-        if (ri < p.n - 1) best = Math.min(best, p.repSec - inRep);
+      if (p.seq) {
+        var ri = Math.min(Math.floor(t.el / p.repSec), p.n - 1), inRep = t.el - ri * p.repSec, acc = 0, q, isUD = function (w) { return w === 'UP' || w === 'DOWN'; };
+        for (q = 0; q < p.seq.length; q++) {
+          if (acc > inRep + 0.001 && isUD(p.seq[q][0])) best = Math.min(best, acc - inRep);
+          acc += p.seq[q][1];
+        }
+        if (ri < p.n - 1 && isUD(p.seq[0][0])) best = Math.min(best, p.repSec - inRep);
       }
       if (nextIsPause) best = Math.min(best, rem);
     } else if (p.k === 'hold') { if (nextIsPause) best = Math.min(best, rem); }
@@ -511,13 +562,20 @@
     }
     return C.motivation[G.motOrder[G.motPos++]];
   }
+  function motAllowed(s) {
+    if (s.t === 'rest') return true;
+    if (!s.tracks) return false;
+    var live = s.tracks.filter(function (t) { return !t.fin; });
+    return live.length > 0 && live.every(function (t) { var p = t.ph[t.pi]; return p.k === 'hold' && p.label !== 'Timed set'; });
+  }
   function maybeMotivate(s, windowEnd) {
     var n = nowMs();
+    if (!motAllowed(s)) return;
     if (Voice.busy() || n - Voice.lastEnd < 4000 || n - G.lastMot < 25000 || s.age < 5) return;
     var m = nextMot();
-    if (Voice.est(m.text) + 1 > windowEnd) { G.motPos--; return; }
+    if (Voice.est(m.text) * 1.2 + 3 > windowEnd) { G.motPos--; return; }
     G.lastMot = n;
-    Voice.say([{ id: m.id, text: m.text }], { nocap: true });
+    Voice.say([{ id: m.id, text: m.text }], { nocap: true, dropIfCut: true });
     G.ui.mot.textContent = m.text + (m.ref ? ' — ' + m.ref : '');
     s.motUntil = s.age + 7;
   }
@@ -597,7 +655,11 @@
       if (!s.single && s.n === 1 && s.set === 2) Voice.say([{ id: 'set-2', text: 'Set two.' }], { blocking: s.listen });
       if (!s.single && s.n === 1 && s.set === 3) Voice.say([{ id: 'set-3', text: 'Set three.' }], { blocking: s.listen });
       Voice.say([{ id: 'move-' + s.n, text: 'Move ' + s.n }], { blocking: s.listen });
-      if (s.set === 1) queueCueGroups(act, function (pid, typ) { return m[pid].cues[typ]; }, ['how'], { blocking: true });
+      if (s.set === 1) {
+        ['how', 'feel', 'fix'].forEach(function (typ) {
+          queueCueGroups(act, function (pid, t2) { return m[pid].cues[t2]; }, [typ], { blocking: true });
+        });
+      }
     } else {
       ui = scaffold('cool', 'Cool-down', 'Stretch ' + (s.k + 1) + ' of ' + s.total + ' · Round ' + s.round + ' of ' + N.stretchRounds);
       s.listen = (s.round === 1);
@@ -606,7 +668,11 @@
       s.cardsList.push({ card: c2, on: true });
       if (!s.single && s.k === 0 && s.round === 1) Voice.say([{ id: 'section-cooldown', text: 'Cool-down.' }], { blocking: s.listen });
       if (!s.single && s.k === 0 && s.round === 2) Voice.say([{ id: 'round-2', text: 'Round two.' }], { blocking: s.listen });
-      if (s.round === 1) Voice.say([{ id: s.st.cues.how.id, text: s.st.cues.how.text }], { blocking: true });
+      if (s.round === 1) {
+        ['how', 'feel', 'fix'].forEach(function (typ) {
+          Voice.say([{ id: s.st.cues[typ].id, text: s.st.cues[typ].text }], { blocking: true });
+        });
+      }
     }
     ui.phase.textContent = s.listen ? 'Listen' : 'Get ready';
   };
@@ -659,7 +725,9 @@
       s.cardsList.push({ card: card, t: t, on: on });
     });
     ui.phase.textContent = 'Go';
-    queueCueGroups(act, function (pid, typ) { return m[pid].cues[typ]; }, ['feel', 'fix'], { fits: function (it) { return fitCheck(s, it); } });
+    setUpDownMode(s);
+    Voice.say([{ id: 'start', text: 'Start.' }], { urgent: true, nocap: true });
+    if (s.set !== 1) queueCueGroups(act, function (pid, typ) { return m[pid].cues[typ]; }, ['feel', 'fix'], { fits: function (it) { return fitCheck(s, it); } });
   };
   stepTick.move = function (s, dt) {
     s.age += dt;
@@ -670,7 +738,7 @@
       s.tracks.forEach(function (t) { trackTick(s, t, dt); });
     }
     s.cardsList.forEach(function (x) { renderTrack(s, x.t, x.card, !x.on); });
-    if (s.tracks.every(function (t) { return t.fin; })) { advance(); return; }
+    if (s.tracks.every(function (t) { return t.fin; })) { G.finishSay = true; advance(); return; }
     var w = windowLeft(s);
     maybeMotivate(s, Math.min(w.end, w.hold, w.urgent - 0.3));
   };
@@ -704,7 +772,9 @@
     var card = makeCard({ who: who, mv: s.st.name, amt: s.st.targets, done: s.st.kind === 'rounds' ? function () { trackDone(s, t); } : null });
     s.cardsList = [{ card: card, t: t, on: true }];
     ui.phase.textContent = 'Go';
-    [s.st.cues.feel, s.st.cues.fix].forEach(function (c) {
+    setUpDownMode(s);
+    Voice.say([{ id: 'start', text: 'Start.' }], { urgent: true, nocap: true });
+    if (s.round !== 1) [s.st.cues.feel, s.st.cues.fix].forEach(function (c) {
       Voice.say([{ id: c.id, text: c.text }], { fits: function (it) { return fitCheck(s, it); } });
     });
   };
@@ -750,6 +820,8 @@
     G.paused = false; Voice.paused = false;
     var prev = G.step;
     Voice.clear();
+    if (G.finishSay && (prev.t === 'move' || prev.t === 'stretch')) Voice.say([{ id: 'finished', text: 'Finished.' }], { urgent: true, nocap: true });
+    G.finishSay = false;
     if (prev.t === 'warmup') Voice.say([{ id: 'warmup-done', text: 'Warm-up done.' }]);
     G.i++;
     if (G.i >= G.plan.length) { goHome(); return; }
@@ -875,6 +947,30 @@
     });
   }
 
+  function voiceBox() {
+    var msg = h('p', { class: 'sub', hidden: true });
+    function seg(list, get, put) {
+      var btns = [];
+      var row = h('div', { class: 'seg vseg' });
+      list.forEach(function (o) {
+        var b = h('button', { class: 'btn small', type: 'button', 'aria-pressed': get() === o.v ? 'true' : 'false' }, o.t);
+        b.onclick = function () { put(o.v); btns.forEach(function (x) { x.b.setAttribute('aria-pressed', get() === x.v ? 'true' : 'false'); }); msg.hidden = true; };
+        btns.push({ b: b, v: o.v }); row.appendChild(b);
+      });
+      return row;
+    }
+    var speedRow = seg(SPEEDNAMES.map(function (n, i) { return { t: n, v: i }; }), function () { return S.vspeed; }, function (v) { S.vspeed = v; store.set('vspeed', v); });
+    var genRow = seg([{ t: 'Woman', v: 'woman' }, { t: 'Man', v: 'man' }], function () { return S.vgender; }, function (v) { S.vgender = v; store.set('vgender', v); Voice.picked = null; });
+    var test = h('button', { class: 'btn alt small', type: 'button', onclick: function () {
+      Voice.unlock(); Voice.clear();
+      Voice.picked = null; Voice.voice();
+      Voice.say([{ text: 'This is how the voice sounds.' }], { urgent: true, nocap: true });
+      if (S.vgender === 'man' && !Voice.genderOk) { msg.textContent = 'No man voice was found on this phone, so the default voice is used.'; msg.hidden = false; } else { msg.hidden = true; }
+    } }, 'Test voice');
+    return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Voice'),
+      h('label', {}, 'Speed'), speedRow, h('label', {}, 'Voice'), genRow, h('div', { class: 'vtest' }, test), msg);
+  }
+
   function renderHome() {
     appEl.textContent = '';
     var root = h('div', { class: 'screen' });
@@ -917,6 +1013,7 @@
     renderCoolRows();
 
     root.appendChild(h('button', { class: 'btn start', type: 'button', onclick: startDay }, 'Start ' + curDay().title.split(':')[0]));
+    root.appendChild(voiceBox());
 
     // verse
     var vtxt = h('div', {}, C.verses[S.verse].text);

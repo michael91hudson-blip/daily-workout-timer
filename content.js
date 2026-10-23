@@ -1717,6 +1717,18 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "start",
+   "text": "Start.",
+   "where": "Start of each move and stretch",
+   "who": "Both"
+  },
+  {
+   "id": "finished",
+   "text": "Finished.",
+   "where": "End of each move and stretch",
+   "who": "Both"
+  },
+  {
    "id": "switch-sides",
    "text": "Switch sides.",
    "where": "Side change (moves and stretches)",
@@ -1725,13 +1737,13 @@ window.CONTENT = {
   {
    "id": "up",
    "text": "Up.",
-   "where": "Glute Bridge: start of each rep",
+   "where": "Every rep move: start of each Up",
    "who": "Both"
   },
   {
    "id": "down",
    "text": "Down.",
-   "where": "Glute Bridge: end of the hold",
+   "where": "Every rep move: start of each Down",
    "who": "Both"
   },
   {

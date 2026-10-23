@@ -148,3 +148,10 @@ h1{font-size:26px;margin:4px 0 2px}
 .dock .ctrls{gap:6px}
 .dock .ctrls .btn{padding:10px 4px;font-size:16px}
 #play.paused .phase{display:block !important}
+
+/* voice box */
+.voicebox{--fill:#fff;--edge:var(--line)}
+.voicebox label{display:block;font-size:14px;color:var(--muted);margin:8px 0 2px}
+.vseg{flex-wrap:nowrap;gap:6px}
+.vseg .btn{flex:1 1 0;min-width:0;min-height:44px;font-size:14px;padding:6px 2px}
+.vtest{margin-top:10px}
