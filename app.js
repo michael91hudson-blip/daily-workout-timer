@@ -48,8 +48,18 @@
     short: false,
     verse: store.get('verse', 0),
     vspeed: store.get('vspeed', 2),
-    vgender: store.get('vgender', 'woman')
+    vgender: 'woman'
   };
+  function planWeek(dt) {
+    var P = C.plan, a = P.start.split('-'), d = dt || new Date();
+    var days = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
+    return Math.max(1, Math.min(P.weeks, Math.floor(days / 7) + 1));
+  }
+  var WEEK = planWeek();
+  if (store.get('plan_week', 0) !== WEEK) {
+    S.setsHer = C.plan.setsHer[WEEK - 1]; S.setsHis = C.plan.setsHis[WEEK - 1];
+    store.set('her_sets', S.setsHer); store.set('his_sets', S.setsHis); store.set('plan_week', WEEK);
+  }
   var RATES = [0.7, 0.85, 1, 1.2, 1.4];
   var SPEEDNAMES = ['Slowest', 'Slow', 'Normal', 'Fast', 'Faster'];
   if (!(S.vspeed >= 0 && S.vspeed < RATES.length)) S.vspeed = 2;
@@ -269,13 +279,14 @@
     return (S.short && keys) ? C.stretches.filter(function (s) { return keys.indexOf(s.key) >= 0; }) : C.stretches;
   }
 
-  function buildDay() {
+  function buildDay(cardio) {
     var p = [{ t: 'warmup' }];
     var ts = totalSets(), s, n, r;
     for (s = 1; s <= ts; s++) {
       for (n = 1; n <= curMoves().length; n++) { p.push({ t: 'ready', what: 'move', n: n, set: s }); p.push({ t: 'move', n: n, set: s }); }
       if (s < ts) p.push({ t: 'rest', set: s });
     }
+    if (cardio) { p.push({ t: 'ready', what: 'cardio', kind: cardio.kind, mins: cardio.mins }); p.push({ t: 'timer', kind: cardio.kind, mins: cardio.mins, inDay: true }); }
     var L = strList();
     for (r = 1; r <= N.stretchRounds; r++) {
       L.forEach(function (st, k) {
@@ -294,6 +305,7 @@
     ui.secname = h('span', { class: 'secname' }, secName);
     ui.prog = h('span', { class: 'prog' }, prog || '');
     ui.phase = h('div', { class: 'phase' }, '');
+    ui.next = h('div', { class: 'next' }, '');
     ui.cards = h('div', { class: 'cards' });
     ui.mot = h('div', { class: 'mot' }, '');
     ui.cap = h('div', { class: 'cap' }, '');
@@ -304,7 +316,7 @@
     ui.home = h('button', { class: 'btn alt', type: 'button', onclick: function () { goHome(); } }, 'Home');
     ui.root = h('div', { id: 'play', class: sec },
       h('div', { class: 'band' }, ui.secname, ui.prog),
-      ui.phase, ui.cards, ui.mot,
+      ui.phase, ui.next, ui.cards, ui.mot,
       h('div', { class: 'dock' }, ui.cap, h('div', { class: 'ctrls' }, ui.pause, ui.repeat, ui.skip, ui.plus, ui.home)));
     appEl.appendChild(ui.root);
     G.ui = ui;
@@ -696,6 +708,11 @@
           queueCueGroups(act, function (pid, t2) { return m[pid].cues[t2]; }, [typ], { blocking: true });
         });
       }
+    } else if (s.what === 'cardio') {
+      ui = scaffold('work', 'Cardio', (s.kind === 'tread' ? 'Treadmill' : 'Circuit') + ' \u00b7 ' + s.mins + ' min');
+      var cw = namedList().map(shownName).join(' & ');
+      s.cardsList.push({ card: makeCard({ who: cw, mv: 'Cardio', amt: (s.kind === 'tread' ? 'Treadmill' : 'Circuit') + ' \u00b7 ' + s.mins + ' min' }), on: true });
+      Voice.say([{ id: 'section-cardio', text: 'Cardio.' }], {});
     } else {
       ui = scaffold('cool', 'Cool-down', 'Stretch ' + (s.k + 1) + ' of ' + s.total + ' · Round ' + s.round + ' of ' + N.stretchRounds);
       s.listen = (s.round === 1);
@@ -866,13 +883,18 @@
       card.big.textContent = String(Math.max(0, Math.ceil(rem)));
       card.barFill.style.width = Math.max(0, Math.min(1, 1 - rem / (work ? T.workSec : T.easySec))) * 100 + '%';
       card.mv.textContent = work ? mv.name : 'Easy';
-      card.amt.textContent = work ? 'Work \u00b7 ' + T.workSec + ' sec' : T.easyName + ' \u00b7 next: ' + nx.name;
+      card.amt.textContent = work ? 'Work \u00b7 ' + T.workSec + ' sec' : T.easyName;
+      G.ui.next.textContent = 'Next: ' + (bi === s.nb - 1 ? (G.mode === 'day' ? planNextText(G.i) : 'Finished') : (work ? 'Easy' : nx.name));
       card.st.textContent = fmtClock(left) + ' left \u00b7 Minute ' + (bi + 1) + ' of ' + s.nb;
       card.strip.textContent = work ? 'WORK' : 'EASY'; card.strip.className = 'strip ' + (work ? 'up' : 'hold');
       s.easierEl.textContent = work ? 'Easier: ' + mv.easier : '';
       s.easierEl.hidden = !work;
     }
-    if (s.el >= s.total) { G.finishSay = true; advance(); }
+    if (s.el >= s.total) {
+      G.finishSay = true;
+      if (s.inDay) G.cardioDone = { k: s.kind, m: s.mins }; else recordTimer(s);
+      advance();
+    }
   };
 
   /* ---------- step: finish ---------- */
@@ -890,10 +912,34 @@
   stepTick.finish = function () {};
 
   /* ---------- engine ---------- */
+  /* what comes after the step you are on (full days only) */
+  function nextLabel(st) {
+    if (st.t === 'finish') return 'Finished';
+    if (st.t === 'rest') return 'Rest';
+    if (st.what === 'cardio') return 'Cardio';
+    if (st.what === 'stretch') return st.st.name;
+    var m = curMoves()[st.n - 1], act = activeIn(st.set, m);
+    var names = act.map(function (pid) { return m[pid].name; });
+    if (names.every(function (x) { return x === names[0]; })) return names[0];
+    return act.map(function (pid) { return shownName(pid) + ': ' + m[pid].name; }).join(' \u00b7 ');
+  }
+  function planNextText(i) {
+    var cur = G.plan[i], base = cur.t === 'ready' ? i + 1 : i, j;
+    for (j = base + 1; j < G.plan.length; j++) {
+      var st = G.plan[j];
+      if (st.t === 'ready' || st.t === 'rest' || st.t === 'finish') {
+        var lab = nextLabel(st);
+        if (cur.t === 'rest' && st.t === 'ready' && st.what === 'move') lab = 'Set ' + st.set + ', Move ' + st.n + ': ' + lab;
+        return lab;
+      }
+    }
+    return 'Finished';
+  }
   function enter(step) {
     G.step = step;
     TESTLOG('step', step.t + (step.n ? ' m' + step.n : '') + (step.set ? ' s' + step.set : '') + (step.st ? ' ' + step.st.key : '') + (step.round ? ' r' + step.round : ''));
     stepEnter[step.t](step);
+    if (G.ui && G.ui.next) G.ui.next.textContent = (G.mode === 'day' && step.t !== 'finish') ? 'Next: ' + planNextText(G.i) : '';
   }
   function setPaused(on) {
     G.paused = on; Voice.paused = on;
@@ -957,10 +1003,16 @@
     if (mode !== 'timer' && !namedList().length) { showMsg('Type a name to begin.'); return; }
     Snd.unlock(); Voice.unlock(); lockScreen();
     Voice.clear();
-    G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.lastMot = nowMs(); G.activeSec = 0;
+    G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.cardioDone = null; G.lastMot = nowMs(); G.activeSec = 0;
     enter(G.plan[0]);
   }
-  function startDay() { startPlan(buildDay(), 'day'); }
+  function startDay() {
+    if (!namedList().length) { showMsg('Type a name to begin.'); return; }
+    timerSetup({ title: 'Cardio today?', mins: C.cardio.cardioMins, def: C.cardio.cardioDefault, key: 'cardio_min',
+      go: [{ t: 'Treadmill', fn: function (m) { startPlan(buildDay({ kind: 'tread', mins: m }), 'day'); } },
+           { t: 'Circuit', fn: function (m) { startPlan(buildDay({ kind: 'circuit', mins: m }), 'day'); } },
+           { t: 'Skip cardio', fn: function () { startPlan(buildDay(null), 'day'); } }] });
+  }
   function startTimer(kind, mins) { startPlan([{ t: 'timer', kind: kind, mins: mins }, { t: 'finish', msg: 'Done' }], 'timer'); }
   function startSingle(kind, a) {
     var p;
@@ -1022,6 +1074,7 @@
     if (pid === 'his') {
       box.appendChild(h('label', {}, 'Sets (weeks 1\u20132: 2. Weeks 3\u20134: 3)'));
       box.appendChild(segSets([2, 3], function () { return S.setsHis; }, function (v) { S.setsHis = v; store.set('his_sets', v); }));
+      box.appendChild(h('p', { class: 'sub' }, 'Week ' + WEEK + ': ' + C.plan.setsHis[WEEK - 1] + ' sets suggested'));
       var lval = h('b', {}, S.lower + ' sec');
       function setLower(v) { S.lower = Math.max(N.pushupDownDefault, Math.min(N.pushupDownMax, v)); store.set('his_lower', S.lower); lval.textContent = S.lower + ' sec'; }
       box.appendChild(h('label', {}, 'Slow Floor Pushups: lowering'));
@@ -1032,6 +1085,7 @@
     if (pid === 'her') {
       box.appendChild(h('label', {}, 'Sets (weeks 1\u20132: 2, or 1 if 2 is too hard. Weeks 3\u20134: 3)'));
       box.appendChild(segSets([1, 2, 3], function () { return S.setsHer; }, function (v) { S.setsHer = v; store.set('her_sets', v); }));
+      box.appendChild(h('p', { class: 'sub' }, 'Week ' + WEEK + ': ' + C.plan.setsHer[WEEK - 1] + ' sets suggested'));
       var val = h('b', {}, S.bridge + ' sec');
       function setHold(v) { S.bridge = Math.max(N.bridgeHoldMin, Math.min(N.bridgeHoldMax, v)); store.set('her_bridge', S.bridge); val.textContent = S.bridge + ' sec'; }
       box.appendChild(h('label', {}, 'Glute Bridge top hold'));
@@ -1071,31 +1125,29 @@
   }
 
   function voiceBox() {
-    var msg = h('p', { class: 'sub', hidden: true });
     function seg(list, get, put) {
       var btns = [];
       var row = h('div', { class: 'seg vseg' });
       list.forEach(function (o) {
         var b = h('button', { class: 'btn small', type: 'button', 'aria-pressed': get() === o.v ? 'true' : 'false' }, o.t);
-        b.onclick = function () { put(o.v); btns.forEach(function (x) { x.b.setAttribute('aria-pressed', get() === x.v ? 'true' : 'false'); }); msg.hidden = true; };
+        b.onclick = function () { put(o.v); btns.forEach(function (x) { x.b.setAttribute('aria-pressed', get() === x.v ? 'true' : 'false'); }); };
         btns.push({ b: b, v: o.v }); row.appendChild(b);
       });
       return row;
     }
     var speedRow = seg(SPEEDNAMES.map(function (n, i) { return { t: n, v: i }; }), function () { return S.vspeed; }, function (v) { S.vspeed = v; store.set('vspeed', v); });
-    var genRow = seg([{ t: 'Woman', v: 'woman' }, { t: 'Man', v: 'man' }], function () { return S.vgender; }, function (v) { S.vgender = v; store.set('vgender', v); Voice.picked = null; });
     var test = h('button', { class: 'btn alt small', type: 'button', onclick: function () {
       Voice.unlock(); Voice.clear();
       Voice.picked = null; Voice.voice();
       Voice.say([{ text: 'This is how the voice sounds.' }], { urgent: true, nocap: true });
-      if (S.vgender === 'man' && !Voice.genderOk) { msg.textContent = 'No man voice was found on this phone, so the default voice is used.'; msg.hidden = false; } else { msg.hidden = true; }
     } }, 'Test voice');
     return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Voice'),
-      h('label', {}, 'Speed'), speedRow, h('label', {}, 'Voice'), genRow, h('div', { class: 'vtest' }, test), msg);
+      h('label', {}, 'Speed'), speedRow, h('div', { class: 'vtest' }, test));
   }
 
   function timerSetup(o) {
-    var pick = o.def, btns = [];
+    var saved = o.key ? store.get(o.key, null) : null;
+    var pick = (o.mins.indexOf(saved) >= 0) ? saved : o.def, btns = [];
     var wrap = h('div', { class: 'seg' });
     o.mins.forEach(function (v) {
       var b = h('button', { class: 'btn small', type: 'button', 'aria-pressed': v === pick ? 'true' : 'false' }, v + ' min');
@@ -1106,11 +1158,11 @@
     appEl.appendChild(h('div', { class: 'screen' },
       h('h1', {}, o.title), o.sub ? h('p', { class: 'sub' }, o.sub) : null,
       h('label', { class: 'sub' }, 'Minutes'), wrap,
-      o.go.map(function (g) { return h('button', { class: 'btn start', type: 'button', onclick: function () { startTimer(g.kind, pick); } }, g.t); }),
+      o.go.map(function (g) { return h('button', { class: 'btn start', type: 'button', onclick: function () { if (o.key) store.set(o.key, pick); if (g.fn) g.fn(pick); else startTimer(g.kind, pick); } }, g.t); }),
       h('button', { class: 'btn alt start', type: 'button', onclick: renderHome }, 'Back')));
   }
-  function renderWalk() { timerSetup({ title: 'Walk', mins: C.cardio.walkMins, def: C.cardio.walkDefault, go: [{ t: 'Start walk', kind: 'walk' }] }); }
-  function renderCardio() { timerSetup({ title: 'Cardio', sub: 'Are we doing the treadmill?', mins: C.cardio.cardioMins, def: C.cardio.cardioDefault, go: [{ t: 'Yes, treadmill', kind: 'tread' }, { t: 'No, circuit', kind: 'circuit' }] }); }
+  function renderWalk() { timerSetup({ title: 'Walk', key: 'walk_min', mins: C.cardio.walkMins, def: C.cardio.walkDefault, go: [{ t: 'Start walk', kind: 'walk' }] }); }
+  function renderCardio() { timerSetup({ title: 'Cardio', key: 'cardio_min', sub: 'Are we doing the treadmill?', mins: C.cardio.cardioMins, def: C.cardio.cardioDefault, go: [{ t: 'Yes, treadmill', kind: 'tread' }, { t: 'No, circuit', kind: 'circuit' }] }); }
 
   function renderHome() {
     appEl.textContent = '';
@@ -1191,10 +1243,17 @@
       var e = { d: now, day: S.day, min: Math.max(1, Math.round((G.activeSec || 0) / 60)) };
       if (named('her')) e.her = S.setsHer;
       if (named('his')) e.his = S.setsHis;
+      if (G.cardioDone) { e.c = G.cardioDone.k; e.cm = G.cardioDone.m; }
       var l = histList(); l.unshift(e); store.set('hist', l.slice(0, 30));
       var c = histCounts(), k = c[S.day] || { n: 0, last: '' };
       c[S.day] = { n: (k.n || 0) + 1, last: now };
       store.set('hist_counts', c);
+    } catch (e2) { /* ignore */ }
+  }
+  var KIND = { walk: 'Walk', tread: 'Treadmill', circuit: 'Circuit' };
+  function recordTimer(s) {
+    try {
+      var l = histList(); l.unshift({ d: new Date().toISOString(), t: s.kind, min: s.mins }); store.set('hist', l.slice(0, 30));
     } catch (e2) { /* ignore */ }
   }
   function histLine() {
@@ -1208,7 +1267,8 @@
     var rows = h('div', { class: 'rows' });
     if (!l.length) rows.appendChild(h('p', { class: 'sub' }, 'No sessions yet.'));
     l.forEach(function (e) {
-      var bits = [dayLabel(e.d, true), 'Day ' + e.day, e.min + ' min'];
+      var bits = e.t ? [dayLabel(e.d, true), (KIND[e.t] || 'Cardio') + ' \u00b7 ' + e.min + ' min'] : [dayLabel(e.d, true), 'Day ' + e.day, e.min + ' min'];
+      if (e.c && KIND[e.c]) bits.push(KIND[e.c] + ' ' + e.cm + ' min');
       if (e.her) bits.push('Her ' + e.her + (e.her === 1 ? ' set' : ' sets'));
       if (e.his) bits.push('His ' + e.his + (e.his === 1 ? ' set' : ' sets'));
       rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, bits.join(' \u00b7 '))));
@@ -1228,6 +1288,6 @@
   }
 
   /* ---------- go ---------- */
-  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, repsFor: repsFor, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, repeatStep: repeatStep, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
+  if (TEST) window.__app = { S: S, G: G, Voice: Voice, Snd: Snd, N: N, startDay: startDay, repsFor: repsFor, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, repeatStep: repeatStep, planWeek: planWeek, histList: histList, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();

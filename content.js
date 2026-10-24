@@ -1594,6 +1594,12 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "section-cardio",
+   "text": "Cardio.",
+   "where": "Start of the cardio step in a full day",
+   "who": "Both"
+  },
+  {
    "id": "move-1",
    "text": "Move 1",
    "where": "Start of move 1",
@@ -2559,6 +2565,22 @@ window.CONTENT = {
     "name": "Shadow Boxing",
     "easier": "Slow Punches (feet planted)"
    }
+  ]
+ },
+ "plan": {
+  "start": "2026-10-19",
+  "weeks": 4,
+  "setsHer": [
+   2,
+   2,
+   3,
+   3
+  ],
+  "setsHis": [
+   2,
+   2,
+   3,
+   3
   ]
  }
 };

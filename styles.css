@@ -172,3 +172,8 @@ h1{font-size:26px;margin:4px 0 2px}
 .ctrls .btn{min-width:0;padding:10px 4px;font-size:15px}
 @media (min-width:520px){.ctrls{gap:10px}.ctrls .btn{font-size:17px;padding:10px 12px}}
 .screen label.sub{display:block;margin:8px 0 2px}
+
+/* next line */
+.next{text-align:center;font-size:18px;font-weight:700;color:var(--muted);padding:2px 16px 0}
+.next:empty{display:none}
+@media (orientation:landscape) and (max-height:520px){.next{font-size:14px;padding:2px 16px 0}}
