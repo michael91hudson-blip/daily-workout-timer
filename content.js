@@ -355,50 +355,12 @@ window.CONTENT = {
       }
      },
      "n": 6
-    },
-    {
-     "her": null,
-     "his": {
-      "name": "Side-Staggered Pushups",
-      "amount": "5/side",
-      "how": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm.",
-      "easier": "Bring the outside hand closer to your body",
-      "easierHow": null,
-      "easierHowName": null,
-      "muscles": "The same muscles as pushups, with more work for the arm under your chest",
-      "feel": "Mostly the arm under your chest",
-      "fix": "Body sagging. Keep it straight from head to heels.",
-      "cfg": {
-       "kind": "reps",
-       "top": 5,
-       "repSec": 5,
-       "perSide": true,
-       "pauseSec": 1,
-       "done": true
-      },
-      "cues": {
-       "how": {
-        "id": "daya-m7-his-how",
-        "text": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm."
-       },
-       "feel": {
-        "id": "daya-m7-his-feel",
-        "text": "You should feel it in: Mostly the arm under your chest"
-       },
-       "fix": {
-        "id": "daya-m7-his-fix",
-        "text": "Should not feel, or fix: Body sagging. Keep it straight from head to heels."
-       }
-      }
-     },
-     "n": 7
     }
    ],
-   "shortSentence": "Short on time: chest, shoulder, and cat-cow.",
+   "shortSentence": "Short on time: chest and shoulder.",
    "shortKeys": [
     "doorway-chest",
-    "cross-body-shoulder",
-    "cat-cow"
+    "cross-body-shoulder"
    ]
   },
   {
@@ -796,14 +758,13 @@ window.CONTENT = {
      "n": 6
     }
    ],
-   "shortSentence": "Short on time: quad, hamstring, calf, hip flexor, figure-4, and cat-cow.",
+   "shortSentence": "Short on time: quad, hamstring, calf, hip flexor, and figure-4.",
    "shortKeys": [
     "standing-quad",
     "seated-hamstring",
     "wall-calf",
     "kneeling-hip-flexor",
-    "seated-figure-4",
-    "cat-cow"
+    "seated-figure-4"
    ]
   },
   {
@@ -1074,8 +1035,8 @@ window.CONTENT = {
     {
      "her": {
       "name": "Dead Bugs",
-      "amount": "6/side",
-      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+      "amount": "6 each side",
+      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides on the next rep, with no pause.",
       "easier": "Lower your arm and leg less",
       "easierHow": null,
       "easierHowName": null,
@@ -1086,13 +1047,13 @@ window.CONTENT = {
        "kind": "reps",
        "top": 6,
        "repSec": 4,
-       "perSide": true,
-       "done": true
+       "done": true,
+       "alt": true
       },
       "cues": {
        "how": {
         "id": "dayc-m5-both-how",
-        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides."
+        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides on the next rep, with no pause."
        },
        "feel": {
         "id": "dayc-m5-both-feel",
@@ -1106,8 +1067,8 @@ window.CONTENT = {
      },
      "his": {
       "name": "Dead Bugs",
-      "amount": "8–12/side",
-      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+      "amount": "8–12 each side",
+      "how": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides on the next rep, with no pause.",
       "easier": "Lower your arm and leg less",
       "easierHow": null,
       "easierHowName": null,
@@ -1118,13 +1079,13 @@ window.CONTENT = {
        "kind": "reps",
        "top": 12,
        "repSec": 4,
-       "perSide": true,
-       "done": true
+       "done": true,
+       "alt": true
       },
       "cues": {
        "how": {
         "id": "dayc-m5-both-how",
-        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides."
+        "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides on the next rep, with no pause."
        },
        "feel": {
         "id": "dayc-m5-both-feel",
@@ -1388,30 +1349,6 @@ window.CONTENT = {
     "fix": {
      "id": "stretch-seated-figure-4-fix",
      "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far."
-    }
-   }
-  },
-  {
-   "key": "cat-cow",
-   "name": "Cat-Cow",
-   "targets": "Back",
-   "how": "On hands and knees, round your back up, then let it sag gently while looking forward. Do 5–8 slow rounds instead of a hold.",
-   "muscles": "Erector spinae (along both sides of the spine)",
-   "feel": "Back muscles, gently",
-   "fix": "Pain. Make the movement smaller.",
-   "kind": "rounds",
-   "cues": {
-    "how": {
-     "id": "stretch-cat-cow-how",
-     "text": "On hands and knees, round your back up, then let it sag gently while looking forward. Do 5–8 slow rounds instead of a hold."
-    },
-    "feel": {
-     "id": "stretch-cat-cow-feel",
-     "text": "You should feel it in: Back muscles, gently"
-    },
-    "fix": {
-     "id": "stretch-cat-cow-fix",
-     "text": "Should not feel, or fix: Pain. Make the movement smaller."
     }
    }
   }
@@ -1693,12 +1630,6 @@ window.CONTENT = {
    "who": "Both"
   },
   {
-   "id": "move-7",
-   "text": "Move 7",
-   "where": "Start of move 7",
-   "who": "Both"
-  },
-  {
    "id": "set-2",
    "text": "Set two.",
    "where": "Start of set 2",
@@ -1726,6 +1657,78 @@ window.CONTENT = {
    "id": "finished",
    "text": "Finished.",
    "where": "End of each move and stretch",
+   "who": "Both"
+  },
+  {
+   "id": "greeting",
+   "text": "Hey [name], are you ready?",
+   "where": "Start of every workout (phone voice only, because it says your typed name; no recording is used)",
+   "who": "Both"
+  },
+  {
+   "id": "walk-start",
+   "text": "Start walking.",
+   "where": "Walk timer: start",
+   "who": "Both"
+  },
+  {
+   "id": "halfway",
+   "text": "Halfway.",
+   "where": "Walk, treadmill and circuit timers: halfway",
+   "who": "Both"
+  },
+  {
+   "id": "one-minute",
+   "text": "One minute left.",
+   "where": "Walk, treadmill and circuit timers: last minute",
+   "who": "Both"
+  },
+  {
+   "id": "easy",
+   "text": "Easy.",
+   "where": "Circuit: start of each easy block",
+   "who": "Both"
+  },
+  {
+   "id": "go",
+   "text": "Go.",
+   "where": "Circuit: after the move name at the start of each work block",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-jacks",
+   "text": "Jumping Jacks.",
+   "where": "Circuit: move name",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-run",
+   "text": "Run in Place.",
+   "where": "Circuit: move name",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-skip",
+   "text": "Skipping.",
+   "where": "Circuit: move name",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-knees",
+   "text": "High Knees.",
+   "where": "Circuit: move name",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-kicks",
+   "text": "Butt Kicks.",
+   "where": "Circuit: move name",
+   "who": "Both"
+  },
+  {
+   "id": "cardio-box",
+   "text": "Shadow Boxing.",
+   "where": "Circuit: move name",
    "who": "Both"
   },
   {
@@ -1894,24 +1897,6 @@ window.CONTENT = {
    "id": "daya-m6-his-fix",
    "text": "Should not feel, or fix: Elbows flaring out to the sides. Keep them slightly angled in.",
    "where": "Day A, Move 6, Should not feel, or fix",
-   "who": "His workout"
-  },
-  {
-   "id": "daya-m7-his-how",
-   "text": "On your toes, body straight from head to heels. Place one hand under your chest and the other out to the side, about two palm-lengths from your body. Lower straight down slowly until your chest gently touches the floor, pause 1 second, then push up. Finish one side, then switch. Start with your weaker arm.",
-   "where": "Day A, Move 7, How (read before the move, set 1)",
-   "who": "His workout"
-  },
-  {
-   "id": "daya-m7-his-feel",
-   "text": "You should feel it in: Mostly the arm under your chest",
-   "where": "Day A, Move 7, You should feel it in",
-   "who": "His workout"
-  },
-  {
-   "id": "daya-m7-his-fix",
-   "text": "Should not feel, or fix: Body sagging. Keep it straight from head to heels.",
-   "where": "Day A, Move 7, Should not feel, or fix",
    "who": "His workout"
   },
   {
@@ -2186,7 +2171,7 @@ window.CONTENT = {
   },
   {
    "id": "dayc-m5-both-how",
-   "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides.",
+   "text": "On your back, arms straight up, knees bent 90° over your hips. Reach one arm back past your ear while straightening the opposite leg, stopping a few inches above the floor. Keep your lower back flat on the floor. Return and switch sides on the next rep, with no pause.",
    "where": "Day C, Move 5, How (read before the move, set 1)",
    "who": "Both"
   },
@@ -2350,24 +2335,6 @@ window.CONTENT = {
    "id": "stretch-seated-figure-4-fix",
    "text": "Should not feel, or fix: A burning or tired feeling in the muscles you're working is normal. Sharp, stabbing, or pinching pain in a joint is not, so stop that move. For stretches, a slight pull is right. If it hurts, you've stretched too far.",
    "where": "Seated Figure-4, Should not feel, or fix",
-   "who": "Both"
-  },
-  {
-   "id": "stretch-cat-cow-how",
-   "text": "On hands and knees, round your back up, then let it sag gently while looking forward. Do 5–8 slow rounds instead of a hold.",
-   "where": "Cat-Cow, How (read before the stretch, round 1)",
-   "who": "Both"
-  },
-  {
-   "id": "stretch-cat-cow-feel",
-   "text": "You should feel it in: Back muscles, gently",
-   "where": "Cat-Cow, You should feel it in",
-   "who": "Both"
-  },
-  {
-   "id": "stretch-cat-cow-fix",
-   "text": "Should not feel, or fix: Pain. Make the movement smaller.",
-   "where": "Cat-Cow, Should not feel, or fix",
    "who": "Both"
   },
   {
@@ -2535,8 +2502,6 @@ window.CONTENT = {
   "warmLegSwitch": 5,
   "repSec": 4,
   "ytHisRepSec": 6,
-  "catCowRounds": 8,
-  "catCowRepSec": 4,
   "bridgeUp": 1,
   "bridgeDown": 3,
   "bridgeHoldDefault": 5,
@@ -2546,5 +2511,54 @@ window.CONTENT = {
   "pushupDownDefault": 2,
   "pushupDownMax": 3,
   "pauseRep": 1
+ },
+ "cardio": {
+  "walkMins": [
+   10,
+   15,
+   20
+  ],
+  "walkDefault": 15,
+  "cardioMins": [
+   20,
+   30,
+   40
+  ],
+  "cardioDefault": 30,
+  "workSec": 30,
+  "easySec": 30,
+  "easyName": "March in place",
+  "moves": [
+   {
+    "key": "jacks",
+    "name": "Jumping Jacks",
+    "easier": "Step Jacks (step one foot out at a time, arms up)"
+   },
+   {
+    "key": "run",
+    "name": "Run in Place",
+    "easier": "March in Place"
+   },
+   {
+    "key": "skip",
+    "name": "Skipping (jump rope or skip in place)",
+    "easier": "Step-Touch"
+   },
+   {
+    "key": "knees",
+    "name": "High Knees",
+    "easier": "Slow Knee Lifts"
+   },
+   {
+    "key": "kicks",
+    "name": "Butt Kicks",
+    "easier": "Slow Heel Kicks (stepping)"
+   },
+   {
+    "key": "box",
+    "name": "Shadow Boxing",
+    "easier": "Slow Punches (feet planted)"
+   }
+  ]
  }
 };

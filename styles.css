@@ -166,3 +166,9 @@ h1{font-size:26px;margin:4px 0 2px}
 .repsrow{display:flex;flex-wrap:wrap;gap:6px 18px;padding:0 10px 4px}
 .repsline{margin-top:0}
 .card .amt.reps{font-weight:700}
+
+/* five control buttons, setup screens */
+.ctrls{gap:6px}
+.ctrls .btn{min-width:0;padding:10px 4px;font-size:15px}
+@media (min-width:520px){.ctrls{gap:10px}.ctrls .btn{font-size:17px;padding:10px 12px}}
+.screen label.sub{display:block;margin:8px 0 2px}
