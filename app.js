@@ -45,7 +45,6 @@
     day: store.get('day', 'B'),
     verse: store.get('verse', 0),
     vspeed: store.get('vspeed', 2),
-    vgender: 'woman',
     pace: store.get('pace', N.paceDefault),
     rounds: store.get('rounds', N.roundsDefault)
   };
@@ -58,6 +57,24 @@
   function setsForWeek(w) { var P = C.plan; return w <= P.setsByWeek.length ? P.setsByWeek[w - 1] : P.setsAfter; }
   /* 0: weeks 1-4, 1: weeks 5-8, 2: weeks 9-12, 3: weeks 13-16, 4: week 17 on */
   function bracket(w) { return Math.min(4, Math.floor(((w || planWeek()) - 1) / C.plan.bracket)); }
+  /* the Oct 28 documents renumbered some ladders: saved steps and hold patterns go back to the documents' starting steps once */
+  if (store.get('reset_oct28', 0) !== 1) {
+    try {
+      var kill = [], i0, k0;
+      for (i0 = 0; i0 < localStorage.length; i0++) { k0 = localStorage.key(i0); if (/^(step_|holds_|hp_)/.test(k0)) kill.push(k0); }
+      kill.forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) { /* ignore */ }
+    store.set('reset_oct28', 1);
+  }
+  /* the Oct 28 documents gave her Thursday cardio and new minutes: her saved cardio minutes clear once */
+  if (store.get('reset_oct28b', 0) !== 1) {
+    try {
+      var killb = [], i1, k1;
+      for (i1 = 0; i1 < localStorage.length; i1++) { k1 = localStorage.key(i1); if (/^cm_her_/.test(k1)) killb.push(k1); }
+      killb.forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) { /* ignore */ }
+    store.set('reset_oct28b', 1);
+  }
   var WEEK = planWeek();
   if (store.get('plan_week2', 0) !== WEEK) {
     S.setsHer = setsForWeek(WEEK); S.setsHis = setsForWeek(WEEK);
@@ -66,7 +83,6 @@
   var RATES = [0.7, 0.85, 1, 1.2, 1.4];
   var SPEEDNAMES = ['Slowest', 'Slow', 'Normal', 'Fast', 'Faster'];
   if (!(S.vspeed >= 0 && S.vspeed < RATES.length)) S.vspeed = 2;
-  if (S.vgender !== 'woman' && S.vgender !== 'man') S.vgender = 'woman';
   if (N.sets.indexOf(S.setsHer) < 0) S.setsHer = setsForWeek(WEEK);
   if (N.sets.indexOf(S.setsHis) < 0) S.setsHis = setsForWeek(WEEK);
   if (!C.days.some(function (d) { return d.key === S.day; })) S.day = 'B';
@@ -97,10 +113,12 @@
   function setRepsOf(pid, lk, v) { store.set('reps_' + pid + '_' + lk, Math.max(N.repsMin, Math.min(N.repsMax, v))); }
   function plankOf(pid) { return clampInt(store.get('plank_' + pid, N.plankDefault), N.plankMin, N.plankMax, N.plankDefault); }
   function setPlankOf(pid, v) { store.set('plank_' + pid, Math.max(N.plankMin, Math.min(N.plankMax, v))); }
-  function holdStartOf(pid, lk) { return clampInt(store.get('holds_' + pid + '_' + lk, N.holdStartDefault), N.holdStartMin, N.holdStartMax, N.holdStartDefault); }
-  function setHoldStartOf(pid, lk, v) { store.set('holds_' + pid + '_' + lk, Math.max(N.holdStartMin, Math.min(N.holdStartMax, v))); }
-  /* holds in a set: the starting number, then 2 fewer each set, never fewer than 1 */
-  function holdsIn(start, set) { return Math.max(1, start - N.holdDrop * (set - 1)); }
+  function holdPatOf(pid, lk) { return clampInt(store.get('hp_' + pid + '_' + lk, N.holdDefault[pid]), 0, N.holdPatterns.length - 1, N.holdDefault[pid]); }
+  function setHoldPatOf(pid, lk, v) { store.set('hp_' + pid + '_' + lk, Math.max(0, Math.min(N.holdPatterns.length - 1, v))); }
+  /* holds in a set: the chosen pattern, set by set (3-2-1-1, 4-3-2-1, 5-3-1-1, ...) */
+  function holdsIn(pat, set) { var p = N.holdPatterns[pat]; return p[Math.min(set, p.length) - 1]; }
+  function ytLongOf(pid) { return clampInt(store.get('ytlong_' + pid, N.ytLongDefault), 30, 45, N.ytLongDefault); }
+  function setYtLongOf(pid, v) { store.set('ytlong_' + pid, Math.max(30, Math.min(45, v))); }
 
   /* minutes: the document default for the week, kept only until the plan moves to the next block of weeks */
   function minsGet(key, list, def) {
@@ -109,10 +127,11 @@
   }
   function minsSet(key, v) { store.set(key, { w: bracket(), v: v }); }
   function walkDefault() { return C.cardio.walkDefaults[bracket()]; }
+  var WDKEY = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  function isRestDay() { return C.cardio.restDays.indexOf(WDKEY[new Date().getDay()]) >= 0; }
   function cardioDefault(pid) {
-    var wd = new Date().getDay(), key = wd === 4 ? 'thu' : (wd === 6 ? 'sat' : 'tue');
-    var t = C.cardio.defaults[pid];
-    return (t[key] || t.tue)[bracket()];
+    var wd = WDKEY[new Date().getDay()], t = C.cardio.defaults[pid];
+    return (t[wd] || t.tue)[bracket()];
   }
 
   /* ---------- sounds ---------- */
@@ -229,28 +248,16 @@
         self.playPart(it.parts[i], function () { run(i + 1); });
       })(0);
     },
-    genderOk: true,
     voice: function () {
-      if (this.picked && this.pickedFor === S.vgender) return this.picked;
-      this.genderOk = true;
+      if (this.picked) return this.picked;
       try {
         var vs = window.speechSynthesis.getVoices() || [];
         var en = vs.filter(function (v) { return /^en[-_]US/i.test(v.lang); });
         if (!en.length) en = vs.filter(function (v) { return /^en/i.test(v.lang); });
         var fem = /female|samantha|victoria|karen|moira|tessa|fiona|zira|jenny|aria|susan|hazel|catherine|serena|allison|ava\b|nicky|kathy|heather|linda/i;
-        var mal = /(^|[^e])male|daniel|alex\b|fred|david|mark\b|guy\b|george|ryan|james|oliver|aaron|arthur|christopher|eric|roger|steffan|tom\b|matthew/i;
         function nm(v) { return (v.name || '') + ' ' + (v.voiceURI || ''); }
-        var pick = null;
-        if (S.vgender === 'man') {
-          pick = en.filter(function (v) { return !/female/i.test(nm(v)) && mal.test(nm(v)); })[0] || null;
-          if (!pick) this.genderOk = false;
-        } else {
-          pick = en.filter(function (v) { return fem.test(nm(v)); })[0] || en.filter(function (v) { return /google us|natural/i.test(v.name); })[0] || null;
-        }
-        if (!pick && !this.genderOk) pick = en.filter(function (v) { return /samantha|google us|natural|aria|jenny|zira/i.test(v.name); })[0] || en[0] || null;
-        if (!pick && this.genderOk) pick = en[0] || null;
-        this.picked = pick; this.pickedFor = S.vgender;
-        if (!vs.length) this.picked = null;
+        var pick = en.filter(function (v) { return fem.test(nm(v)); })[0] || en.filter(function (v) { return /google us|natural/i.test(v.name); })[0] || en[0] || null;
+        this.picked = vs.length ? pick : null;
       } catch (e) { this.picked = null; }
       return this.picked;
     },
@@ -311,9 +318,9 @@
     var k = Object.keys(C.rows).filter(function (r) { return r.toLowerCase() === name.toLowerCase(); })[0];
     return C.rows[k || fallback];
   }
-  function holdPattern(start, sets) {
-    var a = [], n = Math.max(3, sets), i;
-    for (i = 1; i <= n; i++) a.push(holdsIn(start, i));
+  function holdPattern(pat, sets) {
+    var a = [], n = Math.min(N.holdPatterns[pat].length, Math.max(3, sets)), i;
+    for (i = 1; i <= n; i++) a.push(holdsIn(pat, i));
     return a.join(', ');
   }
   function howText(st, pid) { return (pid === 'her' && st.howHer) ? st.howHer : st.how; }
@@ -326,10 +333,14 @@
     R.how = atStart ? slot.how : ((pid === 'her' && st.cueHer) ? st.cueHer : st.cue);
     R.row = atStart ? C.rows[slot.row] : rowFor(st.name, slot.row);
     R.cues = { how: R.how, feel: R.row.cues.feel, fix: R.row.cues.fix };
-    R.reps = cfg.kind === 'reps' ? repsOf(pid, slot.ladder) : null;
+    R.reps = (cfg.kind === 'reps' || cfg.kind === 'taps') ? repsOf(pid, slot.ladder) : null;
+    R.startLine = atStart ? slot.startLine : st.startLine;
+    R.first = atStart ? slot.first : st.first;
+    R.startShow = R.startLine || R.how.text;
     if (cfg.kind === 'reps') R.amount = N.repsMin + '–' + N.repsMax + (R.side ? '/side' : '') + (R.yt ? ' each' : '');
     else if (cfg.kind === 'plank') R.amount = plankOf(pid) + ' sec';
-    else R.amount = cfg.sec + '-sec holds: ' + holdPattern(holdStartOf(pid, slot.ladder), maxSetsFor(pid)) + (cfg.sides === 'legs' ? ' per leg' : (cfg.sides === 'none' ? '' : ' per side'));
+    else if (cfg.kind === 'taps') R.amount = N.repsMin + '–' + N.repsMax + '/side';
+    else R.amount = cfg.sec + '-sec holds: ' + holdPattern(holdPatOf(pid, slot.ladder), maxSetsFor(pid)) + (cfg.sides === 'legs' ? ' on each leg' : (cfg.sides === 'none' ? '' : ' per side'));
     if (atStart && slot.easier) {
       R.easier = { text: slot.easier, items: slot.easierSteps.map(function (e) { var s2 = ladderStep(e.ladder, e.n); return { name: s2.name, how: howText(s2, pid) }; }) };
     } else if (!atStart && n > 1) {
@@ -338,7 +349,7 @@
     } else R.easier = null;
     return R;
   }
-  function repsLabel(R) { return R.reps ? 'Reps: ' + R.reps + (R.side ? ' per side' : (R.yt ? ' each' : '')) : null; }
+  function repsLabel(R) { return R.reps ? 'Reps: ' + R.reps + (R.side || R.kind === 'taps' ? ' per side' : (R.yt ? ' each' : '')) : null; }
 
   function buildDay(walk) {
     var p = [{ t: 'warmup' }, { t: 'practice' }];
@@ -399,6 +410,7 @@
     c.who = h('div', { class: 'who' }, o.who || '');
     c.mv = h('div', { class: 'mv' }, o.mv || '');
     c.amt = h('div', { class: 'amt' }, o.amt || '');
+    c.startLine = o.startLine ? h('div', { class: 'startline' }, o.startLine) : null;
     c.repsTxt = o.repsLabel ? h('div', { class: 'amt reps' }, o.repsLabel) : null;
     c.big = h('div', { class: 'big' }, '');
     c.st = h('div', { class: 'st' }, '');
@@ -415,7 +427,7 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.startLine, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
@@ -427,7 +439,7 @@
   }
 
   /* ---------- tracks (one per person per move) ---------- */
-  var CUE = { hold: CUEBY.hold, rest: CUEBY.rest, sides: CUEBY['switch-sides'], legs: CUEBY['switch-legs'], left: CUEBY.left, right: CUEBY.right,
+  var CUE = { hold: CUEBY.hold, rest: CUEBY.rest, sides: CUEBY['switch-sides'], legs: CUEBY['switch-legs'],
               nowT: { id: CUEBY['now-t'].id, text: CUEBY['now-t'].text, named: true } };
   function paceMult() { return N.paceMult[S.pace]; }
   function scaleSeq(seq) { var k = paceMult(); return seq.map(function (q) { return [q[0], Math.round(q[1] * k * 100) / 100]; }); }
@@ -436,16 +448,13 @@
   function brkPh() { return { k: 'brk', dur: N.holdBreak, label: 'Rest', strip: 'REST', cls: 'pause', say: CUE.rest }; }
   function switchPh(cue, label) { return { k: 'pause', dur: N.pause, beep: true, label: label, strip: 'SWITCH', cls: 'wswitch', say: cue }; }
   function holdPhases(pid, R, set) {
-    var c = R.cfg, n = holdsIn(holdStartOf(pid, R.ladder), set), ph = [], i, sd, unit;
+    var c = R.cfg, n = holdsIn(holdPatOf(pid, R.ladder), set), ph = [], i, sd, unit;
     if (c.sides === 'legs' || c.sides === 'sides') {
       unit = c.sides === 'legs' ? 'Leg' : 'Side';
       for (sd = 1; sd <= 2; sd++) {
         for (i = 1; i <= n; i++) { ph.push(holdPh(c.sec, unit + ' ' + sd + ' · Hold ' + i + ' of ' + n)); if (i < n) ph.push(brkPh()); }
         if (sd === 1) ph.push(switchPh(c.sides === 'legs' ? CUE.legs : CUE.sides, c.sides === 'legs' ? 'Switch legs' : 'Switch sides'));
       }
-    } else if (c.sides === 'alt') {
-      var T = n * 2;
-      for (i = 1; i <= T; i++) { ph.push(holdPh(c.sec, 'Hold ' + i + ' of ' + T + ' · Side ' + (i % 2 ? 1 : 2))); if (i < T) ph.push(brkPh()); }
     } else {
       for (i = 1; i <= n; i++) { ph.push(holdPh(c.sec, 'Hold ' + i + ' of ' + n)); if (i < n) ph.push(brkPh()); }
     }
@@ -453,31 +462,21 @@
   }
   function mkTrack(pid, m, set) {
     var R = resolve(m, pid), c = R.cfg, ph = [];
-    function rep(label, n) { var seq = scaleSeq(c.seq), rs = seqSum(seq); return { k: 'reps', n: n, repSec: rs, dur: n * rs, label: label, done: true, seq: seq }; }
+    function rep(label, n) { var seq = scaleSeq(c.seq), rs = seqSum(seq); return { k: 'reps', n: n, repSec: rs, dur: n * rs, label: label, done: true, seq: seq, words: c.words || '' }; }
+    function taps(n) { var seq = scaleSeq([['TAP', N.tapSec]]), rs = seqSum(seq); return { k: 'reps', n: n, repSec: rs, dur: n * rs, label: '', done: true, seq: seq, unit: 'Tap' }; }
     if (c.kind === 'plank') ph.push({ k: 'hold', dur: plankOf(pid), beep: true, label: 'Hold' });
+    else if (c.kind === 'taps') ph.push(taps(R.reps * 2));
     else if (c.kind === 'holds') ph = holdPhases(pid, R, set);
     else if (c.yt) {
-      if (c.longLast && set === maxSetsFor(pid)) ph.push(holdPh(N.ytLongSec, 'Y hold'), switchPh(CUE.nowT, 'Now T'), holdPh(N.ytLongSec, 'T hold'));
+      if (c.longLast && set === maxSetsFor(pid)) ph.push(holdPh(ytLongOf(pid), 'Y hold'), switchPh(CUE.nowT, 'Now T'), holdPh(ytLongOf(pid), 'T hold'));
       else ph.push(rep('Y', R.reps), switchPh(CUE.nowT, 'Now T'), rep('T', R.reps));
     } else if (c.side) ph.push(rep('Side 1', R.reps), switchPh(CUE.sides, 'Switch sides'), rep('Side 2', R.reps));
     else ph.push(rep('', R.reps));
     return { pid: pid, ph: ph, pi: 0, el: 0, fin: false, repIdx: -1, upSaid: false, downSaid: false, R: R };
   }
-  function shinPhases() {
-    var ph = [], sets, d;
-    for (sets = 1; sets <= N.shinSets; sets++) {
-      for (d = 1; d <= N.shinDrops; d++) {
-        var left = (d % 2 === 1);
-        ph.push({ k: 'drop', dur: N.shinDropSec, label: 'Drop ' + d + ' of ' + N.shinDrops + ' · Set ' + sets + ' of ' + N.shinSets, strip: left ? 'LEFT' : 'RIGHT', cls: left ? 'down' : 'up', say: left ? CUE.left : CUE.right });
-      }
-      if (sets < N.shinSets) ph.push({ k: 'brk', dur: N.shinBreak, label: 'Rest', strip: 'REST', cls: 'pause', say: CUE.rest });
-    }
-    return ph;
-  }
   function mkStretchTrack(st) {
     var ph = [];
-    if (st.kind === 'shin') ph = shinPhases();
-    else if (st.kind === 'once') ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Hold' });
+    if (st.kind === 'once') ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Hold' });
     else ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Side 1' }, { k: 'pause', dur: N.pause, beep: true, label: 'Switch sides', say: CUE.sides }, { k: 'hold', dur: N.hold, beep: true, label: 'Side 2' });
     return { pid: null, ph: ph, pi: 0, el: 0, fin: false, repIdx: -1, upSaid: false, downSaid: false };
   }
@@ -486,15 +485,19 @@
   function sayCue(s, t, cue) {
     var mode = s.udMode;
     if (mode && mode.silent.indexOf(t) >= 0) return;
-    var parts = [], short = (cue.id === 'up' || cue.id === 'down' || cue.id === 'hold' || cue.id === 'rest' || cue.id === 'left' || cue.id === 'right');
+    var parts = [], short = (cue.id === 'up' || cue.id === 'down' || cue.id === 'in' || cue.id === 'out' || cue.id === 'tap' || cue.id === 'hold' || cue.id === 'rest');
     if (t.pid && ((mode && mode.names) || (cue.named && s.activeCount > 1))) parts.push({ text: sayName(t.pid) + '.' });
     parts.push({ id: cue.id, text: cue.text });
     Voice.say(parts, { urgent: true, nocap: short });
   }
-  function sayUpDown(s, t, word) { sayCue(s, t, word === 'UP' ? CUEBY.up : CUEBY.down); }
+  function sayUpDown(s, t, word, words) {
+    if (word === 'TAP') { sayCue(s, t, CUEBY.tap); return; }
+    var wall = (words === 'wall');
+    sayCue(s, t, word === 'UP' ? (wall ? CUEBY.out : CUEBY.up) : (wall ? CUEBY['in'] : CUEBY.down));
+  }
   function setUpDownMode(s) {
     var rt = s.tracks.filter(function (t) { return t.ph.some(function (p) { return p.seq || p.say; }); });
-    var sig = function (t) { return JSON.stringify(t.ph.map(function (p) { return [p.k, p.seq || null, p.repSec || 0, p.dur, p.say ? p.say.id : '']; })); };
+    var sig = function (t) { return JSON.stringify(t.ph.map(function (p) { return [p.k, p.seq || null, p.repSec || 0, p.dur, p.say ? p.say.id : '', p.words || '']; })); };
     var mode = { names: false, silent: [] };
     if (rt.length > 1) {
       if (rt.every(function (t) { return sig(t) === sig(rt[0]); })) mode.silent = rt.slice(1);
@@ -536,7 +539,7 @@
         if (t.lastSeq !== key) {
           t.lastSeq = key;
           var word = p.seq[qi][0];
-          if (word === 'UP' || word === 'DOWN') sayUpDown(s, t, word);
+          if (word === 'UP' || word === 'DOWN' || word === 'TAP') sayUpDown(s, t, word, p.words);
         }
       }
       if (t.el >= p.dur) nextPhase(s, t);
@@ -556,7 +559,7 @@
     var p = t.ph[t.pi], frac;
     if (p.k === 'reps') {
       var ri = Math.max(0, Math.min(Math.floor(t.el / p.repSec), p.n - 1));
-      var repTxt = 'Rep ' + (ri + 1) + ' of ' + p.n;
+      var repTxt = (p.unit || 'Rep') + ' ' + (ri + 1) + ' of ' + p.n;
       var lab = p.label ? p.label + ' · ' : '';
       var inRep = t.el - ri * p.repSec;
       if (p.seq) {
@@ -565,7 +568,8 @@
           if (inRep < acc + p.seq[q][1]) { word = p.seq[q][0]; left = acc + p.seq[q][1] - inRep; break; }
           acc += p.seq[q][1];
         }
-        c.strip.textContent = word + ' ' + Math.max(1, Math.ceil(left - 0.001));
+        var shownWord = (p.words === 'wall') ? (word === 'UP' ? 'OUT' : (word === 'DOWN' ? 'IN' : word)) : word;
+        c.strip.textContent = shownWord + ' ' + Math.max(1, Math.ceil(left - 0.001));
         c.strip.className = 'strip ' + word.toLowerCase();
       } else { clearStrip(c); }
       c.big.textContent = (ri + 1) + ' / ' + p.n;
@@ -600,7 +604,7 @@
     var p = t.ph[t.pi], rem = p.dur - t.el, best = Infinity;
     var nextSays = !!(t.ph[t.pi + 1] && t.ph[t.pi + 1].say);
     if (p.k === 'reps' && p.seq) {
-      var ri = Math.min(Math.floor(t.el / p.repSec), p.n - 1), inRep = t.el - ri * p.repSec, acc = 0, q, isUD = function (w) { return w === 'UP' || w === 'DOWN'; };
+      var ri = Math.min(Math.floor(t.el / p.repSec), p.n - 1), inRep = t.el - ri * p.repSec, acc = 0, q, isUD = function (w) { return w === 'UP' || w === 'DOWN' || w === 'TAP'; };
       for (q = 0; q < p.seq.length; q++) {
         if (acc > inRep + 0.001 && isUD(p.seq[q][0])) best = Math.min(best, acc - inRep);
         acc += p.seq[q][1];
@@ -755,7 +759,7 @@
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0, R = resolve(m, pid);
         if (on) res[pid] = R;
-        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
+        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, startLine: on ? R.startShow : null, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
         if (!on) card.root.className += ' dim';
         s.cardsList.push({ card: card, on: on });
       });
@@ -763,6 +767,10 @@
       if (!s.single && s.n === 1 && s.set === 1) Voice.say([CUEBY['section-workout']], { blocking: s.listen });
       if (!s.single && s.n === 1 && s.set >= 2) Voice.say([CUEBY['set-' + s.set]], { blocking: s.listen });
       Voice.say([CUEBY['move-' + s.n]], { blocking: s.listen });
+      if (s.set >= 2) {
+        var firsts = act.filter(function (pid) { return res[pid].first; });
+        if (firsts.length) queueCueGroups(firsts, function (pid) { return res[pid].first; }, ['first'], {});
+      }
       if (s.set === 1) {
         ['how', 'feel', 'fix'].forEach(function (typ) {
           queueCueGroups(act, function (pid, t2) { return res[pid].cues[t2]; }, [typ], { blocking: true });
@@ -776,7 +784,7 @@
       var hip = s.grp === 'hip', secName = hip ? 'Hip Flexibility' : 'Cool-down';
       ui = scaffold('cool', secName, 'Stretch ' + (s.k + 1) + ' of ' + s.total + ((s.rounds > 1 && !s.single) ? ' · Round ' + s.round + ' of ' + s.rounds : ''));
       s.listen = (s.round === 1);
-      var c2 = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets });
+      var c2 = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets, startLine: s.st.startLine });
       s.cardsList.push({ card: c2, on: true });
       if (!s.single && s.k === 0 && s.round === 1) Voice.say([CUEBY[hip ? 'section-hip' : 'section-cooldown']], { blocking: s.listen });
       if (!s.single && s.k === 0 && s.round === 2) Voice.say([CUEBY['round-2']], { blocking: s.listen });
@@ -823,7 +831,7 @@
       if (on) {
         t = mkTrack(pid, m, s.set); res[pid] = R;
         card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, easier: R.easier, rep: true, repsLabel: repsLabel(R),
-          done: R.kind === 'reps' ? function () { trackDone(s, t); } : null });
+          done: (R.kind === 'reps' || R.kind === 'taps') ? function () { trackDone(s, t); } : null });
         s.tracks.push(t);
       } else {
         card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount });
@@ -875,7 +883,7 @@
     var ui = scaffold('cool', s.grp === 'hip' ? 'Hip Flexibility' : 'Cool-down', 'Stretch ' + (s.k + 1) + ' of ' + s.total + ((s.rounds > 1 && !s.single) ? ' · Round ' + s.round + ' of ' + s.rounds : ''));
     var t = mkStretchTrack(s.st);
     s.age = 0; s.frozen = 0; s.tracks = [t]; s.activeCount = namedList().length;
-    var card = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets, rep: s.st.kind === 'shin' });
+    var card = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets });
     s.cardsList = [{ card: card, t: t, on: true }];
     ui.phase.textContent = 'Go';
     setUpDownMode(s);
@@ -1102,14 +1110,14 @@
     TESTLOG('plus10');
   }
   function startPlan(plan, mode) {
-    if (mode !== 'timer' && !namedList().length) { showMsg('Type a name to begin.'); return; }
+    if (mode !== 'timer' && !namedList().length) { showMsg('Open Settings (at the bottom) and type a name to begin.'); return; }
     Snd.unlock(); Voice.unlock(); lockScreen();
     Voice.clear();
     G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.cardioDone = null; G.lastMot = nowMs(); G.activeSec = 0;
     enter(G.plan[0]);
   }
   function startDay() {
-    if (!namedList().length) { showMsg('Type a name to begin.'); return; }
+    if (!namedList().length) { showMsg('Open Settings (at the bottom) and type a name to begin.'); return; }
     timerSetup({ title: 'Walk today?', key: 'walk_min2', mins: C.cardio.mins, def: walkDefault(),
       go: [{ t: 'Walk (treadmill or outside)', fn: function (m) { startPlan(buildDay({ mins: m }), 'day'); } },
            { t: 'Skip', fn: function () { startPlan(buildDay(null), 'day'); }, noSave: true }] });
@@ -1134,7 +1142,9 @@
     }
     startPlan(p, 'single');
   }
+  window.__appBusy = function () { return !!G.running; };
   function goHome() {
+    if (window.__updateReady) { location.reload(); return; }
     G.paused = false; Voice.paused = false;
     G.running = false; G.step = null; G.ui = null;
     Voice.clear(); unlockScreen();
@@ -1186,7 +1196,7 @@
   function slotBox(pid) {
     var nameIn = h('input', { type: 'text', id: pid + '-name', value: S[pid].name, autocomplete: 'off', placeholder: 'Name', 'aria-label': 'Name for ' + slotLabel(pid) });
     var sayIn = h('input', { type: 'text', id: pid + '-say', value: S[pid].say, autocomplete: 'off', placeholder: 'Say it as (optional)', 'aria-label': 'Say it as, for ' + slotLabel(pid) });
-    nameIn.oninput = function () { S[pid].name = nameIn.value; store.set(pid + '_name', nameIn.value); showMsg(''); renderRows(); };
+    nameIn.oninput = function () { S[pid].name = nameIn.value; store.set(pid + '_name', nameIn.value); showMsg(''); };
     sayIn.oninput = function () { S[pid].say = sayIn.value; store.set(pid + '_say', sayIn.value); };
     var box = h('div', { class: 'slot' }, h('h2', {}, slotLabel(pid)),
       h('label', { for: pid + '-name' }, 'Name'), nameIn,
@@ -1194,12 +1204,12 @@
     box.appendChild(h('label', {}, 'Sets'));
     box.appendChild(segOf(N.sets.map(function (v) { return { t: v + (v === 1 ? ' set' : ' sets'), v: v }; }),
       function () { return maxSetsFor(pid); },
-      function (v) { if (pid === 'her') { S.setsHer = v; store.set('her_sets', v); } else { S.setsHis = v; store.set('his_sets', v); } renderRows(); }, 'setseg'));
+      function (v) { if (pid === 'her') { S.setsHer = v; store.set('her_sets', v); } else { S.setsHis = v; store.set('his_sets', v); } }, 'setseg'));
     box.appendChild(h('p', { class: 'sub' }, 'Week ' + WEEK + ': ' + setsForWeek(WEEK) + ' sets suggested'));
     return box;
   }
 
-  var warmBox, workBox, coolBox, hipBox;
+  var workBox = null, openMoves = {};
   function rowBtn(num, lines, onclick) {
     return h('button', { class: 'row', type: 'button', onclick: onclick },
       h('span', { class: 'n' }, num), h('span', { class: 't' }, lines));
@@ -1214,16 +1224,18 @@
       sel.value = String(R.step);
       sel.onchange = function () { setStepFor(pid, slot, parseInt(sel.value, 10)); renderRows(); };
       var line = h('div', { class: 'ctl' }, h('span', { class: 'cwho' }, label + ' step:'), sel);
-      var pick = null;
+      var pick = null, pick2 = null;
       if (R.kind === 'reps') pick = stepperOf('Reps:', function () { return repsOf(pid, slot.ladder); }, function (v) { setRepsOf(pid, slot.ladder, v); }, String, label + ' reps');
+      else if (R.kind === 'taps') pick = stepperOf('Reps per side:', function () { return repsOf(pid, slot.ladder); }, function (v) { setRepsOf(pid, slot.ladder, v); }, String, label + ' reps');
       else if (R.kind === 'plank') pick = stepperOf('Plank:', function () { return plankOf(pid); }, function (v) { setPlankOf(pid, v); }, function (v) { return v + ' sec'; }, label + ' plank seconds', N.plankStep);
-      else pick = stepperOf('Start holds:', function () { return holdStartOf(pid, slot.ladder); }, function (v) { setHoldStartOf(pid, slot.ladder, v); renderRows(); }, String, label + ' starting holds');
-      wrap.appendChild(h('div', { class: 'ctlrow' }, line, pick));
+      else pick = stepperOf('Holds:', function () { return holdPatOf(pid, slot.ladder); }, function (v) { setHoldPatOf(pid, slot.ladder, v); renderRows(); }, function (v) { return N.holdPatterns[v].join('-'); }, label + ' holds pattern');
+      if (R.cfg.longLast) pick2 = stepperOf('Long hold:', function () { return ytLongOf(pid); }, function (v) { setYtLongOf(pid, v); }, function (v) { return v + ' sec'; }, label + ' long hold seconds', 5);
+      wrap.appendChild(h('div', { class: 'ctlrow' }, line, pick, pick2));
     });
     return wrap;
   }
   function renderRows() {
-    if (!workBox) return;
+    if (!workBox || !workBox.rows.isConnected) return;
     var who = namedList();
     var pids = who.length ? who : ['her', 'his'];
     workBox.box.textContent = '';
@@ -1234,8 +1246,13 @@
         var R = resolve(m, pid);
         return h('span', { class: 'who' }, (who.length ? shownName(pid) : slotLabel(pid)) + ': ' + R.name + ' · ' + R.amount);
       });
-      workBox.rows.appendChild(rowBtn(String(m.n), lines, function () { startSingle('move', m.n); }));
-      workBox.rows.appendChild(moveControls(m, pids, who));
+      var ctl = moveControls(m, pids, who);
+      ctl.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { startSingle('move', m.n); } }, 'Do this move alone'));
+      ctl.hidden = !openMoves[S.day + m.n];
+      var row = h('button', { class: 'row', type: 'button', 'aria-expanded': ctl.hidden ? 'false' : 'true' }, h('span', { class: 'n' }, String(m.n)), h('span', { class: 't' }, lines));
+      row.onclick = function () { ctl.hidden = !ctl.hidden; openMoves[S.day + m.n] = !ctl.hidden; row.setAttribute('aria-expanded', ctl.hidden ? 'false' : 'true'); };
+      workBox.rows.appendChild(row);
+      workBox.rows.appendChild(ctl);
     });
   }
 
@@ -1273,22 +1290,25 @@
   function renderCardio() {
     var cc = C.cardio, circ = cc.circuit, who = namedList(), wd = new Date().getDay();
     var pids = who.length ? who : ['her'], picks = {};
-    pids.forEach(function (pid) { picks[pid] = minsGet('cm_' + pid + '_' + wd, cc.mins, cardioDefault(pid)); });
+    pids.forEach(function (pid) { picks[pid] = minsGet('cm_' + pid + '_' + wd, cc.mins.concat([0]), isRestDay() ? 0 : cardioDefault(pid)); });
     var opt = {
       reps: clampInt(store.get('circ_reps', circ.repsDefault), 15, 24, circ.repsDefault),
       jog: circ.jog.indexOf(store.get('circ_jog', 0)) >= 0 ? store.get('circ_jog', 0) : circ.jogDefault,
       stepSec: circ.stepSec.indexOf(store.get('circ_step', 0)) >= 0 ? store.get('circ_step', 0) : circ.stepDefault
     };
     function go(kind) {
-      var use = kind === 'vr' ? ['his'] : pids;
-      use.forEach(function (pid) { minsSet('cm_' + pid + '_' + wd, picks[pid]); });
+      var use = (kind === 'vr' ? ['his'] : pids).filter(function (pid) { return picks[pid] > 0; });
+      pids.forEach(function (pid) { minsSet('cm_' + pid + '_' + wd, picks[pid]); });
+      if (!use.length) { cmsg.hidden = false; return; }
       store.set('circ_reps', opt.reps); store.set('circ_jog', opt.jog); store.set('circ_step', opt.stepSec);
       startCardio(kind, picks, use, { reps: opt.reps, jog: opt.jog, stepSec: opt.stepSec });
     }
-    var kids = [h('h1', {}, 'Cardio'), h('p', { class: 'sub' }, 'Pick the minutes, then what you are doing.')];
+    var cmsg = h('p', { class: 'msg', role: 'alert', hidden: true }, 'Pick the minutes for whoever is doing cardio.');
+    cmsg.style.fontWeight = '700'; cmsg.style.color = '#b42318';
+    var kids = [h('h1', {}, 'Cardio'), h('p', { class: 'sub' }, 'Pick the minutes, then what you are doing. On a rest day, pick Rest.'), cmsg];
     pids.forEach(function (pid) {
       kids.push(h('label', { class: 'sub' }, who.length ? shownName(pid) + ': minutes' : 'Minutes'));
-      kids.push(segOf(cc.mins.map(function (v) { return { t: v + ' min', v: v }; }), function () { return picks[pid]; }, function (v) { picks[pid] = v; }, 'wrap'));
+      kids.push(segOf([{ t: 'Rest', v: 0 }].concat(cc.mins.map(function (v) { return { t: v + ' min', v: v }; })), function () { return picks[pid]; }, function (v) { picks[pid] = v; cmsg.hidden = true; }, 'wrap'));
     });
     kids.push(h('h2', {}, circ.title));
     kids.push(h('p', { class: 'sub' }, circ.intro[1]));
@@ -1327,9 +1347,56 @@
       h('button', { class: 'btn start', type: 'button', onclick: renderHome }, 'Back')));
   }
 
+  /* a box that starts closed and opens with a tap */
+  function foldBox(cls, title, kids, openNow) {
+    var body = h('div', { class: 'foldbody' }, kids);
+    var head = h('button', { class: 'foldhead', type: 'button', 'aria-expanded': openNow ? 'true' : 'false' }, h('span', {}, title), h('span', { class: 'chev', 'aria-hidden': 'true' }, openNow ? '−' : '+'));
+    body.hidden = !openNow;
+    head.onclick = function () {
+      body.hidden = !body.hidden;
+      head.setAttribute('aria-expanded', body.hidden ? 'false' : 'true');
+      head.lastChild.textContent = body.hidden ? '+' : '−';
+    };
+    return h('section', { class: 'sec fold ' + cls }, head, body);
+  }
+
+  /* what today is: Mon/Wed/Fri strength, Tue/Thu/Sat cardio, Sun rest */
+  var TODAYDAY = { 1: 'A', 3: 'B', 5: 'C' };
+  function todayCard() {
+    var wd = new Date().getDay(), card = h('section', { class: 'today' });
+    if (TODAYDAY[wd]) {
+      var d = C.days.filter(function (x) { return x.key === TODAYDAY[wd]; })[0];
+      card.appendChild(h('h2', {}, 'Today'));
+      card.appendChild(h('p', { class: 'tname' }, d.title));
+      card.appendChild(h('p', { class: 'sub' }, d.subtitle));
+      card.appendChild(h('button', { class: 'btn start', type: 'button', onclick: function () { S.day = d.key; store.set('day', d.key); startDay(); } }, 'Start ' + d.title.split(':')[0]));
+    } else if (isRestDay()) {
+      card.appendChild(h('h2', {}, 'Today'));
+      card.appendChild(h('p', { class: 'tname' }, 'Rest day'));
+      card.appendChild(h('button', { class: 'btn start', type: 'button', onclick: startHip }, 'Hip Flexibility'));
+    } else {
+      card.appendChild(h('h2', {}, 'Today'));
+      card.appendChild(h('p', { class: 'tname' }, 'Cardio'));
+      card.appendChild(h('button', { class: 'btn start', type: 'button', onclick: renderCardio }, 'Start cardio'));
+    }
+    return card;
+  }
+
+  function renderSettings() {
+    appEl.textContent = '';
+    appEl.appendChild(h('div', { class: 'screen' }, h('h1', {}, 'Settings'),
+      h('div', { class: 'slots' }, slotBox('her'), slotBox('his')),
+      settingsBox(), voiceBox(),
+      h('button', { class: 'btn start', type: 'button', onclick: renderHome }, 'Back')));
+  }
+
   function renderHome() {
     appEl.textContent = '';
     var root = h('div', { class: 'screen' });
+    msgEl = h('p', { class: 'msg', role: 'alert', hidden: true });
+    msgEl.style.fontWeight = '700'; msgEl.style.color = '#b42318';
+    root.appendChild(todayCard());
+    root.appendChild(msgEl);
     var picker = h('div', { class: 'days', role: 'group', 'aria-label': 'Choose a day' });
     C.days.forEach(function (d) {
       picker.appendChild(h('button', { class: 'btn day', type: 'button', 'aria-pressed': d.key === S.day ? 'true' : 'false',
@@ -1338,43 +1405,29 @@
     root.appendChild(picker);
     root.appendChild(h('p', { class: 'hist' }, histLine()));
     root.appendChild(h('p', { class: 'sub' }, curDay().subtitle));
-    root.appendChild(h('div', { class: 'slots' }, slotBox('her'), slotBox('his')));
-    msgEl = h('p', { class: 'msg', role: 'alert', hidden: true });
-    msgEl.style.fontWeight = '700'; msgEl.style.color = '#b42318';
-    root.appendChild(msgEl);
-    root.appendChild(settingsBox());
 
     // warm-up
     var wr = h('div', { class: 'rows' });
     wr.appendChild(rowBtn('', [h('span', {}, C.warmup.text)], function () { startSingle('warmup'); }));
-    warmBox = { rows: wr };
-    root.appendChild(h('section', { class: 'sec warm' }, h('h2', {}, 'Warm-up'), wr, h('p', { class: 'sub' }, C.warmup.practice)));
+    root.appendChild(foldBox('warm', 'Warm-up', [wr, h('p', { class: 'sub' }, C.warmup.practice)], false));
 
     // workout
     var kr = h('div', { class: 'rows' }), kb = h('div', { class: 'boxlines' });
     workBox = { rows: kr, box: kb };
-    root.appendChild(h('section', { class: 'sec work' }, h('h2', {}, 'Workout'), kb, kr));
+    root.appendChild(foldBox('work', 'Workout', [kb, kr], false));
     renderRows();
 
     // cool-down
     var cr = h('div', { class: 'rows' });
-    coolBox = { rows: cr };
     C.stretches.forEach(function (st, k) { cr.appendChild(rowBtn(String(k + 1), st.name, function () { startSingle('stretch', st); })); });
-    root.appendChild(h('section', { class: 'sec cool' }, h('h2', {}, 'Cool-down'), curDay().cool.map(function (t) { return h('p', { class: 'sub' }, t); }), cr));
+    root.appendChild(foldBox('cool', 'Cool-down', curDay().cool.map(function (t) { return h('p', { class: 'sub' }, t); }).concat([cr]), false));
 
     // Hip Flexibility
     var hr = h('div', { class: 'rows' });
     C.hip.forEach(function (st, k) { hr.appendChild(rowBtn(String(k + 1), st.name, function () { startSingle('stretch', st); })); });
-    root.appendChild(h('section', { class: 'sec cool' }, h('h2', {}, 'Hip Flexibility stretches'),
-      h('button', { class: 'btn start', type: 'button', onclick: startHip }, 'Hip Flexibility'), hr));
-
-    var wc = h('div', { class: 'rows' });
-    wc.appendChild(rowBtn('', [h('span', {}, 'Walk')], renderWalk));
-    wc.appendChild(rowBtn('', [h('span', {}, 'Cardio: treadmill, circuit or VR combat')], renderCardio));
-    root.appendChild(h('section', { class: 'sec warm' }, h('h2', {}, 'Walk and cardio'), wc));
+    root.appendChild(foldBox('cool', 'Hip Flexibility stretches', [h('button', { class: 'btn start', type: 'button', onclick: startHip }, 'Hip Flexibility'), hr], false));
 
     root.appendChild(h('button', { class: 'btn start', type: 'button', onclick: startDay }, 'Start ' + curDay().title.split(':')[0]));
-    root.appendChild(voiceBox());
 
     // verse
     var vtxt = h('div', {}, C.verses[S.verse].text);
@@ -1382,9 +1435,11 @@
       h('button', { class: 'btn alt small', type: 'button', onclick: function () {
         S.verse = (S.verse + 1) % C.verses.length; store.set('verse', S.verse); vtxt.textContent = C.verses[S.verse].text;
       } }, 'Next verse')));
-    root.appendChild(h('button', { class: 'link', type: 'button', onclick: renderSafety }, 'Before You Start'));
-    root.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: renderLadders }, 'Move Ladders')));
-    root.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: renderHistory }, 'Past sessions')));
+    var links = h('div', { class: 'links' });
+    [['Cardio', renderCardio], ['Walk', renderWalk], ['Move Ladders', renderLadders], ['Before You Start', renderSafety], ['Past sessions', renderHistory], ['Settings', renderSettings]].forEach(function (l) {
+      links.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: l[1] }, l[0])));
+    });
+    root.appendChild(links);
     appEl.appendChild(root);
   }
 
@@ -1451,6 +1506,6 @@
   }
 
   /* ---------- go ---------- */
-  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
+  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();
