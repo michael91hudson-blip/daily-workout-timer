@@ -1415,7 +1415,6 @@
     var kr = h('div', { class: 'rows' }), kb = h('div', { class: 'boxlines' });
     workBox = { rows: kr, box: kb };
     root.appendChild(foldBox('work', 'Workout', [kb, kr], false));
-    renderRows();
 
     // cool-down
     var cr = h('div', { class: 'rows' });
@@ -1441,6 +1440,7 @@
     });
     root.appendChild(links);
     appEl.appendChild(root);
+    renderRows();
   }
 
   /* ---------- history (on this phone only, no names) ---------- */
