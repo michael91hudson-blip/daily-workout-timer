@@ -209,3 +209,6 @@ h1{font-size:26px;margin:4px 0 2px}
 .foldhead .chev{font-size:26px;line-height:1;min-width:1.2em;text-align:center}
 .foldbody{padding:0 12px 12px}
 .links{margin-top:6px}
+
+.howbox{margin:10px 0 0;padding:10px 12px;text-align:left;font-size:16px;line-height:1.45;background:rgba(255,255,255,.85);border:1px solid var(--edge);border-radius:10px}
+.tiphint{margin:0 0 8px;font-size:14px}

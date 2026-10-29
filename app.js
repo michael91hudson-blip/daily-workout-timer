@@ -42,7 +42,7 @@
     her: { name: store.get('her_name', ''), say: store.get('her_say', '') },
     setsHer: store.get('her_sets', 2),
     setsHis: store.get('his_sets', 2),
-    day: store.get('day', 'B'),
+    day: ({ 1: 'A', 3: 'B', 5: 'C' })[new Date().getDay()] || store.get('day', 'B'),
     verse: store.get('verse', 0),
     vspeed: store.get('vspeed', 2),
     pace: store.get('pace', N.paceDefault),
@@ -419,7 +419,7 @@
     c.btns = h('div', { class: 'btns' });
     c.strip = h('div', { class: o.rep ? 'strip' : 'strip none' }, '');
     c.doneBtn = null;
-    if (o.done) { c.doneBtn = h('button', { class: 'btn small', type: 'button', onclick: o.done }, 'Done'); c.btns.appendChild(c.doneBtn); }
+    if (o.done) { c.doneBtn = h('button', { class: 'btn small', type: 'button', onclick: o.done }, 'Done early'); c.btns.appendChild(c.doneBtn); }
     c.easierBox = null;
     if (o.easier) {
       var box = h('div', { class: 'easier', hidden: true }, h('p', {}, 'Easier version: ' + o.easier.text));
@@ -427,7 +427,13 @@
       c.easierBox = box;
       c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { box.hidden = !box.hidden; } }, 'Easier version'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.startLine, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.easierBox);
+    c.howBox = null;
+    if (o.howText) {
+      var hb = h('div', { class: 'howbox', hidden: !o.howOpen }, o.howText);
+      c.howBox = hb;
+      if (!o.howOpen) c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { hb.hidden = !hb.hidden; } }, 'How to do it'));
+    }
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.startLine, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.howBox, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
@@ -569,7 +575,7 @@
           acc += p.seq[q][1];
         }
         var shownWord = (p.words === 'wall') ? (word === 'UP' ? 'OUT' : (word === 'DOWN' ? 'IN' : word)) : word;
-        c.strip.textContent = shownWord + ' ' + Math.max(1, Math.ceil(left - 0.001));
+        c.strip.textContent = shownWord + ' \u00b7 ' + Math.max(1, Math.ceil(left - 0.001)) + ' sec';
         c.strip.className = 'strip ' + word.toLowerCase();
       } else { clearStrip(c); }
       c.big.textContent = (ri + 1) + ' / ' + p.n;
@@ -759,7 +765,7 @@
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0, R = resolve(m, pid);
         if (on) res[pid] = R;
-        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, startLine: on ? R.startShow : null, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
+        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, startLine: on ? R.startShow : null, howText: on ? R.how.text : null, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
         if (!on) card.root.className += ' dim';
         s.cardsList.push({ card: card, on: on });
       });
@@ -784,7 +790,7 @@
       var hip = s.grp === 'hip', secName = hip ? 'Hip Flexibility' : 'Cool-down';
       ui = scaffold('cool', secName, 'Stretch ' + (s.k + 1) + ' of ' + s.total + ((s.rounds > 1 && !s.single) ? ' · Round ' + s.round + ' of ' + s.rounds : ''));
       s.listen = (s.round === 1);
-      var c2 = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets, startLine: s.st.startLine });
+      var c2 = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets, startLine: s.st.startLine, howText: s.st.how });
       s.cardsList.push({ card: c2, on: true });
       if (!s.single && s.k === 0 && s.round === 1) Voice.say([CUEBY[hip ? 'section-hip' : 'section-cooldown']], { blocking: s.listen });
       if (!s.single && s.k === 0 && s.round === 2) Voice.say([CUEBY['round-2']], { blocking: s.listen });
@@ -830,7 +836,7 @@
       var on = act.indexOf(pid) >= 0, t = null, card, R = resolve(m, pid);
       if (on) {
         t = mkTrack(pid, m, s.set); res[pid] = R;
-        card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, easier: R.easier, rep: true, repsLabel: repsLabel(R),
+        card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, howText: R.how.text, easier: R.easier, rep: true, repsLabel: repsLabel(R),
           done: (R.kind === 'reps' || R.kind === 'taps') ? function () { trackDone(s, t); } : null });
         s.tracks.push(t);
       } else {
@@ -883,7 +889,7 @@
     var ui = scaffold('cool', s.grp === 'hip' ? 'Hip Flexibility' : 'Cool-down', 'Stretch ' + (s.k + 1) + ' of ' + s.total + ((s.rounds > 1 && !s.single) ? ' · Round ' + s.round + ' of ' + s.rounds : ''));
     var t = mkStretchTrack(s.st);
     s.age = 0; s.frozen = 0; s.tracks = [t]; s.activeCount = namedList().length;
-    var card = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets });
+    var card = makeCard({ who: namedList().map(shownName).join(' & '), mv: s.st.name, amt: s.st.targets, howText: s.st.how, howOpen: true });
     s.cardsList = [{ card: card, t: t, on: true }];
     ui.phase.textContent = 'Go';
     setUpDownMode(s);
@@ -1239,7 +1245,13 @@
     var who = namedList();
     var pids = who.length ? who : ['her', 'his'];
     workBox.box.textContent = '';
-    ((named('her') && !named('his')) ? curDay().boxHer : curDay().box).forEach(function (line) { workBox.box.appendChild(h('p', { class: 'boxline' }, line)); });
+    var dy = curDay();
+    function bl(t) { workBox.box.appendChild(h('p', { class: 'boxline' }, t)); }
+    if (named('her') && !named('his')) dy.boxHer.forEach(bl);
+    else if (named('his') && !named('her')) dy.box.forEach(bl);
+    else dy.box.forEach(function (line, i) {
+      if (line === dy.boxHer[i]) bl(line); else { bl('His: ' + line); bl('Hers: ' + dy.boxHer[i]); }
+    });
     workBox.rows.textContent = '';
     curMoves().forEach(function (m) {
       var lines = pids.map(function (pid) {
@@ -1319,6 +1331,7 @@
     kids.push(segOf(circ.jog.map(function (v) { return { t: v + ' sec', v: v }; }), function () { return opt.jog; }, function (v) { opt.jog = v; }));
     kids.push(h('label', { class: 'sub' }, 'Circuit: Fast Step-Ups'));
     kids.push(segOf(circ.stepSec.map(function (v) { return { t: v + ' sec', v: v }; }), function () { return opt.stepSec; }, function (v) { opt.stepSec = v; }));
+    kids.push(h('p', { class: 'sub' }, "Then tap what you're doing to start:"));
     kids.push(h('button', { class: 'btn start', type: 'button', onclick: function () { go('tread'); } }, 'Treadmill'));
     kids.push(h('button', { class: 'btn start', type: 'button', onclick: function () { go('circuit'); } }, circ.title));
     if (named('his')) {
@@ -1414,7 +1427,7 @@
     // workout
     var kr = h('div', { class: 'rows' }), kb = h('div', { class: 'boxlines' });
     workBox = { rows: kr, box: kb };
-    root.appendChild(foldBox('work', 'Workout', [kb, kr], false));
+    root.appendChild(foldBox('work', 'Workout', [kb, h('p', { class: 'sub tiphint' }, 'Tap a move to change its step, reps, or holds.'), kr], false));
 
     // cool-down
     var cr = h('div', { class: 'rows' });
@@ -1476,8 +1489,9 @@
   }
   function histLine() {
     var k = histCounts()[S.day];
-    if (!k || !k.n) return 'Not done yet';
-    return 'Done ' + k.n + (k.n === 1 ? ' time' : ' times') + ' \u00b7 Last: ' + dayLabel(k.last, false);
+    var nm = curDay().title.split(':')[0] + ': ';
+    if (!k || !k.n) return nm + 'not done yet';
+    return nm + 'done ' + k.n + (k.n === 1 ? ' time' : ' times') + ' \u00b7 Last: ' + dayLabel(k.last, false);
   }
   function renderHistory() {
     appEl.textContent = '';
