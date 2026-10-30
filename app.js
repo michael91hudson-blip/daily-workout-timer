@@ -37,6 +37,13 @@
   };
 
   /* ---------- saved settings (on this phone only) ---------- */
+  /* Oct 30: Pace now sets the break length; the old rep-speed choice moves to Rep speed once */
+  if (store.get('reset_oct30', 0) !== 1) {
+    var oldPace = store.get('pace', 1);
+    if (oldPace === 0 || oldPace === 2) store.set('repspeed', oldPace);
+    store.set('pace', 1);
+    store.set('reset_oct30', 1);
+  }
   var S = {
     his: { name: store.get('his_name', ''), say: store.get('his_say', '') },
     her: { name: store.get('her_name', ''), say: store.get('her_say', '') },
@@ -46,6 +53,7 @@
     verse: store.get('verse', 0),
     vspeed: store.get('vspeed', 2),
     pace: store.get('pace', N.paceDefault),
+    repspeed: store.get('repspeed', N.paceDefault),
     rounds: store.get('rounds', N.roundsDefault)
   };
   /* week 1 starts on plan.start; weeks keep counting after week 4 (Next Phase) */
@@ -93,6 +101,7 @@
   if (!C.days.some(function (d) { return d.key === S.day; })) S.day = 'B';
   if (!(S.verse >= 0 && S.verse < C.verses.length)) S.verse = 0;
   if (!(S.pace >= 0 && S.pace < N.paceNames.length)) S.pace = N.paceDefault;
+  if (!(S.repspeed >= 0 && S.repspeed < N.paceNames.length)) S.repspeed = N.paceDefault;
   if (N.rounds.indexOf(S.rounds) < 0) S.rounds = N.roundsDefault;
 
   function named(pid) { return S[pid].name.trim() !== ''; }
@@ -459,12 +468,13 @@
   /* ---------- tracks (one per person per move) ---------- */
   var CUE = { hold: CUEBY.hold, rest: CUEBY.rest, sides: CUEBY['switch-sides'], legs: CUEBY['switch-legs'],
               nowT: { id: CUEBY['now-t'].id, text: CUEBY['now-t'].text, named: true } };
-  function paceMult() { return N.paceMult[S.pace]; }
+  function paceMult() { return N.repMult[S.repspeed]; }
+  function breakSec() { return N.breakSec[S.pace]; }
   function scaleSeq(seq) { var k = paceMult(); return seq.map(function (q) { return [q[0], Math.round(q[1] * k * 100) / 100]; }); }
   function seqSum(seq) { return seq.reduce(function (a, q) { return a + q[1]; }, 0); }
   function holdPh(dur, label) { return { k: 'hold', dur: dur, beep: true, label: label, strip: 'HOLD', cls: 'hold', say: CUE.hold }; }
   function brkPh() { return { k: 'brk', dur: N.holdBreak, label: 'Rest', strip: 'REST', cls: 'pause', say: CUE.rest }; }
-  function switchPh(cue, label) { return { k: 'pause', dur: N.pause, beep: true, label: label, strip: 'SWITCH', cls: 'wswitch', say: cue }; }
+  function switchPh(cue, label) { return { k: 'pause', dur: breakSec(), beep: true, label: label, strip: 'SWITCH', cls: 'wswitch', say: cue }; }
   function holdPhases(pid, R, set) {
     var c = R.cfg, n = holdsIn(holdPatOf(pid, R.ladder), set), ph = [], i, sd, unit;
     if (c.sides === 'legs' || c.sides === 'sides') {
@@ -495,7 +505,7 @@
   function mkStretchTrack(st) {
     var ph = [];
     if (st.kind === 'once') ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Hold' });
-    else ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Side 1' }, { k: 'pause', dur: N.pause, beep: true, label: 'Switch sides', say: CUE.sides }, { k: 'hold', dur: N.hold, beep: true, label: 'Side 2' });
+    else ph.push({ k: 'hold', dur: N.hold, beep: true, label: 'Side 1' }, { k: 'pause', dur: breakSec(), beep: true, label: 'Switch sides', say: CUE.sides }, { k: 'hold', dur: N.hold, beep: true, label: 'Side 2' });
     return { pid: null, ph: ph, pi: 0, el: 0, fin: false, repIdx: -1, upSaid: false, downSaid: false };
   }
 
@@ -696,7 +706,7 @@
     var ui = scaffold('warm', 'Warm-up', C.warmup.label);
     s.age = 0; s.pi = 0; s.pel = 0; s.said = -1; s.parts = [];
     C.warmup.parts.forEach(function (p, i) {
-      if (i > 0) s.parts.push({ gap: true, next: p.name, cue: p.next, sec: N.warmSwitch });
+      if (i > 0) s.parts.push({ gap: true, next: p.name, cue: p.next, sec: breakSec() });
       s.parts.push({ part: i + 1, name: p.name.toUpperCase(), sec: p.sec, how: p.how });
     });
     var who = namedList().map(shownName).join(' & ');
@@ -769,7 +779,7 @@
   /* ---------- step: get ready ---------- */
   stepEnter.ready = function (s) {
     var ui, ts = totalSets();
-    s.dur = N.ready; s.el = 0; s.age = 0; s.listenWait = 0; s.listen = false; s.cardsList = [];
+    s.dur = breakSec(); s.el = 0; s.age = 0; s.listenWait = 0; s.listen = false; s.cardsList = [];
     if (s.what === 'move') {
       var m = curMoves()[s.n - 1], res = {};
       ui = scaffold('work', 'Workout', 'Move ' + s.n + ' of ' + curMoves().length + ' · Set ' + s.set + ' of ' + (s.single ? 1 : ts));
@@ -1356,9 +1366,11 @@
       h('label', {}, 'Speed'), speedRow, h('div', { class: 'vtest' }, test));
   }
   function settingsBox() {
-    return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Pace and rounds'),
-      h('label', {}, 'Pace (rep speed, and the circuit)'),
+    return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Pace, rep speed and rounds'),
+      h('label', {}, 'Pace (time to get ready and to switch sides)'),
       segOf(N.paceNames.map(function (n, i) { return { t: n, v: i }; }), function () { return S.pace; }, function (v) { S.pace = v; store.set('pace', v); }),
+      h('label', {}, 'Rep speed (reps, and the circuit)'),
+      segOf(N.paceNames.map(function (n, i) { return { t: n, v: i }; }), function () { return S.repspeed; }, function (v) { S.repspeed = v; store.set('repspeed', v); }),
       h('label', {}, 'Rounds (cool-down and Hip Flexibility)'),
       segOf(N.rounds.map(function (v) { return { t: v + (v === 1 ? ' round' : ' rounds'), v: v }; }), function () { return S.rounds; }, function (v) { S.rounds = v; store.set('rounds', v); }));
   }

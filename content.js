@@ -4825,7 +4825,12 @@ window.CONTENT = {
    "Normal",
    "Faster"
   ],
-  "paceMult": [
+  "breakSec": [
+   15,
+   10,
+   5
+  ],
+  "repMult": [
    1.25,
    1,
    0.8
