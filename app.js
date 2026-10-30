@@ -54,6 +54,7 @@
     vspeed: store.get('vspeed', 2),
     pace: store.get('pace', N.paceDefault),
     repspeed: store.get('repspeed', N.paceDefault),
+    talk: store.get('talk', 1),
     rounds: store.get('rounds', N.roundsDefault)
   };
   /* week 1 starts on plan.start; weeks keep counting after week 4 (Next Phase) */
@@ -102,6 +103,7 @@
   if (!(S.verse >= 0 && S.verse < C.verses.length)) S.verse = 0;
   if (!(S.pace >= 0 && S.pace < N.paceNames.length)) S.pace = N.paceDefault;
   if (!(S.repspeed >= 0 && S.repspeed < N.paceNames.length)) S.repspeed = N.paceDefault;
+  if (S.talk !== 0 && S.talk !== 1) S.talk = 1;
   if (N.rounds.indexOf(S.rounds) < 0) S.rounds = N.roundsDefault;
 
   function named(pid) { return S[pid].name.trim() !== ''; }
@@ -406,7 +408,7 @@
     ui.cap = h('div', { class: 'cap' }, '');
     ui.pause = h('button', { class: 'btn alt', type: 'button', onclick: function () { togglePause(); } }, 'Pause');
     ui.repeat = h('button', { class: 'btn alt', type: 'button', onclick: function () { repeatStep(); } }, 'Repeat');
-    ui.skip = h('button', { class: 'btn', type: 'button', onclick: function () { advance(); } }, 'Skip');
+    ui.skip = h('button', { class: 'btn', type: 'button', onclick: function () { skipPress(); } }, 'Skip');
     ui.plus = h('button', { class: 'btn alt', type: 'button', onclick: function () { plus10(); } }, '+10 sec');
     ui.pace = h('button', { class: 'btn alt', type: 'button', onclick: function () { cyclePace(); } }, paceLabel());
     ui.home = h('button', { class: 'btn alt', type: 'button' }, 'Home');
@@ -704,7 +706,7 @@
 
   stepEnter.warmup = function (s) {
     var ui = scaffold('warm', 'Warm-up', C.warmup.label);
-    s.age = 0; s.pi = 0; s.pel = 0; s.said = -1; s.parts = [];
+    s.age = 0; s.pi = 0; s.pel = 0; s.said = -1; s.parts = []; s.prep = 0;
     C.warmup.parts.forEach(function (p, i) {
       if (i > 0) s.parts.push({ gap: true, next: p.name, cue: p.next, sec: breakSec() });
       s.parts.push({ part: i + 1, name: p.name.toUpperCase(), sec: p.sec, how: p.how });
@@ -734,7 +736,19 @@
       s.listenWait = null; G.ui.phase.textContent = 'Warm-up';
     }
     var p = s.parts[s.pi];
-    if (s.said !== s.pi) { s.said = s.pi; if (!p.gap) Voice.say([p.how], {}); }
+    if (s.prep > 0) {
+      var pb = s.prep;
+      s.prep -= dt;
+      beepCross(pb, s.prep);
+      G.ui.phase.textContent = 'Get in position';
+      s.card.big.textContent = String(Math.max(0, Math.ceil(s.prep)));
+      s.card.barFill.style.width = Math.min(1, (SKIP_PREP - s.prep) / SKIP_PREP) * 100 + '%';
+      s.card.strip.textContent = 'GET IN POSITION'; s.card.strip.className = 'strip wswitch';
+      s.card.st.textContent = 'Next: ' + p.name;
+      if (s.prep > 0) return;
+      s.prep = 0; G.ui.phase.textContent = 'Warm-up';
+    }
+    if (s.said !== s.pi) { s.said = s.pi; if (!p.gap && S.talk) Voice.say([p.how], {}); }
     var before = p.sec - s.pel;
     s.pel += dt;
     beepCross(before, p.sec - s.pel);
@@ -800,7 +814,7 @@
         if (firsts.length) queueCueGroups(firsts, function (pid) { return res[pid].first; }, ['first'], {});
       }
       if (s.set === 1) {
-        ['how', 'feel', 'fix'].forEach(function (typ) {
+        if (S.talk) ['how', 'feel', 'fix'].forEach(function (typ) {
           queueCueGroups(act, function (pid, t2) { return res[pid].cues[t2]; }, [typ], { blocking: true });
         });
       }
@@ -816,7 +830,7 @@
       s.cardsList.push({ card: c2, on: true });
       if (!s.single && s.k === 0 && s.round === 1) Voice.say([CUEBY[hip ? 'section-hip' : 'section-cooldown']], { blocking: s.listen });
       if (!s.single && s.k === 0 && s.round === 2) Voice.say([CUEBY['round-2']], { blocking: s.listen });
-      if (s.round === 1) {
+      if (s.round === 1 && S.talk) {
         ['how', 'feel', 'fix'].forEach(function (typ) { Voice.say([s.st.cues[typ]], { blocking: true }); });
       }
     }
@@ -870,7 +884,7 @@
     ui.phase.textContent = 'Go';
     setUpDownMode(s);
     startCues(s);
-    if (s.set !== 1) queueCueGroups(act, function (pid, typ) { return res[pid].cues[typ]; }, ['feel', 'fix'], { fits: function (it) { return fitCheck(s, it); } });
+    if (s.set !== 1 && S.talk) queueCueGroups(act, function (pid, typ) { return res[pid].cues[typ]; }, ['feel', 'fix'], { fits: function (it) { return fitCheck(s, it); } });
   };
   stepTick.move = function (s, dt) {
     s.age += dt;
@@ -916,7 +930,7 @@
     ui.phase.textContent = 'Go';
     setUpDownMode(s);
     startCues(s);
-    if (s.round !== 1) [s.st.cues.feel, s.st.cues.fix].forEach(function (c) {
+    if (s.round !== 1 && S.talk) [s.st.cues.feel, s.st.cues.fix].forEach(function (c) {
       Voice.say([c], { fits: function (it) { return fitCheck(s, it); } });
     });
   };
@@ -1081,6 +1095,7 @@
     }
     TESTLOG('step', step.t + (step.what && step.what !== 'move' ? ' ' + step.what : '') + (step.n ? ' m' + step.n : '') + (step.set ? ' s' + step.set : '') + (step.st ? ' ' + step.st.key : '') + (step.round ? ' r' + step.round : ''));
     stepEnter[step.t](step);
+    if (G.ui && G.ui.skip) G.ui.skip.textContent = skipLabel();
     if (G.ui && G.ui.next) G.ui.next.textContent = (G.mode === 'day' && step.t !== 'finish') ? 'Next: ' + planNextText(G.i) : '';
   }
   function setPaused(on) {
@@ -1113,13 +1128,61 @@
       ui.plus.disabled = false;
       Array.prototype.forEach.call(ui.root.querySelectorAll('.card button'), function (b) { b.disabled = false; });
       if (s.listenWait !== null && s.listenWait !== undefined) { s.listenWait = null; }
-      s.pel = 0; ui.phase.textContent = 'Warm-up';
+      s.pel = 0; s.prep = 0; ui.phase.textContent = 'Warm-up';
       var q = s.parts[s.pi];
       s.said = s.pi;
-      if (q.gap) Voice.say([q.cue], { urgent: true }); else Voice.say([q.how], {});
+      if (q.gap) Voice.say([q.cue], { urgent: true }); else if (S.talk) Voice.say([q.how], {});
       return;
     }
     enter(s);
+  }
+  var SKIP_PREP = 5;
+  /* Skip only skips what is on screen; anything that leads into an exercise gets a short get-in-position wait */
+  function skipPress() {
+    if (!G.running || !G.step) return;
+    var s = G.step;
+    if (s.t === 'warmup') {
+      if (s.prep > 0) return;
+      if (s.listenWait !== null && s.listenWait !== undefined) {
+        Voice.clear(); s.listenWait = null; s.said = -1; s.pel = 0; s.prep = SKIP_PREP;
+        TESTLOG('skip', 'warm-talk'); return;
+      }
+      var p = s.parts[s.pi];
+      if (p.gap) {
+        if (p.sec - s.pel > SKIP_PREP) s.pel = p.sec - SKIP_PREP;
+        TESTLOG('skip', 'warm-wait'); return;
+      }
+      var j = s.pi + 1;
+      while (j < s.parts.length && s.parts[j].gap) j++;
+      Voice.clear();
+      if (j >= s.parts.length) { TESTLOG('skip', 'warm-end'); advance(); return; }
+      if (s.parts[j - 1].gap) Voice.say([s.parts[j - 1].cue], { urgent: true });
+      s.pi = j; s.pel = 0; s.said = -1; s.prep = SKIP_PREP;
+      TESTLOG('skip', 'warm-part'); return;
+    }
+    if (s.t === 'ready') {
+      if (s.listen && Voice.blockingPending() && s.listenWait < 120) {
+        Voice.clear(); s.listenWait = 120; s.dur = SKIP_PREP; s.el = 0;
+        TESTLOG('skip', 'talk'); return;
+      }
+      if (s.dur - s.el > SKIP_PREP) s.el = s.dur - SKIP_PREP;
+      TESTLOG('skip', 'wait'); return;
+    }
+    advance();
+  }
+  function skipLabel() {
+    var s = G.step;
+    if (!s) return 'Skip';
+    if (s.t === 'warmup') {
+      if (s.prep > 0) return 'Skip wait';
+      if (s.listenWait !== null && s.listenWait !== undefined) return 'Skip talk';
+      var p = s.parts[s.pi];
+      return p && p.gap ? 'Skip wait' : 'Skip part';
+    }
+    if (s.t === 'ready') return (s.listen && Voice.blockingPending() && s.listenWait < 120) ? 'Skip talk' : 'Skip wait';
+    if (s.t === 'move' || s.t === 'stretch') return 'Skip move';
+    if (s.t === 'rest') return 'Skip rest';
+    return 'Skip';
   }
   function advance() {
     if (!G.running || !G.step) return;
@@ -1245,6 +1308,7 @@
     if (G.paused) return;
     if (G.running) G.activeSec = (G.activeSec || 0) + dt;
     if (G.running && G.step && stepTick[G.step.t]) stepTick[G.step.t](G.step, dt);
+    if (G.running && G.step && G.ui && G.ui.skip) { var sl = skipLabel(); if (G.ui.skip.textContent !== sl) G.ui.skip.textContent = sl; }
   }, 100);
 
   /* ---------- first-open safety screen ---------- */
@@ -1363,7 +1427,10 @@
       Voice.say([{ text: 'This is how the voice sounds.' }], { urgent: true, nocap: true });
     } }, 'Test voice');
     return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Voice'),
-      h('label', {}, 'Speed'), speedRow, h('div', { class: 'vtest' }, test));
+      h('label', {}, 'Speed'), speedRow,
+      h('label', {}, 'Spoken instructions (how to do each move)'),
+      segOf([{ t: 'On', v: 1 }, { t: 'Off', v: 0 }], function () { return S.talk; }, function (v) { S.talk = v; store.set('talk', v); }),
+      h('div', { class: 'vtest' }, test));
   }
   function settingsBox() {
     return h('section', { class: 'sec voicebox' }, h('h2', {}, 'Pace, rep speed and rounds'),
