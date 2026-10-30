@@ -20,7 +20,7 @@ window.CONTENT = {
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
-    "10-second holds: Curl-Ups, Side Planks, and Bird Dogs use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
+    "10-second holds: Curl-Ups and Bird Dogs use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
     "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides. Moves that switch sides on every rep need no switch time."
    ],
    "cool": [
@@ -125,22 +125,17 @@ window.CONTENT = {
      "n": 3,
      "her": {
       "ladder": "taps",
-      "name": "Plank Shoulder Taps",
+      "name": "Plank Shoulder Taps (knees)",
       "amount": "8–15/side, starting at 8",
       "how": {
-       "id": "how-taps-2",
-       "text": "Start: in a plank on your hands and toes, hands under your shoulders, body in a straight line from head to heels. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap."
+       "id": "how-taps-1",
+       "text": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap."
       },
-      "easier": "From your knees",
-      "easierSteps": [
-       {
-        "ladder": "taps",
-        "n": 1
-       }
-      ],
+      "easier": null,
+      "easierSteps": [],
       "row": "Plank Shoulder Taps",
-      "start": 2,
-      "startLine": "Start: in a plank on your hands and toes, hands under your shoulders, body in a straight line from head to heels."
+      "start": 1,
+      "startLine": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head."
      },
      "his": {
       "ladder": "taps",
@@ -237,18 +232,22 @@ window.CONTENT = {
     {
      "n": 6,
      "her": {
-      "ladder": "sideplank",
-      "name": "Side Plank (knees)",
-      "amount": "10-sec holds: 3, 2, 1 per side",
+      "ladder": "hipraise",
+      "name": "Plank Hip Raises",
+      "amount": "8–15, starting at 8",
       "how": {
-       "id": "how-sideplank-1",
-       "text": "Start: lie on your side, propped on your forearm with your elbow under your shoulder, knees bent to 90°, free hand on your top hip. Move: 1. Lift your hips until your body is straight from head to knees. 2. Hold, then lower slowly. 3. When all your holds are done, turn onto your other side and do them again. Keep: hips steady, not turning. Gaze forward."
+       "id": "how-hipraise-1",
+       "text": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up. Move: 1. Lift your hips up into an upside-down V. 2. Once your hips reach the highest point, lower back to the plank. Keep: your muscles engaged the whole time."
       },
       "easier": null,
       "easierSteps": [],
-      "row": "Side Plank",
+      "row": "Plank Hip Raises",
       "start": 1,
-      "startLine": "Start: lie on your side, propped on your forearm with your elbow under your shoulder, knees bent to 90°, free hand on your top hip."
+      "startLine": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
      },
      "his": {
       "ladder": "sideplank",
@@ -617,7 +616,6 @@ window.CONTENT = {
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
-    "10-second holds: Side Planks use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
     "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides, or to switch from Y to T. Moves that switch sides on every rep need no switch time."
    ],
    "cool": [
@@ -899,18 +897,22 @@ window.CONTENT = {
     {
      "n": 7,
      "her": {
-      "ladder": "sideplank",
-      "name": "Side Plank (knees)",
-      "amount": "10-sec holds: 3, 2, 1 per side",
+      "ladder": "hipraise",
+      "name": "Plank Hip Raises",
+      "amount": "8–15, starting at 8",
       "how": {
-       "id": "how-sideplank-1",
-       "text": "Start: lie on your side, propped on your forearm with your elbow under your shoulder, knees bent to 90°, free hand on your top hip. Move: 1. Lift your hips until your body is straight from head to knees. 2. Hold, then lower slowly. 3. When all your holds are done, turn onto your other side and do them again. Keep: hips steady, not turning. Gaze forward."
+       "id": "how-hipraise-1",
+       "text": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up. Move: 1. Lift your hips up into an upside-down V. 2. Once your hips reach the highest point, lower back to the plank. Keep: your muscles engaged the whole time."
       },
       "easier": null,
       "easierSteps": [],
-      "row": "Side Plank",
+      "row": "Plank Hip Raises",
       "start": 1,
-      "startLine": "Start: lie on your side, propped on your forearm with your elbow under your shoulder, knees bent to 90°, free hand on your top hip."
+      "startLine": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
      },
      "his": {
       "ladder": "sideplank",
@@ -1468,29 +1470,29 @@ window.CONTENT = {
    "title": "Plank Shoulder Taps",
    "short": "Plank Shoulder Taps",
    "start": {
-    "her": 2,
+    "her": 1,
     "his": 2
    },
    "steps": [
     {
      "n": 1,
      "name": "From Your Knees",
-     "how": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still.",
-     "note": "—",
+     "how": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap.",
+     "note": "Her start",
      "startLine": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head.",
      "cfg": {
       "kind": "taps"
      },
      "cue": {
       "id": "how-taps-1",
-      "text": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still."
+      "text": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap."
      }
     },
     {
      "n": 2,
      "name": "Plank Shoulder Taps",
      "how": "Start: in a plank on your hands and toes, hands under your shoulders, body in a straight line from head to heels. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap.",
-     "note": "Both start. Strong. Ultimate",
+     "note": "His start. Strong. Ultimate",
      "startLine": "Start: in a plank on your hands and toes, hands under your shoulders, body in a straight line from head to heels.",
      "cfg": {
       "kind": "taps"
@@ -1752,7 +1754,6 @@ window.CONTENT = {
    "title": "Side Plank",
    "short": "Side Plank",
    "start": {
-    "her": 1,
     "his": 1
    },
    "steps": [
@@ -1833,7 +1834,48 @@ window.CONTENT = {
      }
     }
    ],
-   "prefix": []
+   "prefix": [],
+   "only": "his"
+  },
+  "hipraise": {
+   "title": "Plank Hip Raises",
+   "short": "Plank Hip Raises",
+   "start": {
+    "her": 1
+   },
+   "steps": [
+    {
+     "n": 1,
+     "name": "Plank Hip Raises",
+     "how": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up. Move: 1. Lift your hips up into an upside-down V. 2. Once your hips reach the highest point, lower back to the plank. Keep: your muscles engaged the whole time.",
+     "note": "Her start. Ultimate",
+     "startLine": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up.",
+     "first": {
+      "id": "first-up",
+      "text": "First move: up."
+     },
+     "cfg": {
+      "kind": "reps",
+      "seq": [
+       [
+        "UP",
+        1
+       ],
+       [
+        "DOWN",
+        3
+       ]
+      ],
+      "side": false
+     },
+     "cue": {
+      "id": "how-hipraise-1",
+      "text": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up. Move: 1. Lift your hips up into an upside-down V. 2. Once your hips reach the highest point, lower back to the plank. Keep: your muscles engaged the whole time."
+     }
+    }
+   ],
+   "prefix": [],
+   "only": "her"
   },
   "bird": {
    "title": "Bird Dog",
@@ -2569,6 +2611,7 @@ window.CONTENT = {
   "plank",
   "curl",
   "sideplank",
+  "hipraise",
   "bird",
   "squats",
   "rdl",
@@ -2952,6 +2995,21 @@ window.CONTENT = {
     "fix": {
      "id": "fix-scapular-pushups",
      "text": "Should not feel, or fix: Elbows bending. Keep them locked."
+    }
+   }
+  },
+  "Plank Hip Raises": {
+   "muscles": "Front of belly (rectus abdominis), deep core under it (transverse abdominis), shoulder muscles that hold you steady",
+   "feel": "Belly (core) and shoulders",
+   "fix": "Low-back pain. Stop the set, since a plank should not be painful.",
+   "cues": {
+    "feel": {
+     "id": "feel-plank-hip-raises",
+     "text": "You should feel it in: Belly (core) and shoulders"
+    },
+    "fix": {
+     "id": "fix-plank-hip-raises",
+     "text": "Should not feel, or fix: Low-back pain. Stop the set, since a plank should not be painful."
     }
    }
   },
@@ -3873,7 +3931,7 @@ window.CONTENT = {
   },
   {
    "id": "how-taps-1",
-   "text": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still.",
+   "text": "Start: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Move: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap.",
    "where": "Plank Shoulder Taps ladder, step 1: how",
    "who": "Both"
   },
@@ -3971,6 +4029,12 @@ window.CONTENT = {
    "id": "how-sideplank-5",
    "text": "Move your top arm and leg up and down a few times while you hold.",
    "where": "Side Plank ladder, step 5: how",
+   "who": "Both"
+  },
+  {
+   "id": "how-hipraise-1",
+   "text": "Start: face down on your forearms and toes, elbows directly under your shoulders, body in a straight line from head to heels. First move: up. Move: 1. Lift your hips up into an upside-down V. 2. Once your hips reach the highest point, lower back to the plank. Keep: your muscles engaged the whole time.",
+   "where": "Plank Hip Raises ladder, step 1: how",
    "who": "Both"
   },
   {
@@ -4385,6 +4449,18 @@ window.CONTENT = {
    "id": "feel-standing-it-band-stretch",
    "text": "You should feel it in: Outer hip and the side of your trunk",
    "where": "What you should feel: Standing IT Band Stretch",
+   "who": "Both"
+  },
+  {
+   "id": "feel-plank-hip-raises",
+   "text": "You should feel it in: Belly (core) and shoulders",
+   "where": "What you should feel: Plank Hip Raises",
+   "who": "Both"
+  },
+  {
+   "id": "fix-plank-hip-raises",
+   "text": "Should not feel, or fix: Low-back pain. Stop the set, since a plank should not be painful.",
+   "where": "Should not feel, or fix: Plank Hip Raises",
    "who": "Both"
   },
   {

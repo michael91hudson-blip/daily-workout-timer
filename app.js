@@ -75,6 +75,11 @@
     } catch (e) { /* ignore */ }
     store.set('reset_oct28b', 1);
   }
+  /* the Oct 29 documents start her shoulder taps on the knee version: her saved taps step clears once */
+  if (store.get('reset_oct29', 0) !== 1) {
+    try { localStorage.removeItem('step_her_taps'); } catch (e) { /* ignore */ }
+    store.set('reset_oct29', 1);
+  }
   var WEEK = planWeek();
   if (store.get('plan_week2', 0) !== WEEK) {
     S.setsHer = setsForWeek(WEEK); S.setsHis = setsForWeek(WEEK);
@@ -395,7 +400,14 @@
     ui.skip = h('button', { class: 'btn', type: 'button', onclick: function () { advance(); } }, 'Skip');
     ui.plus = h('button', { class: 'btn alt', type: 'button', onclick: function () { plus10(); } }, '+10 sec');
     ui.pace = h('button', { class: 'btn alt', type: 'button', onclick: function () { cyclePace(); } }, paceLabel());
-    ui.home = h('button', { class: 'btn alt', type: 'button', onclick: function () { goHome(); } }, 'Home');
+    ui.home = h('button', { class: 'btn alt', type: 'button' }, 'Home');
+    (function (b) {
+      var armed = false, tm = null;
+      b.onclick = function () {
+        if (!armed) { armed = true; b.textContent = 'Tap again to leave'; tm = setTimeout(function () { armed = false; b.textContent = 'Home'; }, 4000); return; }
+        clearTimeout(tm); goHome();
+      };
+    })(ui.home);
     ui.root = h('div', { id: 'play', class: sec },
       h('div', { class: 'band' }, ui.secname, ui.prog),
       ui.phase, ui.next, ui.cards, ui.mot,
@@ -1006,7 +1018,7 @@
     } else circuitTick(s, dt, left);
     if (s.el >= s.total) {
       G.finishSay = true;
-      if (s.inDay) G.cardioDone = { k: s.kind, m: s.mins }; else recordTimer(s);
+      if (s.inDay) { G.cardioDone = { k: s.kind, m: s.mins }; if (G.recorded) recordSession(false); } else recordTimer(s);
       advance();
     }
   };
@@ -1016,7 +1028,7 @@
     appEl.textContent = '';
     G.ui = null;
     unlockScreen();
-    if (s.voice) recordSession();
+    if (s.voice) { recordSession(true); clearResume(); }
     G.running = false;
     appEl.appendChild(h('div', { class: 'screen finish' },
       h('h1', {}, s.msg || 'Done'),
@@ -1050,8 +1062,13 @@
     }
     return 'Finished';
   }
+  function lastMoveIdx() { var j, k = -1; for (j = 0; j < G.plan.length; j++) if (G.plan[j].t === 'move') k = j; return k; }
   function enter(step) {
     G.step = step;
+    if (G.mode === 'day') {
+      if (!G.recorded && G.i > lastMoveIdx()) { recordSession(false); G.recorded = true; }
+      if (step.t !== 'finish') saveResume();
+    }
     TESTLOG('step', step.t + (step.what && step.what !== 'move' ? ' ' + step.what : '') + (step.n ? ' m' + step.n : '') + (step.set ? ' s' + step.set : '') + (step.st ? ' ' + step.st.key : '') + (step.round ? ' r' + step.round : ''));
     stepEnter[step.t](step);
     if (G.ui && G.ui.next) G.ui.next.textContent = (G.mode === 'day' && step.t !== 'finish') ? 'Next: ' + planNextText(G.i) : '';
@@ -1115,18 +1132,23 @@
     else if (s.frozen !== undefined) s.frozen += N.plus;
     TESTLOG('plus10');
   }
-  function startPlan(plan, mode) {
+  function startPlan(plan, mode, opts) {
     if (mode !== 'timer' && !namedList().length) { showMsg('Open Settings (at the bottom) and type a name to begin.'); return; }
     Snd.unlock(); Voice.unlock(); lockScreen();
     Voice.clear();
     G.plan = plan; G.mode = mode; G.i = 0; G.running = true; G.cardioDone = null; G.lastMot = nowMs(); G.activeSec = 0;
-    enter(G.plan[0]);
+    G.sid = null; G.recorded = false;
+    if (mode === 'day') { G.walk = plan.filter(function (x) { return x.t === 'timer'; }).map(function (x) { return x.mins; })[0] || 0; }
+    var at = (opts && opts.at) || 0;
+    if (opts && opts.res) { G.activeSec = opts.res.sec || 0; G.sid = opts.res.sid || null; G.recorded = !!opts.res.rec; G.cardioDone = opts.res.cd || null; }
+    G.i = at;
+    enter(G.plan[at]);
   }
   function startDay() {
     if (!namedList().length) { showMsg('Open Settings (at the bottom) and type a name to begin.'); return; }
     timerSetup({ title: 'Walk today?', key: 'walk_min2', mins: C.cardio.mins, def: walkDefault(),
-      go: [{ t: 'Walk (treadmill or outside)', fn: function (m) { startPlan(buildDay({ mins: m }), 'day'); } },
-           { t: 'Skip', fn: function () { startPlan(buildDay(null), 'day'); }, noSave: true }] });
+      go: [{ t: 'Walk (treadmill or outside)', fn: function (m) { clearResume(); startPlan(buildDay({ mins: m }), 'day'); } },
+           { t: 'Skip', fn: function () { clearResume(); startPlan(buildDay(null), 'day'); }, noSave: true }] });
   }
   function startTimer(kind, mins) { startPlan([{ t: 'timer', kind: kind, mins: mins }, { t: 'finish', msg: 'Done' }], 'timer'); }
   function startCardio(kind, per, pids, opts) {
@@ -1147,6 +1169,55 @@
       p = [{ t: 'ready', what: 'stretch', st: a, k: k, total: L.length, round: 1, rounds: 1, grp: grp, single: true }, { t: 'stretch', st: a, k: k, total: L.length, round: 1, rounds: 1, grp: grp, single: true }, { t: 'finish', msg: 'Done' }];
     }
     startPlan(p, 'single');
+  }
+  /* Resume: the place in a full day is saved at each step, kept for 12 hours */
+  var RESUME_MS = 12 * 3600 * 1000;
+  function saveResume() {
+    var j = G.i;
+    while (j > 0 && G.plan[j].t !== 'ready' && G.plan[j].t !== 'warmup' && G.plan[j].t !== 'practice' && G.plan[j].t !== 'rest') j--;
+    store.set('resume', { day: S.day, walk: G.walk || 0, i: j, ts: Date.now(), setsHer: S.setsHer, setsHis: S.setsHis, rounds: S.rounds,
+      sec: G.activeSec || 0, sid: G.sid, rec: !!G.recorded, cd: G.cardioDone, n: G.plan.length });
+  }
+  function clearResume() { store.set('resume', null); }
+  function getResume() {
+    var r = store.get('resume', null);
+    if (!r || typeof r !== 'object' || !r.ts || Date.now() - r.ts > RESUME_MS) return null;
+    if (!C.days.some(function (d) { return d.key === r.day; })) return null;
+    return r;
+  }
+  function resumeLabel(r) {
+    var p = r.plan[r.i], d = C.days.filter(function (x) { return x.key === r.day; })[0].title.split(':')[0];
+    if (p.t === 'warmup' || p.t === 'practice') return d + ' \u00b7 Warm-up';
+    if (p.t === 'rest') return d + ' \u00b7 Rest after set ' + p.set;
+    if (p.what === 'move') return d + ' \u00b7 Move ' + p.n + ' of ' + C.days.filter(function (x) { return x.key === r.day; })[0].moves.length + ' \u00b7 Set ' + p.set + ' of ' + Math.max(r.setsHer, r.setsHis);
+    if (p.what === 'walk') return d + ' \u00b7 Walk';
+    if (p.what === 'stretch') return d + ' \u00b7 ' + (p.grp === 'hip' ? 'Hip Flexibility' : 'Cool-down') + ' \u00b7 Stretch ' + (p.k + 1) + ' of ' + p.total;
+    return d;
+  }
+  function resumePlan(apply) {
+    var r = getResume();
+    if (!r) return null;
+    var keep = { day: S.day, her: S.setsHer, his: S.setsHis, rounds: S.rounds };
+    S.day = r.day; S.setsHer = r.setsHer; S.setsHis = r.setsHis; S.rounds = r.rounds;
+    var plan = buildDay(r.walk ? { mins: r.walk } : null), ok = plan.length === r.n && r.i < plan.length;
+    if (!ok || !apply) { S.day = keep.day; S.setsHer = keep.her; S.setsHis = keep.his; S.rounds = keep.rounds; }
+    if (!ok) { clearResume(); return null; }
+    r.plan = plan;
+    return r;
+  }
+  function doResume() {
+    var r = resumePlan(true);
+    if (!r) { renderHome(); return; }
+    store.set('day', r.day);
+    startPlan(r.plan, 'day', { at: r.i, res: r });
+  }
+  function resumeCard() {
+    var r = resumePlan(false);
+    if (!r) return null;
+    var lab = resumeLabel(r);
+    return h('section', { class: 'today resume' }, h('h2', {}, 'Unfinished workout'), h('p', { class: 'tname' }, lab),
+      h('button', { class: 'btn start', type: 'button', onclick: doResume }, 'Resume'),
+      h('button', { class: 'btn alt small', type: 'button', onclick: function () { clearResume(); renderHome(); } }, 'Start over'));
   }
   window.__appBusy = function () { return !!G.running; };
   function goHome() {
@@ -1249,9 +1320,15 @@
     function bl(t) { workBox.box.appendChild(h('p', { class: 'boxline' }, t)); }
     if (named('her') && !named('his')) dy.boxHer.forEach(bl);
     else if (named('his') && !named('her')) dy.box.forEach(bl);
-    else dy.box.forEach(function (line, i) {
-      if (line === dy.boxHer[i]) bl(line); else { bl('His: ' + line); bl('Hers: ' + dy.boxHer[i]); }
-    });
+    else {
+      var lab = function (t) { return t.split(':')[0]; }, herBy = {};
+      dy.boxHer.forEach(function (t) { herBy[lab(t)] = t; });
+      dy.box.forEach(function (line) {
+        var hr = herBy[lab(line)];
+        if (line === hr) bl(line);
+        else { bl('His: ' + line); if (hr) bl('Hers: ' + hr); }
+      });
+    }
     workBox.rows.textContent = '';
     curMoves().forEach(function (m) {
       var lines = pids.map(function (pid) {
@@ -1349,9 +1426,9 @@
     var pid = (named('her') && !named('his')) ? 'her' : 'his';
     var blocks = C.ladderOrder.map(function (lk) {
       var lad = C.ladders[lk];
-      return h('section', { class: 'sec work' }, h('h2', {}, lad.title),
+      return h('section', { class: 'sec work' }, h('h2', {}, lad.title + (lad.only ? (lad.only === 'his' ? ' (his)' : ' (hers)') : '')),
         lad.steps.map(function (st) {
-          return h('div', { class: 'ladstep' }, h('b', {}, 'Step ' + st.n + ' · ' + st.name), h('p', {}, howText(st, pid)),
+          return h('div', { class: 'ladstep' }, h('b', {}, 'Step ' + st.n + ' · ' + st.name), h('p', {}, howText(st, lad.only || pid)),
             st.note !== '—' ? h('p', { class: 'sub' }, 'Note: ' + st.note) : null);
         }));
     });
@@ -1408,6 +1485,8 @@
     var root = h('div', { class: 'screen' });
     msgEl = h('p', { class: 'msg', role: 'alert', hidden: true });
     msgEl.style.fontWeight = '700'; msgEl.style.color = '#b42318';
+    var rc = resumeCard();
+    if (rc) root.appendChild(rc);
     root.appendChild(todayCard());
     root.appendChild(msgEl);
     var picker = h('div', { class: 'days', role: 'group', 'aria-label': 'Choose a day' });
@@ -1468,17 +1547,26 @@
     if (isNaN(d.getTime())) return '';
     return MON[d.getMonth()] + ' ' + d.getDate() + (withYear ? ', ' + d.getFullYear() : '');
   }
-  function recordSession() {
+  /* a full day counts once the last set is done; the walk and the cool-down are added to the same entry if done */
+  function recordSession(cool) {
     try {
-      var now = new Date().toISOString();
-      var e = { d: now, day: S.day, min: Math.max(1, Math.round((G.activeSec || 0) / 60)) };
-      if (named('her')) e.her = S.setsHer;
-      if (named('his')) e.his = S.setsHis;
+      var l = histList(), e = null, i;
+      if (G.sid) for (i = 0; i < l.length; i++) if (l[i].sid === G.sid) { e = l[i]; break; }
+      if (!e) {
+        var now = new Date().toISOString();
+        G.sid = G.sid || now;
+        e = { d: now, sid: G.sid, day: S.day };
+        if (named('her')) e.her = S.setsHer;
+        if (named('his')) e.his = S.setsHis;
+        l.unshift(e);
+        var c = histCounts(), k = c[S.day] || { n: 0, last: '' };
+        c[S.day] = { n: (k.n || 0) + 1, last: now };
+        store.set('hist_counts', c);
+      }
+      e.min = Math.max(1, Math.round((G.activeSec || 0) / 60));
       if (G.cardioDone) { e.c = G.cardioDone.k; e.cm = G.cardioDone.m; }
-      var l = histList(); l.unshift(e); store.set('hist', l.slice(0, 30));
-      var c = histCounts(), k = c[S.day] || { n: 0, last: '' };
-      c[S.day] = { n: (k.n || 0) + 1, last: now };
-      store.set('hist_counts', c);
+      if (cool) e.cool = true;
+      store.set('hist', l.slice(0, 30));
     } catch (e2) { /* ignore */ }
   }
   var KIND = { walk: 'Walk', tread: 'Treadmill', circuit: 'No-Treadmill Circuit', vr: 'VR combat' };
@@ -1501,6 +1589,7 @@
     l.forEach(function (e) {
       var bits = e.t ? [dayLabel(e.d, true), (KIND[e.t] || 'Cardio') + ' \u00b7 ' + e.min + ' min'] : [dayLabel(e.d, true), 'Day ' + e.day, e.min + ' min'];
       if (e.c && KIND[e.c]) bits.push(KIND[e.c] + ' ' + e.cm + ' min');
+      if (e.cool) bits.push('Cool-down done');
       if (e.her) bits.push('Her ' + e.her + (e.her === 1 ? ' set' : ' sets'));
       if (e.his) bits.push('His ' + e.his + (e.his === 1 ? ' set' : ' sets'));
       rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, bits.join(' \u00b7 '))));
@@ -1520,6 +1609,6 @@
   }
 
   /* ---------- go ---------- */
-  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
+  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, doResume: doResume, getResume: getResume, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();
