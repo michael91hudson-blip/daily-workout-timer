@@ -214,3 +214,9 @@ h1{font-size:26px;margin:4px 0 2px}
 .tiphint{margin:0 0 8px;font-size:14px}
 .today.resume{border-color:#b45309;background:#fff7ed}
 .today.resume .btn.small{margin-top:8px;width:100%}
+.using{margin:6px 0 0;font-size:16px;font-weight:700;color:var(--muted)}
+.eqrow .seg{margin-top:2px;flex-wrap:wrap}
+.eqrow .seg .btn{flex:1 1 auto;padding:6px 8px;font-size:15px}
+.eqnote{font-size:15px;color:var(--muted)}
+.seeit{margin:8px 0 0;font-size:16px}
+.seeit a{color:var(--btn);font-weight:700}

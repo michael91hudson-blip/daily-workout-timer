@@ -89,6 +89,17 @@
     try { localStorage.removeItem('step_her_taps'); } catch (e) { /* ignore */ }
     store.set('reset_oct29', 1);
   }
+  /* Nov 17: three ladders gained a step in the middle; saved steps stay on the same version, and an old unfinished workout is dropped */
+  if (store.get('reset_nov17', 0) !== 1) {
+    [['squats', 3], ['rdl', 4], ['glute', 4]].forEach(function (x) {
+      ['her', 'his'].forEach(function (pid) {
+        var k = 'step_' + pid + '_' + x[0], v = store.get(k, null);
+        if (typeof v === 'number' && v >= x[1]) store.set(k, v + 1);
+      });
+    });
+    store.set('resume', null);
+    store.set('reset_nov17', 1);
+  }
   var WEEK = planWeek();
   if (store.get('plan_week2', 0) !== WEEK) {
     S.setsHer = setsForWeek(WEEK); S.setsHis = setsForWeek(WEEK);
@@ -131,6 +142,27 @@
   function setPlankOf(pid, v) { store.set('plank_' + pid, Math.max(N.plankMin, Math.min(N.plankMax, v))); }
   function holdPatOf(pid, lk) { return clampInt(store.get('hp_' + pid + '_' + lk, N.holdDefault[pid]), 0, N.holdPatterns.length - 1, N.holdDefault[pid]); }
   function setHoldPatOf(pid, lk, v) { store.set('hp_' + pid + '_' + lk, Math.max(0, Math.min(N.holdPatterns.length - 1, v))); }
+  /* ---------- equipment: the tools you have, and the tool picked for a move ---------- */
+  var TOOLS = C.equipment.tools, TOOLBY = {};
+  TOOLS.forEach(function (t) { TOOLBY[t.key] = t; });
+  function owns(key) { return store.get('own_' + key, TOOLBY[key].own) === 1; }
+  function setOwns(key, v) { store.set('own_' + key, v); }
+  function eqRaw(pid, lk) { var v = store.get('eq_' + pid + '_' + lk, 'body'); return (v === 'body' || TOOLBY[v]) ? v : 'body'; }
+  function setEq(pid, lk, v) { store.set('eq_' + pid + '_' + lk, v); }
+  function toolsAt(lk, n) { return C.ladders[lk].steps[n - 1].tools; }
+  /* the tool in use: Bodyweight unless a picked tool fits the step you are on and is switched on in Settings */
+  function eqOf(pid, lk, n) { var v = eqRaw(pid, lk); return (v !== 'body' && toolsAt(lk, n).indexOf(v) >= 0 && owns(v)) ? v : 'body'; }
+  function anyWrist() {
+    var hit = false;
+    Object.keys(C.ladders).forEach(function (lk) { ['her', 'his'].forEach(function (pid) { if (eqRaw(pid, lk) === 'wrist' && owns('wrist')) hit = true; }); });
+    return hit;
+  }
+  function dayWrist() {
+    var hit = false;
+    curMoves().forEach(function (m) { namedList().forEach(function (pid) { var sl = m[pid]; if (sl && eqOf(pid, sl.ladder, stepFor(pid, sl)) === 'wrist') hit = true; }); });
+    return hit;
+  }
+  function wristNow() { return (G.running && G.mode === 'day') ? dayWrist() : anyWrist(); }
   /* holds in a set: the chosen pattern, set by set (3-2-1-1, 4-3-2-1, 5-3-1-1, ...) */
   function holdsIn(pat, set) { var p = N.holdPatterns[pat]; return p[Math.min(set, p.length) - 1]; }
   function ytLongOf(pid) { return clampInt(store.get('ytlong_' + pid, N.ytLongDefault), 30, 45, N.ytLongDefault); }
@@ -352,7 +384,13 @@
     R.reps = (cfg.kind === 'reps' || cfg.kind === 'taps') ? repsOf(pid, slot.ladder) : null;
     R.startLine = atStart ? slot.startLine : st.startLine;
     R.first = atStart ? slot.first : st.first;
-    R.startShow = R.startLine || R.how.text;
+    R.show = atStart ? slot.show : howText(st, pid);
+    R.see = atStart ? slot.see : st.see;
+    R.tool = eqOf(pid, slot.ladder, n);
+    R.using = R.tool === 'body' ? null : 'Using: ' + TOOLBY[R.tool].name;
+    if (st.need) R.using = 'Needs: a looped resistance band';
+    if (R.tool === 'bands' && slot.ladder === 'row') R.show += ' ' + C.equipment.bandRow;
+    R.startShow = R.startLine || R.show;
     if (cfg.kind === 'reps') R.amount = N.repsMin + '–' + N.repsMax + (R.side ? '/side' : '') + (R.yt ? ' each' : '');
     else if (cfg.kind === 'plank') R.amount = plankOf(pid) + ' sec';
     else if (cfg.kind === 'taps') R.amount = N.repsMin + '–' + N.repsMax + '/side';
@@ -433,6 +471,7 @@
     c.who = h('div', { class: 'who' }, o.who || '');
     c.mv = h('div', { class: 'mv' }, o.mv || '');
     c.amt = h('div', { class: 'amt' }, o.amt || '');
+    c.using = o.using ? h('div', { class: 'using' }, o.using) : null;
     c.startLine = o.startLine ? h('div', { class: 'startline' }, o.startLine) : null;
     c.repsTxt = o.repsLabel ? h('div', { class: 'amt reps' }, o.repsLabel) : null;
     c.big = h('div', { class: 'big' }, '');
@@ -453,10 +492,11 @@
     c.howBox = null;
     if (o.howText) {
       var hb = h('div', { class: 'howbox', hidden: !o.howOpen }, o.howText);
+      if (o.see) hb.appendChild(h('div', { class: 'seeit' }, h('a', { href: 'https://' + o.see, target: '_blank', rel: 'noopener' }, 'See it')));
       c.howBox = hb;
       if (!o.howOpen) c.btns.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { hb.hidden = !hb.hidden; } }, 'How to do it'));
     }
-    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.startLine, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.howBox, c.easierBox);
+    c.root = h('div', { class: 'card' }, c.who, c.mv, c.amt, c.using, c.startLine, c.repsTxt, c.big, c.st, c.bar, c.btns, c.strip, c.howBox, c.easierBox);
     G.ui.cards.appendChild(c.root);
     return c;
   }
@@ -801,7 +841,7 @@
       namedList().forEach(function (pid) {
         var on = act.indexOf(pid) >= 0, R = resolve(m, pid);
         if (on) res[pid] = R;
-        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, startLine: on ? R.startShow : null, howText: on ? R.how.text : null, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
+        var card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, using: on ? R.using : null, see: on ? R.see : null, startLine: on ? R.startShow : null, howText: on ? R.show : null, easier: on ? R.easier : null, rep: on && R.kind === 'reps', repsLabel: on ? repsLabel(R) : null });
         if (!on) card.root.className += ' dim';
         s.cardsList.push({ card: card, on: on });
       });
@@ -814,13 +854,22 @@
         if (firsts.length) queueCueGroups(firsts, function (pid) { return res[pid].first; }, ['first'], {});
       }
       if (s.set === 1) {
+        act.forEach(function (pid) {
+          if (res[pid].tool === 'body' || !CUEBY['using-' + res[pid].tool]) return;
+          var up = [];
+          if (act.length > 1) up.push({ text: sayName(pid) + '.' });
+          up.push(CUEBY['using-' + res[pid].tool]);
+          Voice.say(up, { blocking: s.listen });
+        });
         if (S.talk) ['how', 'feel', 'fix'].forEach(function (typ) {
           queueCueGroups(act, function (pid, t2) { return res[pid].cues[t2]; }, [typ], { blocking: true });
         });
       }
     } else if (s.what === 'walk') {
       ui = scaffold('warm', 'Walk', 'Walk · ' + s.mins + ' min');
-      s.cardsList.push({ card: makeCard({ who: namedList().map(shownName).join(' & '), mv: 'Walk', amt: s.mins + ' min' }), on: true });
+      var wr = wristNow();
+      s.cardsList.push({ card: makeCard({ who: namedList().map(shownName).join(' & '), mv: 'Walk', amt: s.mins + ' min', startLine: wr ? CUEBY['wrist-off'].text : null }), on: true });
+      if (wr) Voice.say([CUEBY['wrist-off']], {});
       Voice.say([CUEBY['walk-go']], {});
     } else {
       var hip = s.grp === 'hip', secName = hip ? 'Hip Flexibility' : 'Cool-down';
@@ -872,7 +921,7 @@
       var on = act.indexOf(pid) >= 0, t = null, card, R = resolve(m, pid);
       if (on) {
         t = mkTrack(pid, m, s.set); res[pid] = R;
-        card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, howText: R.how.text, easier: R.easier, rep: true, repsLabel: repsLabel(R),
+        card = makeCard({ who: shownName(pid), mv: R.name, amt: R.amount, using: R.using, see: R.see, howText: R.show, easier: R.easier, rep: true, repsLabel: repsLabel(R),
           done: (R.kind === 'reps' || R.kind === 'taps') ? function () { trackDone(s, t); } : null });
         s.tracks.push(t);
       } else {
@@ -966,13 +1015,13 @@
     s.total = s.mins * 60; s.el = 0; s.age = 0; s.fin = {};
     ui.phase.textContent = 'Go';
     if (!isCirc) {
-      s.card = makeCard({ who: s.pids.map(shownName).join(' & '), mv: label, amt: perText(s), rep: true });
+      s.card = makeCard({ who: s.pids.map(shownName).join(' & '), mv: label, amt: perText(s), rep: true, startLine: (s.kind !== 'vr' && wristNow()) ? CUEBY['wrist-off'].text : null });
       if (s.kind === 'walk') Voice.say([CUEBY['walk-start']], { urgent: true });
       else Voice.say([CUEBY.start], { urgent: true, nocap: true });
     } else {
       s.cards = {};
-      s.pids.forEach(function (pid) {
-        var c = makeCard({ who: shownName(pid), mv: '', amt: '', rep: true });
+      s.pids.forEach(function (pid, ci) {
+        var c = makeCard({ who: shownName(pid), mv: '', amt: '', rep: true, startLine: (ci === 0 && wristNow()) ? CUEBY['wrist-off'].text : null });
         c.how = h('div', { class: 'easier' }, ''); c.root.appendChild(c.how);
         s.cards[pid] = c;
       });
@@ -994,28 +1043,28 @@
         if (mv.timed) {
           c.amt.textContent = 'Work · ' + s.opts.stepSec + ' sec';
           c.big.textContent = done ? 'Done' : String(Math.ceil(Math.max(0, p2.dur - s.pel)));
-          c.st.textContent = done ? 'Done — wait for the jog' : fmtClock(left) + ' left';
+          c.st.textContent = done ? 'Done — wait for the march' : fmtClock(left) + ' left';
         } else {
           k = Math.min(Math.floor(s.pel / p2.rs) + 1, p2.n);
           c.amt.textContent = 'Reps: ' + p2.n;
           c.big.textContent = done ? 'Done' : k + ' / ' + p2.n;
-          c.st.textContent = done ? 'Done — wait for the jog' : 'Rep ' + k + ' of ' + p2.n + ' · ' + fmtClock(left) + ' left';
+          c.st.textContent = done ? 'Done — wait for the march' : 'Rep ' + k + ' of ' + p2.n + ' · ' + fmtClock(left) + ' left';
           if (i === 0 && !done && k - 1 > s.ticked) { s.ticked = k - 1; Snd.tick(); }
         }
         c.barFill.style.width = Math.min(1, s.pel / p2.dur) * 100 + '%';
         c.strip.textContent = done ? 'WAIT' : 'GO'; c.strip.className = 'strip ' + (done ? 'pause' : 'up');
       });
-      G.ui.next.textContent = 'Next: Jog';
+      G.ui.next.textContent = 'Next: March';
       if (mv.timed) beepCross(s.moveDur - (s.pel - dt), s.moveDur - s.pel);
-      if (s.pel >= s.moveDur) { s.phase = 'jog'; s.pel = 0; Voice.say([CUEBY.jog], { urgent: true }); }
+      if (s.pel >= s.moveDur) { s.phase = 'march'; s.pel = 0; Voice.say([CUEBY.march], { urgent: true }); }
     } else {
       var jl = Math.max(0, s.opts.jog - s.pel);
       pids.forEach(function (pid) {
         var c = s.cards[pid];
-        c.mv.textContent = 'Jog in place'; c.amt.textContent = 'Jog · ' + s.opts.jog + ' sec'; c.how.textContent = ''; c.how.hidden = true;
+        c.mv.textContent = 'March slowly in place'; c.amt.textContent = 'March · ' + s.opts.jog + ' sec'; c.how.textContent = ''; c.how.hidden = true;
         c.big.textContent = String(Math.ceil(jl)); c.st.textContent = fmtClock(left) + ' left';
         c.barFill.style.width = Math.min(1, s.pel / s.opts.jog) * 100 + '%';
-        c.strip.textContent = 'JOG'; c.strip.className = 'strip hold';
+        c.strip.textContent = 'MARCH'; c.strip.className = 'strip hold';
       });
       G.ui.next.textContent = 'Next: ' + nextNames();
       beepCross(jl + dt, jl);
@@ -1366,6 +1415,22 @@
       h('span', { class: 'n' }, num), h('span', { class: 't' }, lines));
   }
   /* each person's ladder step and number picks under a move */
+  /* what you are using for a move: only the tools that fit the step you are on, and that you have */
+  function eqPicker(pid, slot, R, label) {
+    var lk = slot.ladder, lad = C.ladders[lk], st = lad.steps[R.step - 1], items = [], opts = [];
+    if (st.need) return h('div', { class: 'ctlrow eqrow' }, h('div', { class: 'ctl' }, h('span', { class: 'cwho' }, label + ' using:'), h('span', { class: 'eqnote' }, 'a looped resistance band' + (owns(st.need) ? '' : ' (switch Bands on in Settings)'))));
+    var avail = lad.pair ? lad.steps[lad.pair.tool - 1].tools : st.tools;
+    avail.forEach(function (k) { if (owns(k)) opts.push(k); });
+    if (!opts.length) return null;
+    items.push({ t: 'Bodyweight', v: 'body' });
+    opts.forEach(function (k) { items.push({ t: TOOLBY[k].name, v: k }); });
+    var seg = segOf(items, function () { var n = stepFor(pid, slot), v = eqOf(pid, lk, n); return (lad.pair && n === lad.pair.tool && v === 'body') ? null : v; }, function (v) {
+      if (lad.pair) setStepFor(pid, slot, v === 'body' ? lad.pair.body : lad.pair.tool);
+      setEq(pid, lk, v);
+      renderRows();
+    }, 'eqseg');
+    return h('div', { class: 'ctlrow eqrow' }, h('div', { class: 'ctl' }, h('span', { class: 'cwho' }, label + ' using:')), seg);
+  }
   function moveControls(m, pids, who) {
     var wrap = h('div', { class: 'ctls' });
     pids.forEach(function (pid) {
@@ -1382,6 +1447,8 @@
       else pick = stepperOf('Holds:', function () { return holdPatOf(pid, slot.ladder); }, function (v) { setHoldPatOf(pid, slot.ladder, v); renderRows(); }, function (v) { return N.holdPatterns[v].join('-'); }, label + ' holds pattern');
       if (R.cfg.longLast) pick2 = stepperOf('Long hold:', function () { return ytLongOf(pid); }, function (v) { setYtLongOf(pid, v); }, function (v) { return v + ' sec'; }, label + ' long hold seconds', 5);
       wrap.appendChild(h('div', { class: 'ctlrow' }, line, pick, pick2));
+      var eq = eqPicker(pid, slot, R, label);
+      if (eq) wrap.appendChild(eq);
     });
     return wrap;
   }
@@ -1407,7 +1474,7 @@
     curMoves().forEach(function (m) {
       var lines = pids.map(function (pid) {
         var R = resolve(m, pid);
-        return h('span', { class: 'who' }, (who.length ? shownName(pid) : slotLabel(pid)) + ': ' + R.name + ' · ' + R.amount);
+        return h('span', { class: 'who' }, (who.length ? shownName(pid) : slotLabel(pid)) + ': ' + R.name + ' · ' + R.amount + (R.using ? ' · ' + R.using.replace('Using: ', '') : ''));
       });
       var ctl = moveControls(m, pids, who);
       ctl.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: function () { startSingle('move', m.n); } }, 'Do this move alone'));
@@ -1442,6 +1509,16 @@
       segOf(N.rounds.map(function (v) { return { t: v + (v === 1 ? ' round' : ' rounds'), v: v }; }), function () { return S.rounds; }, function (v) { S.rounds = v; store.set('rounds', v); }));
   }
 
+  function equipmentBox() {
+    var kids = [h('h2', {}, 'Equipment I have'), h('p', { class: 'sub' }, 'Each move offers only the tools you switch on here. Bodyweight is always there.')];
+    TOOLS.forEach(function (t) {
+      kids.push(h('label', {}, t.name));
+      kids.push(segOf([{ t: 'Have it', v: 1 }, { t: 'Not yet', v: 0 }], function () { return owns(t.key) ? 1 : 0; }, function (v) { setOwns(t.key, v); }));
+    });
+    C.equipment.rules.forEach(function (r) { kids.push(h('p', { class: 'sub' }, r)); });
+    return h('section', { class: 'sec voicebox' }, kids);
+  }
+
   function timerSetup(o) {
     var pick = minsGet(o.key, o.mins, o.def);
     var wrap = segOf(o.mins.map(function (v) { return { t: v + ' min', v: v }; }), function () { return pick; }, function (v) { pick = v; }, 'wrap');
@@ -1452,7 +1529,7 @@
       o.go.map(function (g) { return h('button', { class: 'btn start', type: 'button', onclick: function () { if (o.key && !g.noSave) minsSet(o.key, pick); if (g.fn) g.fn(pick); else startTimer(g.kind, pick); } }, g.t); }),
       h('button', { class: 'btn alt start', type: 'button', onclick: renderHome }, 'Back')));
   }
-  function renderWalk() { timerSetup({ title: 'Walk', key: 'walk_min2', mins: C.cardio.mins, def: walkDefault(), go: [{ t: 'Start walk', kind: 'walk' }] }); }
+  function renderWalk() { timerSetup({ title: 'Walk', sub: anyWrist() ? CUEBY['wrist-off'].text : null, key: 'walk_min2', mins: C.cardio.mins, def: walkDefault(), go: [{ t: 'Start walk', kind: 'walk' }] }); }
 
   /* cardio: minutes for each person, circuit settings, then the kind */
   function renderCardio() {
@@ -1474,6 +1551,7 @@
     var cmsg = h('p', { class: 'msg', role: 'alert', hidden: true }, 'Pick the minutes for whoever is doing cardio.');
     cmsg.style.fontWeight = '700'; cmsg.style.color = '#b42318';
     var kids = [h('h1', {}, 'Cardio'), h('p', { class: 'sub' }, 'Pick the minutes, then what you are doing. On a rest day, pick Rest.'), cmsg];
+    if (anyWrist()) kids.push(h('p', { class: 'sub' }, CUEBY['wrist-off'].text));
     pids.forEach(function (pid) {
       kids.push(h('label', { class: 'sub' }, who.length ? shownName(pid) + ': minutes' : 'Minutes'));
       kids.push(segOf([{ t: 'Rest', v: 0 }].concat(cc.mins.map(function (v) { return { t: v + ' min', v: v }; })), function () { return picks[pid]; }, function (v) { picks[pid] = v; cmsg.hidden = true; }, 'wrap'));
@@ -1483,9 +1561,9 @@
     kids.push(h('ul', { class: 'sub circbul' }, circ.bullets.map(function (b) { return h('li', {}, b); })));
     kids.push(h('label', { class: 'sub' }, 'Circuit: reps for each move'));
     kids.push(segOf(circ.reps.map(function (v) { return { t: String(v), v: v }; }), function () { return opt.reps; }, function (v) { opt.reps = v; }, 'wrap'));
-    kids.push(h('label', { class: 'sub' }, 'Circuit: jog between moves'));
+    kids.push(h('label', { class: 'sub' }, 'Circuit: march between moves'));
     kids.push(segOf(circ.jog.map(function (v) { return { t: v + ' sec', v: v }; }), function () { return opt.jog; }, function (v) { opt.jog = v; }));
-    kids.push(h('label', { class: 'sub' }, 'Circuit: Fast Step-Ups'));
+    kids.push(h('label', { class: 'sub' }, 'Circuit: timed moves (March in Place, Fast Step-Ups)'));
     kids.push(segOf(circ.stepSec.map(function (v) { return { t: v + ' sec', v: v }; }), function () { return opt.stepSec; }, function (v) { opt.stepSec = v; }));
     kids.push(h('p', { class: 'sub' }, "Then tap what you're doing to start:"));
     kids.push(h('button', { class: 'btn start', type: 'button', onclick: function () { go('tread'); } }, 'Treadmill'));
@@ -1508,6 +1586,7 @@
       return h('section', { class: 'sec work' }, h('h2', {}, lad.title + (lad.only ? (lad.only === 'his' ? ' (his)' : ' (hers)') : '')),
         lad.steps.map(function (st) {
           return h('div', { class: 'ladstep' }, h('b', {}, 'Step ' + st.n + ' · ' + st.name), h('p', {}, howText(st, lad.only || pid)),
+            st.see ? h('p', { class: 'seeit' }, h('a', { href: 'https://' + st.see, target: '_blank', rel: 'noopener' }, 'See it')) : null,
             st.note !== '—' ? h('p', { class: 'sub' }, 'Note: ' + st.note) : null);
         }));
     });
@@ -1548,6 +1627,10 @@
       card.appendChild(h('p', { class: 'tname' }, 'Cardio'));
       card.appendChild(h('button', { class: 'btn start', type: 'button', onclick: renderCardio }, 'Start cardio'));
     }
+    if (progressDue()) {
+      card.appendChild(h('p', { class: 'sub' }, 'Your Progress Check is due.'));
+      card.appendChild(h('button', { class: 'btn alt small', type: 'button', onclick: renderProgress }, 'Do the Progress Check'));
+    }
     return card;
   }
 
@@ -1555,7 +1638,7 @@
     appEl.textContent = '';
     appEl.appendChild(h('div', { class: 'screen' }, h('h1', {}, 'Settings'),
       h('div', { class: 'slots' }, slotBox('her'), slotBox('his')),
-      settingsBox(), voiceBox(),
+      settingsBox(), equipmentBox(), voiceBox(),
       h('button', { class: 'btn start', type: 'button', onclick: renderHome }, 'Back')));
   }
 
@@ -1606,7 +1689,7 @@
         S.verse = (S.verse + 1) % C.verses.length; store.set('verse', S.verse); vtxt.textContent = C.verses[S.verse].text;
       } }, 'Next verse')));
     var links = h('div', { class: 'links' });
-    [['Cardio', renderCardio], ['Walk', renderWalk], ['Move Ladders', renderLadders], ['Before You Start', renderSafety], ['Past sessions', renderHistory], ['Settings', renderSettings]].forEach(function (l) {
+    [['Cardio', renderCardio], ['Walk', renderWalk], ['Progress Check', renderProgress], ['Move Ladders', renderLadders], ['Before You Start', renderSafety], ['Past sessions', renderHistory], ['Settings', renderSettings]].forEach(function (l) {
       links.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: l[1] }, l[0])));
     });
     root.appendChild(links);
@@ -1687,7 +1770,58 @@
       h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'), l.length ? clr : null)));
   }
 
+  /* ---------- Progress Check: five results, kept on this phone only ---------- */
+  function progressList() { var l = store.get('progress', []); return Array.isArray(l) ? l : []; }
+  /* 1 from the end of week 4 (the last day of 28), 2 from the end of week 8, and so on */
+  function progressDueK() {
+    var P = C.plan, a = P.start.split('-'), d = new Date();
+    var days = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
+    return Math.max(0, Math.floor((days + 1) / (P.bracket * 7)));
+  }
+  function progressDue() {
+    var k = progressDueK();
+    return k >= 1 && !progressList().some(function (e) { return e.k >= k; });
+  }
+  var PFIELDS = [['w', 'Weight', 'Your scale reading'], ['wa', 'Waist', 'Your tape reading'], ['p', 'Pushups', 'Good reps in one set'], ['pl', 'Plank', 'Seconds'], ['wk', 'Walk', 'Minutes and seconds for 1 mile, like 15:30']];
+  function renderProgress() {
+    appEl.textContent = '';
+    var P = C.progress, inputs = {}, armed = false, tm = null;
+    var msg = h('p', { class: 'msg', role: 'alert', hidden: true });
+    msg.style.fontWeight = '700'; msg.style.color = '#b42318';
+    var kids = [h('h1', {}, 'Progress Check'), h('p', { class: 'sub' }, P.sub)];
+    if (progressDue()) kids.push(h('p', { class: 'sub' }, 'This one is due now.'));
+    PFIELDS.forEach(function (f, i) {
+      var inp = h('input', { type: 'text', inputmode: i === 4 ? 'text' : 'decimal', id: 'pc-' + f[0], autocomplete: 'off', placeholder: f[2], 'aria-label': f[1] });
+      inputs[f[0]] = inp;
+      kids.push(h('p', { class: 'sub' }, P.items[i]), inp);
+    });
+    kids.push(msg);
+    kids.push(h('button', { class: 'btn start', type: 'button', onclick: function () {
+      var e = { d: new Date().toISOString(), k: progressDueK() }, any = false;
+      PFIELDS.forEach(function (f) { var v = inputs[f[0]].value.trim(); if (v) { e[f[0]] = v.slice(0, 12); any = true; } });
+      if (!any) { msg.textContent = 'Type at least one result first.'; msg.hidden = false; return; }
+      var l = progressList(); l.unshift(e); store.set('progress', l.slice(0, 40));
+      renderProgress();
+    } }, 'Save these results'));
+    var l = progressList(), rows = h('div', { class: 'rows' });
+    kids.push(h('h2', {}, 'Past results'), h('p', { class: 'sub' }, 'On this phone only. Nothing is sent anywhere.'));
+    if (!l.length) rows.appendChild(h('p', { class: 'sub' }, 'No results yet.'));
+    l.forEach(function (e) {
+      var bits = [dayLabel(e.d, true)];
+      PFIELDS.forEach(function (f) { if (e[f[0]]) bits.push(f[1] + ' ' + e[f[0]]); });
+      rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, bits.join(' \u00b7 '))));
+    });
+    kids.push(rows);
+    var clr = h('button', { class: 'btn alt', type: 'button' }, 'Clear results');
+    clr.onclick = function () {
+      if (!armed) { armed = true; clr.textContent = 'Tap again to clear'; tm = setTimeout(function () { armed = false; clr.textContent = 'Clear results'; }, 4000); return; }
+      clearTimeout(tm); store.set('progress', []); renderProgress();
+    };
+    kids.push(h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'), l.length ? clr : null));
+    appEl.appendChild(h('div', { class: 'screen' }, kids));
+  }
+
   /* ---------- go ---------- */
-  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, doResume: doResume, getResume: getResume, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
+  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, renderProgress: renderProgress, progressDue: progressDue, eqOf: eqOf, setEq: setEq, wristNow: wristNow, doResume: doResume, getResume: getResume, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();
