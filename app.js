@@ -47,8 +47,8 @@
   var S = {
     his: { name: store.get('his_name', ''), say: store.get('his_say', '') },
     her: { name: store.get('her_name', ''), say: store.get('her_say', '') },
-    setsHer: store.get('her_sets', 2),
-    setsHis: store.get('his_sets', 2),
+    setsHer: store.get('her_sets', N.setsDefault),
+    setsHis: store.get('his_sets', N.setsDefault),
     day: ({ 1: 'A', 3: 'B', 5: 'C' })[new Date().getDay()] || store.get('day', 'B'),
     verse: store.get('verse', 0),
     vspeed: store.get('vspeed', 2),
@@ -63,7 +63,6 @@
     var days = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(+a[0], +a[1] - 1, +a[2])) / 86400000);
     return Math.max(1, Math.floor(days / 7) + 1);
   }
-  function setsForWeek(w) { var P = C.plan; return w <= P.setsByWeek.length ? P.setsByWeek[w - 1] : P.setsAfter; }
   /* 0: weeks 1-4, 1: weeks 5-8, 2: weeks 9-12, 3: weeks 13-16, 4: week 17 on */
   function bracket(w) { return Math.min(4, Math.floor(((w || planWeek()) - 1) / C.plan.bracket)); }
   /* the Oct 28 documents renumbered some ladders: saved steps and hold patterns go back to the documents' starting steps once */
@@ -100,16 +99,26 @@
     store.set('resume', null);
     store.set('reset_nov17', 1);
   }
-  var WEEK = planWeek();
-  if (store.get('plan_week2', 0) !== WEEK) {
-    S.setsHer = setsForWeek(WEEK); S.setsHis = setsForWeek(WEEK);
-    store.set('her_sets', S.setsHer); store.set('his_sets', S.setsHis); store.set('plan_week2', WEEK);
+  /* Nov 20: sets are your choice before each workout (2, 3 or 4, 3 to start); Y-T Raises are gone; the calf ladder starts one step higher.
+     Saved calf steps go to the new starts once, saved Y-T picks are removed, and an old unfinished workout is dropped. */
+  if (store.get('reset_nov20', 0) !== 1) {
+    try {
+      var killc = [], i2, k2;
+      for (i2 = 0; i2 < localStorage.length; i2++) { k2 = localStorage.key(i2); if (/_yt$|^ytlong_|^plan_week2$/.test(k2)) killc.push(k2); }
+      killc.forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) { /* ignore */ }
+    S.setsHer = N.setsDefault; S.setsHis = N.setsDefault;
+    store.set('her_sets', S.setsHer); store.set('his_sets', S.setsHis);
+    store.set('step_her_calf', C.ladders.calf.start.her); store.set('step_his_calf', C.ladders.calf.start.his);
+    store.set('resume', null);
+    store.set('reset_nov20', 1);
   }
+  var WEEK = planWeek();
   var RATES = [0.7, 0.85, 1, 1.2, 1.4];
   var SPEEDNAMES = ['Slowest', 'Slow', 'Normal', 'Fast', 'Faster'];
   if (!(S.vspeed >= 0 && S.vspeed < RATES.length)) S.vspeed = 2;
-  if (N.sets.indexOf(S.setsHer) < 0) S.setsHer = setsForWeek(WEEK);
-  if (N.sets.indexOf(S.setsHis) < 0) S.setsHis = setsForWeek(WEEK);
+  if (N.sets.indexOf(S.setsHer) < 0) S.setsHer = N.setsDefault;
+  if (N.sets.indexOf(S.setsHis) < 0) S.setsHis = N.setsDefault;
   if (!C.days.some(function (d) { return d.key === S.day; })) S.day = 'B';
   if (!(S.verse >= 0 && S.verse < C.verses.length)) S.verse = 0;
   if (!(S.pace >= 0 && S.pace < N.paceNames.length)) S.pace = N.paceDefault;
@@ -141,13 +150,21 @@
   function plankOf(pid) { return clampInt(store.get('plank_' + pid, N.plankDefault), N.plankMin, N.plankMax, N.plankDefault); }
   function setPlankOf(pid, v) { store.set('plank_' + pid, Math.max(N.plankMin, Math.min(N.plankMax, v))); }
   function holdPatOf(pid, lk) { return clampInt(store.get('hp_' + pid + '_' + lk, N.holdDefault[pid]), 0, N.holdPatterns.length - 1, N.holdDefault[pid]); }
+  /* the weight picked before a workout: one per person, kept until changed (pounds, from the documents' ranges) */
+  function wtOf(pid) { var v = store.get('wt_' + pid, N.weightDefault[pid]); return N.weights[pid].indexOf(v) >= 0 ? v : N.weightDefault[pid]; }
+  function setWtOf(pid, v) { if (N.weights[pid].indexOf(v) >= 0) store.set('wt_' + pid, v); }
   function setHoldPatOf(pid, lk, v) { store.set('hp_' + pid + '_' + lk, Math.max(0, Math.min(N.holdPatterns.length - 1, v))); }
   /* ---------- equipment: the tools you have, and the tool picked for a move ---------- */
   var TOOLS = C.equipment.tools, TOOLBY = {};
   TOOLS.forEach(function (t) { TOOLBY[t.key] = t; });
   function owns(key) { return store.get('own_' + key, TOOLBY[key].own) === 1; }
   function setOwns(key, v) { store.set('own_' + key, v); }
-  function eqRaw(pid, lk) { var v = store.get('eq_' + pid + '_' + lk, 'body'); return (v === 'body' || TOOLBY[v]) ? v : 'body'; }
+  function eqRaw(pid, lk) {
+    var L = C.ladders[lk], v = store.get('eq_' + pid + '_' + lk, L.defTool || 'body');
+    if (!(v === 'body' || TOOLBY[v])) v = L.defTool || 'body';
+    if (v === 'body' && L.defTool && !L.pair) v = L.defTool;
+    return v;
+  }
   function setEq(pid, lk, v) { store.set('eq_' + pid + '_' + lk, v); }
   function toolsAt(lk, n) { return C.ladders[lk].steps[n - 1].tools; }
   /* the tool in use: Bodyweight unless a picked tool fits the step you are on and is switched on in Settings */
@@ -165,8 +182,6 @@
   function wristNow() { return (G.running && G.mode === 'day') ? dayWrist() : anyWrist(); }
   /* holds in a set: the chosen pattern, set by set (3-2-1-1, 4-3-2-1, 5-3-1-1, ...) */
   function holdsIn(pat, set) { var p = N.holdPatterns[pat]; return p[Math.min(set, p.length) - 1]; }
-  function ytLongOf(pid) { return clampInt(store.get('ytlong_' + pid, N.ytLongDefault), 30, 45, N.ytLongDefault); }
-  function setYtLongOf(pid, v) { store.set('ytlong_' + pid, Math.max(30, Math.min(45, v))); }
 
   /* minutes: the document default for the week, kept only until the plan moves to the next block of weeks */
   function minsGet(key, list, def) {
@@ -367,7 +382,7 @@
     return C.rows[k || fallback];
   }
   function holdPattern(pat, sets) {
-    var a = [], n = Math.min(N.holdPatterns[pat].length, Math.max(3, sets)), i;
+    var a = [], n = Math.min(N.holdPatterns[pat].length, sets), i;
     for (i = 1; i <= n; i++) a.push(holdsIn(pat, i));
     return a.join(', ');
   }
@@ -376,7 +391,7 @@
     var slot = m[pid];
     if (!slot) return null;
     var lad = C.ladders[slot.ladder], n = stepFor(pid, slot), st = lad.steps[n - 1], atStart = (n === slot.start), cfg = st.cfg;
-    var R = { slot: slot, ladder: slot.ladder, step: n, atStart: atStart, cfg: cfg, kind: cfg.kind, side: cfg.kind === 'reps' && !!cfg.side, yt: !!cfg.yt };
+    var R = { slot: slot, ladder: slot.ladder, step: n, atStart: atStart, cfg: cfg, kind: cfg.kind, side: cfg.kind === 'reps' && !!cfg.side };
     R.name = atStart ? slot.name : (lad.prefix.indexOf(n) >= 0 ? lad.short + ': ' + st.name : st.name);
     R.how = atStart ? slot.how : ((pid === 'her' && st.cueHer) ? st.cueHer : st.cue);
     R.row = atStart ? C.rows[slot.row] : rowFor(st.name, slot.row);
@@ -387,11 +402,13 @@
     R.show = atStart ? slot.show : howText(st, pid);
     R.see = atStart ? slot.see : st.see;
     R.tool = eqOf(pid, slot.ladder, n);
-    R.using = R.tool === 'body' ? null : 'Using: ' + TOOLBY[R.tool].name;
+    R.weightLb = ((S.day === 'A' || S.day === 'C') && (R.tool === 'dumbbell' || R.tool === 'wrist')) ? wtOf(pid) : null;
+    R.using = R.tool === 'body' ? null : 'Using: ' + TOOLBY[R.tool].name + (R.weightLb ? ' \u00b7 ' + R.weightLb + ' lb' : '');
     if (st.need) R.using = 'Needs: a looped resistance band';
     if (R.tool === 'bands' && slot.ladder === 'row') R.show += ' ' + C.equipment.bandRow;
+    if (R.tool === 'bands' && slot.ladder === 'bicep') R.show += ' ' + C.equipment.bandCurl;
     R.startShow = R.startLine || R.show;
-    if (cfg.kind === 'reps') R.amount = N.repsMin + '–' + N.repsMax + (R.side ? '/side' : '') + (R.yt ? ' each' : '');
+    if (cfg.kind === 'reps') R.amount = N.repsMin + '–' + N.repsMax + (R.side ? '/side' : '');
     else if (cfg.kind === 'plank') R.amount = plankOf(pid) + ' sec';
     else if (cfg.kind === 'taps') R.amount = N.repsMin + '–' + N.repsMax + '/side';
     else R.amount = cfg.sec + '-sec holds: ' + holdPattern(holdPatOf(pid, slot.ladder), maxSetsFor(pid)) + (cfg.sides === 'legs' ? ' on each leg' : (cfg.sides === 'none' ? '' : ' per side'));
@@ -403,7 +420,7 @@
     } else R.easier = null;
     return R;
   }
-  function repsLabel(R) { return R.reps ? 'Reps: ' + R.reps + (R.side || R.kind === 'taps' ? ' per side' : (R.yt ? ' each' : '')) : null; }
+  function repsLabel(R) { return R.reps ? 'Reps: ' + R.reps + (R.side || R.kind === 'taps' ? ' per side' : '') : null; }
 
   function buildDay(walk) {
     var p = [{ t: 'warmup' }, { t: 'practice' }];
@@ -508,8 +525,7 @@
   }
 
   /* ---------- tracks (one per person per move) ---------- */
-  var CUE = { hold: CUEBY.hold, rest: CUEBY.rest, sides: CUEBY['switch-sides'], legs: CUEBY['switch-legs'],
-              nowT: { id: CUEBY['now-t'].id, text: CUEBY['now-t'].text, named: true } };
+  var CUE = { hold: CUEBY.hold, rest: CUEBY.rest, sides: CUEBY['switch-sides'], legs: CUEBY['switch-legs'] };
   function paceMult() { return N.repMult[S.repspeed]; }
   function breakSec() { return N.breakSec[S.pace]; }
   function scaleSeq(seq) { var k = paceMult(); return seq.map(function (q) { return [q[0], Math.round(q[1] * k * 100) / 100]; }); }
@@ -537,10 +553,7 @@
     if (c.kind === 'plank') ph.push({ k: 'hold', dur: plankOf(pid), beep: true, label: 'Hold' });
     else if (c.kind === 'taps') ph.push(taps(R.reps * 2));
     else if (c.kind === 'holds') ph = holdPhases(pid, R, set);
-    else if (c.yt) {
-      if (c.longLast && set === maxSetsFor(pid)) ph.push(holdPh(ytLongOf(pid), 'Y hold'), switchPh(CUE.nowT, 'Now T'), holdPh(ytLongOf(pid), 'T hold'));
-      else ph.push(rep('Y', R.reps), switchPh(CUE.nowT, 'Now T'), rep('T', R.reps));
-    } else if (c.side) ph.push(rep('Side 1', R.reps), switchPh(CUE.sides, 'Switch sides'), rep('Side 2', R.reps));
+    else if (c.side) ph.push(rep('Side 1', R.reps), switchPh(CUE.sides, 'Switch sides'), rep('Side 2', R.reps));
     else ph.push(rep('', R.reps));
     return { pid: pid, ph: ph, pi: 0, el: 0, fin: false, repIdx: -1, upSaid: false, downSaid: false, R: R };
   }
@@ -1266,8 +1279,51 @@
     G.i = at;
     enter(G.plan[at]);
   }
+  /* the choices made before a workout: sets, weight, and dumbbells or bands for the moves that have a band version */
+  function bandMoves(pid) {
+    var out = [], seen = {};
+    if (!owns('bands')) return out;
+    curMoves().forEach(function (m) {
+      var sl = m[pid]; if (!sl || seen[sl.ladder]) return;
+      var n = stepFor(pid, sl), st = C.ladders[sl.ladder].steps[n - 1];
+      if (st.tools.indexOf('bands') >= 0) { seen[sl.ladder] = 1; out.push({ slot: sl, name: resolve(m, pid).name }); }
+    });
+    return out;
+  }
+  function renderPre(next) {
+    appEl.textContent = '';
+    var kids = [h('h1', {}, 'Before you start'), h('p', { class: 'sub' }, 'Choose these now. They stay the same for the whole workout.')];
+    var pids = namedList(), withWeight = (S.day === 'A' || S.day === 'C');
+    pids.forEach(function (pid) {
+      var label = shownName(pid), box = h('div', { class: 'slot' }, h('h2', {}, label));
+      box.appendChild(h('label', {}, 'Sets'));
+      box.appendChild(segOf(N.sets.map(function (v) { return { t: v + ' sets', v: v }; }),
+        function () { return maxSetsFor(pid); },
+        function (v) { if (pid === 'her') { S.setsHer = v; store.set('her_sets', v); } else { S.setsHis = v; store.set('his_sets', v); } }, 'setseg'));
+      box.appendChild(h('p', { class: 'sub' }, 'Choose 2, 3 or 4 sets; 3 is the default. If 2 sets are too hard, do 1.'));
+      if (withWeight) {
+        box.appendChild(h('label', {}, 'Weight (pounds)'));
+        box.appendChild(segOf(N.weights[pid].map(function (v) { return { t: String(v), v: v }; }), function () { return wtOf(pid); }, function (v) { setWtOf(pid, v); }, 'setseg'));
+        box.appendChild(h('p', { class: 'sub' }, 'Choose your weight before you start. Keep one weight for the whole workout.'));
+        bandMoves(pid).forEach(function (bm) {
+          var lk = bm.slot.ladder, lad = C.ladders[lk];
+          box.appendChild(h('label', {}, bm.name + ': dumbbells or bands'));
+          box.appendChild(segOf([{ t: 'Dumbbells', v: 'dumbbell' }, { t: 'Bands', v: 'bands' }],
+            function () { var t = eqOf(pid, lk, stepFor(pid, bm.slot)); return t === 'bands' ? 'bands' : (t === 'dumbbell' ? 'dumbbell' : null); },
+            function (v) { if (lad.pair) setStepFor(pid, bm.slot, lad.pair.tool); setEq(pid, lk, v); }, 'eqseg'));
+        });
+      }
+      kids.push(box);
+    });
+    kids.push(h('button', { class: 'btn start', type: 'button', onclick: next }, 'Continue'));
+    kids.push(h('button', { class: 'btn alt start', type: 'button', onclick: renderHome }, 'Back'));
+    appEl.appendChild(h('div', { class: 'screen' }, kids));
+  }
   function startDay() {
     if (!namedList().length) { showMsg('Open Settings (at the bottom) and type a name to begin.'); return; }
+    renderPre(startWalkAsk);
+  }
+  function startWalkAsk() {
     timerSetup({ title: 'Walk today?', key: 'walk_min2', mins: C.cardio.mins, def: walkDefault(),
       go: [{ t: 'Walk (treadmill or outside)', fn: function (m) { clearResume(); startPlan(buildDay({ mins: m }), 'day'); } },
            { t: 'Skip', fn: function () { clearResume(); startPlan(buildDay(null), 'day'); }, noSave: true }] });
@@ -1401,11 +1457,6 @@
     var box = h('div', { class: 'slot' }, h('h2', {}, slotLabel(pid)),
       h('label', { for: pid + '-name' }, 'Name'), nameIn,
       h('label', { for: pid + '-say' }, 'Say it as'), sayIn);
-    box.appendChild(h('label', {}, 'Sets'));
-    box.appendChild(segOf(N.sets.map(function (v) { return { t: v + (v === 1 ? ' set' : ' sets'), v: v }; }),
-      function () { return maxSetsFor(pid); },
-      function (v) { if (pid === 'her') { S.setsHer = v; store.set('her_sets', v); } else { S.setsHis = v; store.set('his_sets', v); } }, 'setseg'));
-    box.appendChild(h('p', { class: 'sub' }, 'Week ' + WEEK + ': ' + setsForWeek(WEEK) + ' sets suggested'));
     return box;
   }
 
@@ -1445,7 +1496,6 @@
       else if (R.kind === 'taps') pick = stepperOf('Reps per side:', function () { return repsOf(pid, slot.ladder); }, function (v) { setRepsOf(pid, slot.ladder, v); }, String, label + ' reps');
       else if (R.kind === 'plank') pick = stepperOf('Plank:', function () { return plankOf(pid); }, function (v) { setPlankOf(pid, v); }, function (v) { return v + ' sec'; }, label + ' plank seconds', N.plankStep);
       else pick = stepperOf('Holds:', function () { return holdPatOf(pid, slot.ladder); }, function (v) { setHoldPatOf(pid, slot.ladder, v); renderRows(); }, function (v) { return N.holdPatterns[v].join('-'); }, label + ' holds pattern');
-      if (R.cfg.longLast) pick2 = stepperOf('Long hold:', function () { return ytLongOf(pid); }, function (v) { setYtLongOf(pid, v); }, function (v) { return v + ' sec'; }, label + ' long hold seconds', 5);
       wrap.appendChild(h('div', { class: 'ctlrow' }, line, pick, pick2));
       var eq = eqPicker(pid, slot, R, label);
       if (eq) wrap.appendChild(eq);
@@ -1689,7 +1739,7 @@
         S.verse = (S.verse + 1) % C.verses.length; store.set('verse', S.verse); vtxt.textContent = C.verses[S.verse].text;
       } }, 'Next verse')));
     var links = h('div', { class: 'links' });
-    [['Cardio', renderCardio], ['Walk', renderWalk], ['Progress Check', renderProgress], ['Move Ladders', renderLadders], ['Before You Start', renderSafety], ['Past sessions', renderHistory], ['Settings', renderSettings]].forEach(function (l) {
+    [['Cardio', renderCardio], ['Walk', renderWalk], ['This week', renderWeek], ['Progress Check', renderProgress], ['When to Move Up or Down', renderMoveUp], ['Move Ladders', renderLadders], ['Before You Start', renderSafety], ['Past sessions', renderHistory], ['Backup', renderBackup], ['Settings', renderSettings]].forEach(function (l) {
       links.appendChild(h('div', {}, h('button', { class: 'link', type: 'button', onclick: l[1] }, l[0])));
     });
     root.appendChild(links);
@@ -1728,13 +1778,13 @@
       e.min = Math.max(1, Math.round((G.activeSec || 0) / 60));
       if (G.cardioDone) { e.c = G.cardioDone.k; e.cm = G.cardioDone.m; }
       if (cool) e.cool = true;
-      store.set('hist', l.slice(0, 30));
+      store.set('hist', l.slice(0, 90));
     } catch (e2) { /* ignore */ }
   }
   var KIND = { walk: 'Walk', tread: 'Treadmill', circuit: 'No-Treadmill Circuit', vr: 'VR combat' };
   function recordTimer(s) {
     try {
-      var l = histList(); l.unshift({ d: new Date().toISOString(), t: s.kind, min: s.mins }); store.set('hist', l.slice(0, 30));
+      var l = histList(); l.unshift({ d: new Date().toISOString(), t: s.kind, min: s.mins }); store.set('hist', l.slice(0, 90));
     } catch (e2) { /* ignore */ }
   }
   function histLine() {
@@ -1766,8 +1816,97 @@
       clearTimeout(tm); store.set('hist', []); store.set('hist_counts', {}); renderHistory();
     };
     appEl.appendChild(h('div', { class: 'screen' },
-      h('h1', {}, 'Past sessions'), h('p', { class: 'sub' }, 'Your last 30 full sessions, on this phone only.'), rows,
+      h('h1', {}, 'Past sessions'), h('p', { class: 'sub' }, 'Your last 90 sessions, on this phone only.'), rows,
       h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'), l.length ? clr : null)));
+  }
+
+  /* ---------- This week: Monday to Sunday ---------- */
+  function renderWeek() {
+    appEl.textContent = '';
+    var now = new Date(), dow = (now.getDay() + 6) % 7;
+    var mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dow), nxt = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 7);
+    var inWeek = histList().filter(function (e) { var t = new Date(e.d).getTime(); return t >= mon.getTime() && t < nxt.getTime(); });
+    var rows = h('div', { class: 'rows' }), cardio = 0;
+    inWeek.forEach(function (e) { if (e.t) cardio += (e.min || 0); else if (e.c) cardio += (e.cm || 0); });
+    C.days.forEach(function (d) {
+      var hits = inWeek.filter(function (e) { return !e.t && e.day === d.key; });
+      var txt = hits.length ? 'Done' + (hits.length > 1 ? ' ' + hits.length + ' times' : '') + ' · ' + dayLabel(hits[hits.length - 1].d, false) : 'Not yet';
+      rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, d.title + ': ' + txt)));
+    });
+    rows.appendChild(h('div', { class: 'row hrow' }, h('span', { class: 't' }, 'Cardio this week: ' + cardio + ' min')));
+    appEl.appendChild(h('div', { class: 'screen' }, h('h1', {}, 'This week'),
+      h('p', { class: 'sub' }, dayLabel(mon.toISOString(), false) + ' to ' + dayLabel(new Date(nxt.getFullYear(), nxt.getMonth(), nxt.getDate() - 1).toISOString(), false) + ', on this phone only.'), rows,
+      h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'))));
+  }
+
+  /* ---------- When to Move Up or Down: the documents' rules ---------- */
+  function renderMoveUp() {
+    appEl.textContent = '';
+    var M = C.moveUp, both = !((named('her') && !named('his')) || (named('his') && !named('her'))), only = (named('her') && !named('his')) ? 'her' : 'his';
+    var kids = [h('h1', {}, 'When to Move Up or Down'), h('p', { class: 'sub' }, M.intro)];
+    M.lines.forEach(function (l) {
+      if (l.t) kids.push(h('p', { class: 'sub' }, l.t));
+      else if (both) { kids.push(h('p', { class: 'sub' }, 'His: ' + l.his)); kids.push(h('p', { class: 'sub' }, 'Hers: ' + l.her)); }
+      else kids.push(h('p', { class: 'sub' }, l[only]));
+    });
+    kids.push(h('button', { class: 'btn start', type: 'button', onclick: renderHome }, 'Back'));
+    appEl.appendChild(h('div', { class: 'screen' }, kids));
+  }
+
+  /* ---------- Backup: everything the app keeps on this phone, except names ---------- */
+  var BK_SKIP = /^(her_name|his_name|her_say|his_say|resume)$/;
+  function backupData() {
+    var d = {}, i, k;
+    try { for (i = 0; i < localStorage.length; i++) { k = localStorage.key(i); if (!BK_SKIP.test(k)) d[k] = localStorage.getItem(k); } } catch (e) { /* ignore */ }
+    return d;
+  }
+  function renderBackup() {
+    appEl.textContent = '';
+    var msg = h('p', { class: 'msg', role: 'alert', hidden: true }), armed = false, tm = null, pending = null;
+    msg.style.fontWeight = '700'; msg.style.color = '#b42318';
+    function say(t) { msg.textContent = t; msg.hidden = !t; }
+    var save = h('button', { class: 'btn start', type: 'button' }, 'Save backup');
+    save.onclick = function () {
+      try {
+        var iso = new Date().toISOString(), body = JSON.stringify({ app: 'workout', v: 1, saved: iso, data: backupData() });
+        var url = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
+        var a = h('a', { href: url, download: 'workout-backup-' + iso.slice(0, 10) + '.json' });
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        say('Backup saved to your Downloads.'); msg.style.color = '#1a7f37';
+      } catch (e) { say('The backup could not be saved.'); msg.style.color = '#b42318'; }
+    };
+    var file = h('input', { type: 'file', accept: '.json,application/json', 'aria-label': 'Backup file' });
+    var restore = h('button', { class: 'btn alt start', type: 'button' }, 'Restore backup');
+    file.onchange = function () {
+      var f = file.files && file.files[0]; pending = null; armed = false; restore.textContent = 'Restore backup';
+      if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        try {
+          var j = JSON.parse(String(rd.result));
+          if (!j || j.app !== 'workout' || !j.data || typeof j.data !== 'object') throw new Error('x');
+          pending = j.data; say('Backup file loaded. Tap Restore backup, then tap again to confirm.'); msg.style.color = '#b42318';
+        } catch (e) { say('That is not a backup file from this app.'); msg.style.color = '#b42318'; }
+      };
+      rd.readAsText(f);
+    };
+    restore.onclick = function () {
+      if (!pending) { say('Choose a backup file first.'); msg.style.color = '#b42318'; return; }
+      if (!armed) { armed = true; restore.textContent = 'Tap again to restore'; tm = setTimeout(function () { armed = false; restore.textContent = 'Restore backup'; }, 4000); return; }
+      clearTimeout(tm);
+      try {
+        Object.keys(pending).forEach(function (k) {
+          if (/^[A-Za-z0-9_]{1,60}$/.test(k) && !BK_SKIP.test(k) && typeof pending[k] === 'string' && pending[k].length < 400000) { try { JSON.parse(pending[k]); localStorage.setItem(k, pending[k]); } catch (e2) { /* skip bad value */ } }
+        });
+      } catch (e) { /* ignore */ }
+      location.reload();
+    };
+    appEl.appendChild(h('div', { class: 'screen' }, h('h1', {}, 'Backup'),
+      h('p', { class: 'sub' }, 'Saves your steps, choices, history and Progress Check results to one file. Names are not included.'),
+      msg, save,
+      h('p', { class: 'sub' }, 'To restore, choose a backup file, then tap Restore backup.'), file, restore,
+      h('div', { class: 'hbtns' }, h('button', { class: 'btn', type: 'button', onclick: renderHome }, 'Back'))));
   }
 
   /* ---------- Progress Check: five results, kept on this phone only ---------- */
@@ -1822,6 +1961,6 @@
   }
 
   /* ---------- go ---------- */
-  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, setsForWeek: setsForWeek, histList: histList, renderHome: renderHome, renderSettings: renderSettings, renderProgress: renderProgress, progressDue: progressDue, eqOf: eqOf, setEq: setEq, wristNow: wristNow, doResume: doResume, getResume: getResume, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, ytLongOf: ytLongOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
+  if (TEST) window.__app = { mkTrack: mkTrack, mkStretchTrack: mkStretchTrack, curMoves: curMoves, S: S, G: G, Voice: Voice, Snd: Snd, N: N, C: C, startDay: startDay, resolve: resolve, histLine: histLine, togglePause: togglePause, startSingle: startSingle, startTimer: startTimer, startCardio: startCardio, startHip: startHip, repeatStep: repeatStep, planWeek: planWeek, bracket: bracket, histList: histList, renderHome: renderHome, renderSettings: renderSettings, renderProgress: renderProgress, renderWeek: renderWeek, renderMoveUp: renderMoveUp, renderBackup: renderBackup, backupData: backupData, renderPre: renderPre, progressDue: progressDue, eqOf: eqOf, setEq: setEq, wristNow: wristNow, doResume: doResume, getResume: getResume, renderCardio: renderCardio, isRestDay: isRestDay, holdPatOf: holdPatOf, wtOf: wtOf, setWtOf: setWtOf, advance: advance, store: store, windowLeft: windowLeft, cyclePace: cyclePace, cardioDefault: cardioDefault, walkDefault: walkDefault, buildDay: buildDay };
   if (store.get('safety_ok', false)) renderHome(); else renderSafety();
 })();

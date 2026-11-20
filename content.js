@@ -1,4 +1,4 @@
-/* All words and numbers for the app. Text copied from the workout documents (Oct 26 – Nov 22, 2026, saved Oct 28); the documents win if they differ. */
+/* All words and numbers for the app. Text copied from the workout documents (Oct 26 – Nov 22, 2026, saved Nov 20); the documents win if they differ. */
 window.CONTENT = {
  "days": [
   {
@@ -7,26 +7,28 @@ window.CONTENT = {
    "subtitle": "Works chest, shoulders, arms, upper back, abs, and lower back.",
    "box": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in her workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
     "Breathing: breathe steadily through every move and never hold your breath. Where a move gives its own breathing cue, follow it.",
-    "Weights: you each use your own. Her: 2 lb wrist weights or dumbbells. His: dumbbells at 5 lb per hand. Keep one dumbbell setting for the whole workout.",
-    "10-second holds: Curl-Ups, Side Planks, and Bird Dogs use 10-second holds: 5 in set 1, 3 in set 2, and 1 in sets 3 and 4. Rest about 3 seconds between holds.",
-    "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides, or to switch from Y to T. Moves that switch sides on every rep need no switch time.",
+    "Weights: you each use your own. Choose your weight before you start. Her: 2 to 5 lb. His: 10 to 20 lb per hand. Keep one weight for the whole workout.",
+    "Tool: before you start, choose dumbbells or bands for Single-Arm Rows and Biceps Curls, the moves that have a band version. Every other move stays as listed. Choose bands only once you own them.",
+    "10-second holds: Curl-Ups, Side Planks, and Bird Dogs use 10-second holds: 5 in set 1, 3 in set 2, 1 in set 3, and 1 in set 4. Stop at the number of sets you chose. Rest about 3 seconds between holds.",
+    "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides. Moves that switch sides on every rep need no switch time.",
     "Common mistakes and how to fix them are in What You Should Feel."
    ],
    "boxHer": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in his workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
     "Breathing: breathe steadily through every move and never hold your breath. Where a move gives its own breathing cue, follow it.",
-    "Weights: you each use your own. Her: 2 lb wrist weights or dumbbells. His: dumbbells at 5 lb per hand. Keep one dumbbell setting for the whole workout.",
-    "10-second holds: Curl-Ups and Bird Dogs use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
-    "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides, or to switch from Y to T. Moves that switch sides on every rep need no switch time.",
+    "Weights: you each use your own. Choose your weight before you start. Her: 2 to 5 lb. His: 10 to 20 lb per hand. Keep one weight for the whole workout.",
+    "Tool: before you start, choose dumbbells or bands for Single-Arm Rows and Biceps Curls, the moves that have a band version. Every other move stays as listed. Choose bands only once you own them.",
+    "10-second holds: Curl-Ups and Bird Dogs use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. Stop at the number of sets you chose. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
+    "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides. Moves that switch sides on every rep need no switch time.",
     "Common mistakes and how to fix them are in What You Should Feel."
    ],
    "cool": [
@@ -176,6 +178,92 @@ window.CONTENT = {
     {
      "n": 4,
      "her": {
+      "ladder": "bicep",
+      "name": "Biceps Curls",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Band: pick Bands under Using to see the Band Biceps Curl. Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging.",
+      "see": "acefitness.org/resources/everyone/exercise-library/44/seated-biceps-curl",
+      "how": {
+       "id": "how-bicep-1",
+       "text": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging."
+      },
+      "easier": null,
+      "easierSteps": [],
+      "row": "Biceps Curls",
+      "start": 1,
+      "startLine": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
+     },
+     "his": {
+      "ladder": "bicep",
+      "name": "Biceps Curls",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Band: pick Bands under Using to see the Band Biceps Curl. Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging.",
+      "see": "acefitness.org/resources/everyone/exercise-library/44/seated-biceps-curl",
+      "how": {
+       "id": "how-bicep-1",
+       "text": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging."
+      },
+      "easier": null,
+      "easierSteps": [],
+      "row": "Biceps Curls",
+      "start": 1,
+      "startLine": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
+     }
+    },
+    {
+     "n": 5,
+     "her": {
+      "ladder": "lateral",
+      "name": "Lateral Raises",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight.",
+      "see": "acefitness.org/resources/everyone/exercise-library/26/lateral-raise",
+      "how": {
+       "id": "how-lateral-1",
+       "text": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight."
+      },
+      "easier": null,
+      "easierSteps": [],
+      "row": "Lateral Raises",
+      "start": 1,
+      "startLine": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
+     },
+     "his": {
+      "ladder": "lateral",
+      "name": "Lateral Raises",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight.",
+      "see": "acefitness.org/resources/everyone/exercise-library/26/lateral-raise",
+      "how": {
+       "id": "how-lateral-1",
+       "text": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight."
+      },
+      "easier": null,
+      "easierSteps": [],
+      "row": "Lateral Raises",
+      "start": 1,
+      "startLine": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up.",
+      "first": {
+       "id": "first-up",
+       "text": "First move: up."
+      }
+     }
+    },
+    {
+     "n": 6,
+     "her": {
       "ladder": "scap",
       "name": "Wall Scapular Pushups",
       "amount": "8–15",
@@ -222,47 +310,42 @@ window.CONTENT = {
      }
     },
     {
-     "n": 5,
+     "n": 7,
      "her": {
-      "ladder": "yt",
-      "name": "Prone Y-T Raises",
-      "amount": "8–15 each",
-      "show": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Lower slowly, with no hold at the top. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-      "see": null,
+      "ladder": "rfly",
+      "name": "Seated Reverse Fly",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back.",
+      "see": "mayoclinic.org/healthy-lifestyle/fitness/multimedia/reverse-fly/vid-20084679",
       "how": {
-       "id": "how-yt-1",
-       "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Lower slowly, with no hold at the top. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back."
+       "id": "how-rfly-1",
+       "text": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back."
       },
       "easier": null,
       "easierSteps": [],
-      "row": "Prone Y-T Raises",
+      "row": "Seated Reverse Fly",
       "start": 1,
-      "startLine": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up.",
+      "startLine": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up.",
       "first": {
        "id": "first-up",
        "text": "First move: up."
       }
      },
      "his": {
-      "ladder": "yt",
-      "name": "Prone Y-T Raises",
-      "amount": "8–15 each",
-      "show": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Hold 1–2 seconds, then lower slowly. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-      "see": null,
+      "ladder": "rfly",
+      "name": "Seated Reverse Fly",
+      "amount": "8–15",
+      "show": "Works with: dumbbells. Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back.",
+      "see": "mayoclinic.org/healthy-lifestyle/fitness/multimedia/reverse-fly/vid-20084679",
       "how": {
-       "id": "how-yt-2",
-       "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Hold 1–2 seconds, then lower slowly. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back."
+       "id": "how-rfly-1",
+       "text": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back."
       },
-      "easier": "No hold at the top",
-      "easierSteps": [
-       {
-        "ladder": "yt",
-        "n": 1
-       }
-      ],
-      "row": "Prone Y-T Raises",
-      "start": 2,
-      "startLine": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up.",
+      "easier": null,
+      "easierSteps": [],
+      "row": "Seated Reverse Fly",
+      "start": 1,
+      "startLine": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up.",
       "first": {
        "id": "first-up",
        "text": "First move: up."
@@ -270,7 +353,7 @@ window.CONTENT = {
      }
     },
     {
-     "n": 6,
+     "n": 8,
      "her": {
       "ladder": "curl",
       "name": "Curl-Ups",
@@ -278,7 +361,7 @@ window.CONTENT = {
       "show": "Set up: on your back, one leg straight and the other knee bent with the foot flat. Slide your hands under your lower back to keep its natural arch. Do it: 1. Breathe out and lift your head, shoulders, and chest off the floor together, just enough to feel your abs work. 2. Hold, then lower slowly. 3. When all your holds are done, switch which knee is bent and do them again. One rep is: one 10-second hold. Keep: lower back still. Don't tuck your chin or tilt your head back.",
       "see": "health.harvard.edu/staying-healthy/three-moves-for-better-spine-health",
       "how": {
-       "id": "daya-m6-her-how",
+       "id": "daya-m8-her-how",
        "text": "Set up: on your back, one leg straight and the other knee bent with the foot flat. Slide your hands under your lower back to keep its natural arch. Do it: 1. Breathe out and lift your head, shoulders, and chest off the floor together, just enough to feel your abs work. 2. Hold, then lower slowly. 3. When all your holds are done, switch which knee is bent and do them again. One rep is: one 10-second hold. Keep: lower back still. Don't tuck your chin or tilt your head back."
       },
       "easier": null,
@@ -294,7 +377,7 @@ window.CONTENT = {
       "show": "Set up: on your back, one leg straight and the other knee bent with the foot flat. Slide your hands under your lower back to keep its natural arch. Do it: 1. Breathe out and lift your head, shoulders, and chest off the floor together, just enough to feel your abs work. 2. Hold, then lower slowly. 3. When all your holds are done, switch which knee is bent and do them again. One rep is: one 10-second hold. Keep: lower back still. Don't tuck your chin or tilt your head back.",
       "see": "health.harvard.edu/staying-healthy/three-moves-for-better-spine-health",
       "how": {
-       "id": "daya-m6-her-how",
+       "id": "daya-m8-her-how",
        "text": "Set up: on your back, one leg straight and the other knee bent with the foot flat. Slide your hands under your lower back to keep its natural arch. Do it: 1. Breathe out and lift your head, shoulders, and chest off the floor together, just enough to feel your abs work. 2. Hold, then lower slowly. 3. When all your holds are done, switch which knee is bent and do them again. One rep is: one 10-second hold. Keep: lower back still. Don't tuck your chin or tilt your head back."
       },
       "easier": null,
@@ -305,7 +388,7 @@ window.CONTENT = {
      }
     },
     {
-     "n": 7,
+     "n": 9,
      "her": {
       "ladder": "hipraise",
       "name": "Plank Hip Raises",
@@ -344,7 +427,7 @@ window.CONTENT = {
      }
     },
     {
-     "n": 8,
+     "n": 10,
      "her": {
       "ladder": "bird",
       "name": "Bird Dog",
@@ -396,7 +479,7 @@ window.CONTENT = {
    "subtitle": "Works thighs, glutes, back of the thighs, outer hips, and calves.",
    "box": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in her workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
@@ -406,7 +489,7 @@ window.CONTENT = {
    ],
    "boxHer": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in his workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
@@ -564,7 +647,7 @@ window.CONTENT = {
       "ladder": "glute",
       "name": "Glute Bridges",
       "amount": "8–15",
-      "show": "Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
+      "show": "Works with (optional): one dumbbell held across the front of your hips with both hands. Add it once your form is solid without it. Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
       "see": "acefitness.org/resources/everyone/exercise-library/49/glute-bridge",
       "how": {
        "id": "how-glute-1",
@@ -584,11 +667,11 @@ window.CONTENT = {
       "ladder": "glute",
       "name": "Single-Leg Glute Bridges",
       "amount": "8–15/side",
-      "show": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
+      "show": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
       "see": null,
       "how": {
        "id": "how-glute-3",
-       "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
+       "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
       },
       "easier": "Two-leg bridge",
       "easierSteps": [
@@ -599,7 +682,7 @@ window.CONTENT = {
       ],
       "row": "Single-Leg Glute Bridges",
       "start": 3,
-      "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes.",
+      "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up.",
       "first": {
        "id": "first-up",
        "text": "First move: up."
@@ -653,29 +736,9 @@ window.CONTENT = {
      "n": 6,
      "her": {
       "ladder": "calf",
-      "name": "Calf Raises",
-      "amount": "8–15",
-      "show": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once.",
-      "see": null,
-      "how": {
-       "id": "how-calf-1",
-       "text": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once."
-      },
-      "easier": null,
-      "easierSteps": [],
-      "row": "Calf Raises",
-      "start": 1,
-      "startLine": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up.",
-      "first": {
-       "id": "first-up",
-       "text": "First move: up."
-      }
-     },
-     "his": {
-      "ladder": "calf",
       "name": "Single-Leg Calf Raises",
       "amount": "8–15/side",
-      "show": "Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
+      "show": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
       "see": null,
       "how": {
        "id": "how-calf-2",
@@ -695,6 +758,26 @@ window.CONTENT = {
        "id": "first-up",
        "text": "First move: up."
       }
+     },
+     "his": {
+      "ladder": "calf",
+      "name": "Heel Off a Step",
+      "amount": "8–15/side",
+      "show": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once.",
+      "see": null,
+      "how": {
+       "id": "how-calf-3",
+       "text": "Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once."
+      },
+      "easier": "Single-leg calf raise on the floor",
+      "easierSteps": [
+       {
+        "ladder": "calf",
+        "n": 2
+       }
+      ],
+      "row": "Heel Off a Step",
+      "start": 3
      }
     }
    ]
@@ -705,24 +788,27 @@ window.CONTENT = {
    "subtitle": "Works chest, shoulders, arms, upper back, thighs, glutes, calves, and abs.",
    "box": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in her workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
     "Breathing: breathe steadily through every move and never hold your breath. Where a move gives its own breathing cue, follow it.",
-    "Weights: you each use your own. Her: 2 lb wrist weights or dumbbells. His: dumbbells at 5 lb per hand. Keep one dumbbell setting for the whole workout.",
-    "10-second holds: Side Planks use 10-second holds: 5 in set 1, 3 in set 2, and 1 in sets 3 and 4. Rest about 3 seconds between holds.",
+    "Weights: you each use your own. Choose your weight before you start. Her: 2 to 5 lb. His: 10 to 20 lb per hand. Keep one weight for the whole workout.",
+    "Tool: before you start, choose dumbbells or bands for Single-Arm Rows, the move that has a band version. Every other move stays as listed. Choose bands only once you own them.",
+    "10-second holds: Side Planks use 10-second holds: 5 in set 1, 3 in set 2, 1 in set 3, and 1 in set 4. Stop at the number of sets you chose. Rest about 3 seconds between holds.",
     "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides. Moves that switch sides on every rep need no switch time.",
     "Common mistakes and how to fix them are in What You Should Feel."
    ],
    "boxHer": [
     "Workout: Do the moves in order, top to bottom. Each number lines up with the same number in his workout, so you can do them at the same time.",
-    "Sets: 2 in weeks 1–2, 3 in weeks 3–4. Rest: 1–2 min between sets.",
+    "Sets: choose 2, 3 or 4 before you start; 3 is the default. Rest: 1–2 min between sets.",
     "One set: one set is one pass through the moves in order. Rest, then do the next set.",
     "Effort: end each set when you could still do 2–3 more good reps.",
     "Speed: take about 1 second to lift and about 3 seconds to lower. Where a move says to pause, pause about 1 second.",
     "Breathing: breathe steadily through every move and never hold your breath. Where a move gives its own breathing cue, follow it.",
-    "Weights: you each use your own. Her: 2 lb wrist weights or dumbbells. His: dumbbells at 5 lb per hand. Keep one dumbbell setting for the whole workout.",
+    "Weights: you each use your own. Choose your weight before you start. Her: 2 to 5 lb. His: 10 to 20 lb per hand. Keep one weight for the whole workout.",
+    "Tool: before you start, choose dumbbells or bands for Single-Arm Rows, the move that has a band version. Every other move stays as listed. Choose bands only once you own them.",
+    "10-second holds: Bird Dogs use 10-second holds. Start with 3 in set 1, 2 in set 2, and 1 in sets 3 and 4. Stop at the number of sets you chose. When that feels steady, move to 4, 3, 2, 1, then to 5, 3, 1, 1. Rest about 3 seconds between holds.",
     "Timing: take about 10 seconds to get into position before each move. When you finish all your reps or holds on one side, take about 10 seconds to switch sides. Moves that switch sides on every rep need no switch time.",
     "Common mistakes and how to fix them are in What You Should Feel."
    ],
@@ -886,7 +972,7 @@ window.CONTENT = {
       "ladder": "glute",
       "name": "Glute Bridges",
       "amount": "8–15",
-      "show": "Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
+      "show": "Works with (optional): one dumbbell held across the front of your hips with both hands. Add it once your form is solid without it. Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
       "see": "acefitness.org/resources/everyone/exercise-library/49/glute-bridge",
       "how": {
        "id": "how-glute-1",
@@ -906,11 +992,11 @@ window.CONTENT = {
       "ladder": "glute",
       "name": "Single-Leg Glute Bridges",
       "amount": "8–15/side",
-      "show": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
+      "show": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
       "see": null,
       "how": {
        "id": "how-glute-3",
-       "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
+       "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
       },
       "easier": "Two-leg bridge",
       "easierSteps": [
@@ -921,7 +1007,7 @@ window.CONTENT = {
       ],
       "row": "Single-Leg Glute Bridges",
       "start": 3,
-      "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes.",
+      "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up.",
       "first": {
        "id": "first-up",
        "text": "First move: up."
@@ -974,20 +1060,25 @@ window.CONTENT = {
     {
      "n": 6,
      "her": {
-      "ladder": "taps",
-      "name": "Plank Shoulder Taps (knees)",
-      "amount": "8–15/side, starting at 8",
-      "show": "Set up: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Do it: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. One rep is: one tap. Count each side's taps separately. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap.",
-      "see": null,
+      "ladder": "bird",
+      "name": "Bird Dog",
+      "amount": "10-sec holds: 3, 2, 1 per side",
+      "show": "Set up: on your hands and knees, hands under your shoulders and knees under your hips. Tighten your belly so your back stays flat. Do it: 1. Reach one arm forward and the opposite leg straight back until both are level with the floor. 2. Hold, then return to your hands and knees. 3. Do all your holds on that side, then switch to the other arm and leg. One rep is: one 10-second hold. Keep: hips and shoulders level, eyes on the floor. Raise your arm and leg only as high as you can without your lower back sagging.",
+      "see": "acefitness.org/resources/everyone/exercise-library/14/bird-dog",
       "how": {
-       "id": "how-taps-1",
-       "text": "Set up: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head. Do it: 1. Lift one hand and touch the opposite shoulder, then put the hand back down. 2. Switch hands with every tap. One rep is: one tap. Count each side's taps separately. Keep: hips still, with no rocking side to side. Go slowly, about 2 seconds a tap."
+       "id": "how-bird-2",
+       "text": "Set up: on your hands and knees, hands under your shoulders and knees under your hips. Tighten your belly so your back stays flat. Do it: 1. Reach one arm forward and the opposite leg straight back until both are level with the floor. 2. Hold, then return to your hands and knees. 3. Do all your holds on that side, then switch to the other arm and leg. One rep is: one 10-second hold. Keep: hips and shoulders level, eyes on the floor. Raise your arm and leg only as high as you can without your lower back sagging."
       },
-      "easier": null,
-      "easierSteps": [],
-      "row": "Plank Shoulder Taps",
-      "start": 1,
-      "startLine": "Set up: in a plank on your hands and knees, hands under your shoulders, body straight from knees to head."
+      "easier": "Wider base",
+      "easierSteps": [
+       {
+        "ladder": "bird",
+        "n": 1
+       }
+      ],
+      "row": "Bird Dog",
+      "start": 2,
+      "startLine": "Set up: on your hands and knees, hands under your shoulders and knees under your hips. Tighten your belly so your back stays flat."
      },
      "his": {
       "ladder": "taps",
@@ -1015,29 +1106,9 @@ window.CONTENT = {
      "n": 7,
      "her": {
       "ladder": "calf",
-      "name": "Calf Raises",
-      "amount": "8–15",
-      "show": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once.",
-      "see": null,
-      "how": {
-       "id": "how-calf-1",
-       "text": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once."
-      },
-      "easier": null,
-      "easierSteps": [],
-      "row": "Calf Raises",
-      "start": 1,
-      "startLine": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up.",
-      "first": {
-       "id": "first-up",
-       "text": "First move: up."
-      }
-     },
-     "his": {
-      "ladder": "calf",
       "name": "Single-Leg Calf Raises",
       "amount": "8–15/side",
-      "show": "Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
+      "show": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
       "see": null,
       "how": {
        "id": "how-calf-2",
@@ -1057,6 +1128,26 @@ window.CONTENT = {
        "id": "first-up",
        "text": "First move: up."
       }
+     },
+     "his": {
+      "ladder": "calf",
+      "name": "Heel Off a Step",
+      "amount": "8–15/side",
+      "show": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once.",
+      "see": null,
+      "how": {
+       "id": "how-calf-3",
+       "text": "Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once."
+      },
+      "easier": "Single-leg calf raise on the floor",
+      "easierSteps": [
+       {
+        "ladder": "calf",
+        "n": 2
+       }
+      ],
+      "row": "Heel Off a Step",
+      "start": 3
      }
     },
     {
@@ -1810,7 +1901,7 @@ window.CONTENT = {
      "n": 2,
      "name": "Single-Arm Rows",
      "how": "Works with: dumbbell, kettlebell, or wrist weight (strapped on your wrist instead of holding anything). Band: pick Bands under Using to see the Band Row. No equipment: Pull-Up Superman. Set up: hold the weight in your right hand. Put your left knee and left hand on the seat of a sturdy chair, hand under your shoulder and knee under your hip. Brace your belly, keep your back flat and your head in line with your back. Pull your shoulder blade down and back, and let your right arm hang straight toward the floor. First move: up. Do it: 1. Pull the weight up by bending your elbow and drawing your upper arm back, elbow close to your side. Stop when you can't go higher without twisting. 2. Lower slowly back to the start. 3. Do every rep on that side, then switch. One rep is: weight up and back down once, on one side. Breathe: out as you pull, in as you lower. Keep: back flat and shoulders level, with no twisting.",
-     "note": "Both start (her 2 lb, his 5 lb)",
+     "note": "Both start (her 2–5 lb, his 10–20 lb)",
      "see": "acefitness.org/resources/everyone/exercise-library/126/single-arm-row",
      "startLine": "Set up: hold the weight in your right hand. Put your left knee and left hand on the seat of a sturdy chair, hand under your shoulder and knee under your hip. Brace your belly, keep your back flat and your head in line with your back. Pull your shoulder blade down and back, and let your right arm hang straight toward the floor. First move: up.",
      "first": {
@@ -1847,7 +1938,8 @@ window.CONTENT = {
    "pair": {
     "body": 1,
     "tool": 2
-   }
+   },
+   "defTool": "dumbbell"
   },
   "press": {
    "title": "Seated Overhead Press",
@@ -1861,7 +1953,7 @@ window.CONTENT = {
      "n": 1,
      "name": "Seated Overhead Press",
      "how": "Works with: dumbbells, kettlebells, or wrist weights. Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold the weights at shoulder height, palms forward, about shoulder-width apart, wrists straight. Pull your shoulder blades down and back. First move: up. Do it: 1. Press the weights overhead until your arms are straight, elbows slightly in front of you. 2. Lower slowly back to shoulder height. One rep is: weights up and back down once. Breathe: out as you press, in as you lower. Keep: lower back against the chair, without arching. Lower the weights with control, never letting them drop.",
-     "note": "Both start (her 2 lb, his 5 lb)",
+     "note": "Both start (her 2–5 lb, his 10–20 lb)",
      "see": "acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press",
      "startLine": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold the weights at shoulder height, palms forward, about shoulder-width apart, wrists straight. Pull your shoulder blades down and back. First move: up.",
      "first": {
@@ -1893,21 +1985,113 @@ window.CONTENT = {
      }
     }
    ],
-   "prefix": []
+   "prefix": [],
+   "defTool": "dumbbell"
+  },
+  "bicep": {
+   "title": "Biceps Curls",
+   "short": "Biceps Curls",
+   "start": {
+    "her": 1,
+    "his": 1
+   },
+   "steps": [
+    {
+     "n": 1,
+     "name": "Biceps Curls",
+     "how": "Works with: dumbbells. Band: pick Bands under Using to see the Band Biceps Curl. Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging.",
+     "note": "Both start (her 2–5 lb, his 10–20 lb)",
+     "see": "acefitness.org/resources/everyone/exercise-library/44/seated-biceps-curl",
+     "startLine": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up.",
+     "first": {
+      "id": "first-up",
+      "text": "First move: up."
+     },
+     "tools": [
+      "dumbbell",
+      "bands"
+     ],
+     "cfg": {
+      "kind": "reps",
+      "seq": [
+       [
+        "UP",
+        1
+       ],
+       [
+        "DOWN",
+        3
+       ]
+      ],
+      "side": false
+     },
+     "cue": {
+      "id": "how-bicep-1",
+      "text": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging."
+     }
+    }
+   ],
+   "prefix": [],
+   "defTool": "dumbbell"
+  },
+  "lateral": {
+   "title": "Lateral Raises",
+   "short": "Lateral Raises",
+   "start": {
+    "her": 1,
+    "his": 1
+   },
+   "steps": [
+    {
+     "n": 1,
+     "name": "Lateral Raises",
+     "how": "Works with: dumbbells. Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight.",
+     "note": "Both start (her 2–5 lb, his 10–20 lb)",
+     "see": "acefitness.org/resources/everyone/exercise-library/26/lateral-raise",
+     "startLine": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up.",
+     "first": {
+      "id": "first-up",
+      "text": "First move: up."
+     },
+     "tools": [
+      "dumbbell"
+     ],
+     "cfg": {
+      "kind": "reps",
+      "seq": [
+       [
+        "UP",
+        1
+       ],
+       [
+        "DOWN",
+        3
+       ]
+      ],
+      "side": false
+     },
+     "cue": {
+      "id": "how-lateral-1",
+      "text": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight."
+     }
+    }
+   ],
+   "prefix": [],
+   "defTool": "dumbbell"
   },
   "calf": {
    "title": "Calf Raises",
    "short": "Calf Raises",
    "start": {
-    "her": 1,
-    "his": 2
+    "her": 2,
+    "his": 3
    },
    "steps": [
     {
      "n": 1,
      "name": "Calf Raises",
      "how": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once.",
-     "note": "Her start",
+     "note": "—",
      "see": null,
      "startLine": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up.",
      "first": {
@@ -1941,15 +2125,18 @@ window.CONTENT = {
     {
      "n": 2,
      "name": "Single-Leg Calf Raises",
-     "how": "Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
-     "note": "His start",
+     "how": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Set up: stand on one foot, holding the counter for balance. First move: up. Do it: 1. Push through the ball of your foot and lift your heel as high as is comfortable. 2. Pause, then lower your heel with control. 3. Do every rep on that foot, then switch. One rep is: heels up and back down once.",
+     "note": "Her start",
      "see": null,
      "startLine": "Set up: stand on one foot, holding the counter for balance. First move: up.",
      "first": {
       "id": "first-up",
       "text": "First move: up."
      },
-     "tools": [],
+     "tools": [
+      "dumbbell",
+      "kettlebell"
+     ],
      "cfg": {
       "kind": "reps",
       "seq": [
@@ -1976,10 +2163,13 @@ window.CONTENT = {
     {
      "n": 3,
      "name": "Heel Off a Step",
-     "how": "Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once.",
-     "note": "—",
+     "how": "Works with (optional): a dumbbell or kettlebell held in your free hand. Start with the lightest weight that lets you do 8–15 good reps. Stand on one foot with the front half of that foot on a step and the heel hanging off, holding the rail or the wall. Push through the ball of your foot to lift your heel, pause, then lower with control. One rep is: heels up and back down once.",
+     "note": "His start",
      "see": null,
-     "tools": [],
+     "tools": [
+      "dumbbell",
+      "kettlebell"
+     ],
      "cfg": {
       "kind": "reps",
       "seq": [
@@ -2957,7 +3147,7 @@ window.CONTENT = {
     {
      "n": 1,
      "name": "Glute Bridges",
-     "how": "Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
+     "how": "Works with (optional): one dumbbell held across the front of your hips with both hands. Add it once your form is solid without it. Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up. Do it: 1. Push through your feet to lift your hips until your body is in a straight line from knees to shoulders. 2. Squeeze your glutes, pause, then lower with control. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight. Don't fully relax at the bottom.",
      "note": "Her start",
      "see": "acefitness.org/resources/everyone/exercise-library/49/glute-bridge",
      "startLine": "Set up: on your back, knees bent, feet flat and hip-width apart, directly under your knees, arms at your sides with palms down. First move: up.",
@@ -2965,7 +3155,9 @@ window.CONTENT = {
       "id": "first-up",
       "text": "First move: up."
      },
-     "tools": [],
+     "tools": [
+      "dumbbell"
+     ],
      "cfg": {
       "kind": "reps",
       "seq": [
@@ -3023,10 +3215,10 @@ window.CONTENT = {
     {
      "n": 3,
      "name": "Single-Leg Glute Bridges",
-     "how": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
+     "how": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
      "note": "His start. Strong",
      "see": null,
-     "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes.",
+     "startLine": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up.",
      "first": {
       "id": "first-up",
       "text": "First move: up."
@@ -3048,7 +3240,7 @@ window.CONTENT = {
      },
      "cue": {
       "id": "how-glute-3",
-      "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
+      "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges."
      }
     },
     {
@@ -3189,91 +3381,26 @@ window.CONTENT = {
    ],
    "prefix": []
   },
-  "yt": {
-   "title": "Prone Y-T Raises",
-   "short": "Prone Y-T Raises",
+  "rfly": {
+   "title": "Seated Reverse Fly",
+   "short": "Seated Reverse Fly",
    "start": {
     "her": 1,
-    "his": 2
+    "his": 1
    },
    "steps": [
     {
      "n": 1,
-     "name": "No Hold",
-     "how": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Lower slowly, with no hold at the top. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-     "note": "Her start",
-     "see": null,
-     "startLine": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up.",
+     "name": "Seated Reverse Fly",
+     "how": "Works with: dumbbells. Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back.",
+     "note": "Both start (her 2–5 lb, his 10–20 lb)",
+     "see": "mayoclinic.org/healthy-lifestyle/fitness/multimedia/reverse-fly/vid-20084679",
+     "startLine": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up.",
      "first": {
       "id": "first-up",
       "text": "First move: up."
      },
-     "tools": [],
-     "cfg": {
-      "kind": "reps",
-      "seq": [
-       [
-        "UP",
-        1
-       ],
-       [
-        "DOWN",
-        3
-       ]
-      ],
-      "side": false,
-      "yt": true
-     },
-     "cue": {
-      "id": "how-yt-1",
-      "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Lower slowly, with no hold at the top. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back."
-     }
-    },
-    {
-     "n": 2,
-     "name": "1–2 Second Hold",
-     "how": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Hold 1–2 seconds, then lower slowly. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-     "note": "His start. Strong",
-     "see": null,
-     "startLine": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up.",
-     "first": {
-      "id": "first-up",
-      "text": "First move: up."
-     },
-     "tools": [],
-     "cfg": {
-      "kind": "reps",
-      "seq": [
-       [
-        "UP",
-        1
-       ],
-       [
-        "HOLD",
-        2
-       ],
-       [
-        "DOWN",
-        3
-       ]
-      ],
-      "side": false,
-      "yt": true
-     },
-     "cue": {
-      "id": "how-yt-2",
-      "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Hold 1–2 seconds, then lower slowly. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back."
-     }
-    },
-    {
-     "n": 3,
-     "name": "With Wrist Weights",
-     "how": "Works with: wrist weights, about 2–5 lb, or light dumbbells (your 2 lb pair works). Start with the lightest pair that lets you do 8–15 good reps. One rep is: arms up and back down once. Y reps and T reps count separately.",
-     "note": "—",
-     "see": null,
-     "howHer": "Works with: wrist weights, about 2–5 lb, or light dumbbells. Start with the lightest pair that lets you do 8–15 good reps. One rep is: arms up and back down once. Y reps and T reps count separately.",
      "tools": [
-      "wrist",
       "dumbbell"
      ],
      "cfg": {
@@ -3284,61 +3411,20 @@ window.CONTENT = {
         1
        ],
        [
-        "HOLD",
-        2
-       ],
-       [
         "DOWN",
         3
        ]
       ],
-      "side": false,
-      "yt": true
+      "side": false
      },
      "cue": {
-      "id": "how-yt-3",
-      "text": "Start with the lightest pair that lets you do 8–15 good reps. One rep is: arms up and back down once. Y reps and T reps count separately."
-     }
-    },
-    {
-     "n": 4,
-     "name": "Long Hold",
-     "how": "Make your last set one 30–45 second Y hold, then, after about 10 seconds to switch, one 30–45 second T hold.",
-     "note": "Ultimate",
-     "see": null,
-     "tools": [],
-     "cfg": {
-      "kind": "reps",
-      "seq": [
-       [
-        "UP",
-        1
-       ],
-       [
-        "HOLD",
-        2
-       ],
-       [
-        "DOWN",
-        3
-       ]
-      ],
-      "side": false,
-      "yt": true,
-      "longLast": true
-     },
-     "cue": {
-      "id": "how-yt-4",
-      "text": "Make your last set one 30–45 second Y hold, then, after about 10 seconds to switch, one 30–45 second T hold."
+      "id": "how-rfly-1",
+      "text": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back."
      }
     }
    ],
-   "prefix": [
-    1,
-    2,
-    3,
-    4
-   ]
+   "prefix": [],
+   "defTool": "dumbbell"
   }
  },
  "ladderOrder": [
@@ -3348,6 +3434,8 @@ window.CONTENT = {
   "taps",
   "row",
   "press",
+  "bicep",
+  "lateral",
   "calf",
   "plank",
   "curl",
@@ -3359,12 +3447,51 @@ window.CONTENT = {
   "rdl",
   "glute",
   "sllr",
-  "yt"
+  "rfly"
  ],
  "ladderIntro": [
   "Every version of each move, from easiest to hardest, with where each of you starts.",
-  "Do each step until you can do 1–2 reps more than 15 on your last set, two workouts in a row, then go to the next step. \"Strong\" marks a solid health goal, done for 3 sets at the top of the range. \"Ultimate\" is the top skill. Keep every squat to about 90° at the knees."
+  "Do each step until When to Move Up or Down says to move up, then go to the next step. \"Strong\" marks a solid health goal, done for 3 sets at the top of the range. \"Ultimate\" is the top skill. Keep every squat to about 90° at the knees."
  ],
+ "moveUp": {
+  "intro": "When to make a move harder, and what to do if it's too hard.",
+  "lines": [
+   {
+    "t": "Starting step: start each move at the step where you can do 8–15 good reps and still have 2–3 left. Your starting steps are marked in the Move Ladders."
+   },
+   {
+    "t": "Each set: ends when you could still do 2–3 more good reps."
+   },
+   {
+    "t": "Sets: choose 2, 3 or 4 before each workout; 3 is the default. Move up by adding reps, not sets."
+   },
+   {
+    "t": "Moving up: move up one step when you can do 1–2 reps more than 15 on your last set, two workouts in a row."
+   },
+   {
+    "t": "Moving down: if you can't do 8 good reps, go back one step."
+   },
+   {
+    "t": "Way too easy: if you can do 20 or more good reps in your first set, move up one step at your next workout, without waiting for two workouts."
+   },
+   {
+    "t": "Floor Plank: work up from your starting time to 30 seconds, then move up a step."
+   },
+   {
+    "his": "10-second holds (Curl-Ups, Side Planks, Bird Dogs): keep the pattern going down each set (5, 3, 1, then 1 in set 4). Stop at the number of sets you chose. You can raise the starting number, as long as each set has fewer holds than the one before. Move up a step once the move feels steady and strong.",
+    "her": "10-second holds (Curl-Ups, Bird Dogs): start at 3, 2, 1. When that feels steady, move to 4, 3, 2, then to 5, 3, 1. From there, you can raise the starting number. Each set has fewer holds than the one before, and set 4 is always 1. Stop at the number of sets you chose. Move up a step once the move feels steady and strong."
+   },
+   {
+    "t": "Weights and bands: start with the lightest weight or band that lets you do 8–15 good reps. Her range: 2 to 5 lb. His range: 10 to 20 lb per hand. Choose your weight before each workout and keep it for the whole workout. Change your dumbbell plates only between workout days, never during a workout, and only once Single-Arm Rows and Seated Overhead Press have both reached the move-up point (1–2 reps more than 15 on your last set, two workouts in a row). Until then, keep adding reps on the move that got there first. Then move up one step: 1 lb for her, 2 lb for him."
+   },
+   {
+    "t": "Next step or more weight: on a move that uses weights, once you reach the move-up point, you can go to the next step or add weight. Either one counts as moving up."
+   },
+   {
+    "t": "Wrist weights: wear them only for the strength moves that list them. Never wear them on walks or during cardio."
+   }
+  ]
+ },
  "progress": {
   "sub": "What to record at the end of week 4, and every 4 weeks after.",
   "items": [
@@ -3403,10 +3530,11 @@ window.CONTENT = {
    }
   ],
   "rules": [
-   "Weights and bands: start with the lightest weight or band that lets you do 8–15 good reps. Her start: 2 lb. His start: 5 lb per hand. Change your dumbbell plates only between workout days, never during a workout, and only once Single-Arm Rows and Seated Overhead Press have both reached the move-up point (1–2 reps more than 15 on your last set, two workouts in a row). Until then, keep adding reps on the move that got there first. Then increase the weight about 2–10%.",
+   "Weights and bands: start with the lightest weight or band that lets you do 8–15 good reps. Her range: 2 to 5 lb. His range: 10 to 20 lb per hand. Choose your weight before each workout and keep it for the whole workout. Change your dumbbell plates only between workout days, never during a workout, and only once Single-Arm Rows and Seated Overhead Press have both reached the move-up point (1–2 reps more than 15 on your last set, two workouts in a row). Until then, keep adding reps on the move that got there first. Then move up one step: 1 lb for her, 2 lb for him.",
    "Wrist weights: wear them only for the strength moves that list them. Never wear them on walks or during cardio."
   ],
-  "bandRow": "Band Row (for Single-Arm Rows): sit with your legs out and knees slightly bent. Loop the band around your feet at the middle of your shoes. Keep your back straight, not rounded or arched. Pull the handles straight back with your elbows, as if rowing a boat, so your shoulder blades move toward each other. Return slowly."
+  "bandRow": "Band Row (for Single-Arm Rows): sit with your legs out and knees slightly bent. Loop the band around your feet at the middle of your shoes. Keep your back straight, not rounded or arched. Pull the handles straight back with your elbows, as if rowing a boat, so your shoulder blades move toward each other. Return slowly.",
+  "bandCurl": "Band Biceps Curl: Stand on the band with one foot, or both feet for more resistance. Keep your elbows tucked in and curl your fists up to your shoulders, then lower slowly."
  },
  "rows": {
   "Floor Pushups": {
@@ -3544,17 +3672,17 @@ window.CONTENT = {
     }
    }
   },
-  "Single-Leg Calf Raises": {
+  "Heel Off a Step": {
    "muscles": "Rounded top part of the calf (gastrocnemius), flat muscle beneath it (soleus)",
    "feel": "Calf muscles",
    "fix": "Sharp, stabbing, or pinching pain in a joint means stop that move.",
    "cues": {
     "feel": {
-     "id": "feel-single-leg-calf-raises",
+     "id": "feel-heel-off-a-step",
      "text": "You should feel it in: Calf muscles"
     },
     "fix": {
-     "id": "fix-single-leg-calf-raises",
+     "id": "fix-heel-off-a-step",
      "text": "Should not feel, or fix: Sharp, stabbing, or pinching pain in a joint means stop that move."
     }
    }
@@ -3574,18 +3702,18 @@ window.CONTENT = {
     }
    }
   },
-  "Prone Y-T Raises": {
-   "muscles": "Lower part of the upper back (lower trapezius), back of shoulder (rear deltoids)",
-   "feel": "Mid-back and the back of your shoulders",
-   "fix": "Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
+  "Seated Reverse Fly": {
+   "muscles": "Upper back between the shoulder blades (rhomboids), back of shoulder (rear deltoids)",
+   "feel": "Across your upper back and in your shoulders",
+   "fix": "Your back arching or hunching, or the weights swinging. Keep your back flat and lift slowly with your upper back.",
    "cues": {
     "feel": {
-     "id": "feel-prone-y-t-raises",
-     "text": "You should feel it in: Mid-back and the back of your shoulders"
+     "id": "feel-seated-reverse-fly",
+     "text": "You should feel it in: Across your upper back and in your shoulders"
     },
     "fix": {
-     "id": "fix-prone-y-t-raises",
-     "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free."
+     "id": "fix-seated-reverse-fly",
+     "text": "Should not feel, or fix: Your back arching or hunching, or the weights swinging. Keep your back flat and lift slowly with your upper back."
     }
    }
   },
@@ -3616,6 +3744,36 @@ window.CONTENT = {
     "fix": {
      "id": "fix-seated-overhead-press",
      "text": "Should not feel, or fix: Your lower back arching off the chair, your wrists bending, or the weights dropping. Keep your back against the chair, your wrists straight, and lower slowly."
+    }
+   }
+  },
+  "Biceps Curls": {
+   "muscles": "Front of upper arm (biceps)",
+   "feel": "The front of your upper arms",
+   "fix": "Your back arching, elbows moving forward, wrists bending, or shrugging. Keep your back against the chair and your elbows by your sides.",
+   "cues": {
+    "feel": {
+     "id": "feel-biceps-curls",
+     "text": "You should feel it in: The front of your upper arms"
+    },
+    "fix": {
+     "id": "fix-biceps-curls",
+     "text": "Should not feel, or fix: Your back arching, elbows moving forward, wrists bending, or shrugging. Keep your back against the chair and your elbows by your sides."
+    }
+   }
+  },
+  "Lateral Raises": {
+   "muscles": "Shoulders (deltoids)",
+   "feel": "Your shoulders",
+   "fix": "Your lower back arching, your wrists bending, or your body swinging. Stand tall and lift slowly.",
+   "cues": {
+    "feel": {
+     "id": "feel-lateral-raises",
+     "text": "You should feel it in: Your shoulders"
+    },
+    "fix": {
+     "id": "fix-lateral-raises",
+     "text": "Should not feel, or fix: Your lower back arching, your wrists bending, or your body swinging. Stand tall and lift slowly."
     }
    }
   },
@@ -3874,17 +4032,17 @@ window.CONTENT = {
     }
    }
   },
-  "Calf Raises": {
+  "Single-Leg Calf Raises": {
    "muscles": "Rounded top part of the calf (gastrocnemius), flat muscle beneath it (soleus)",
    "feel": "Calf muscles",
    "fix": "Sharp, stabbing, or pinching pain in a joint means stop that move.",
    "cues": {
     "feel": {
-     "id": "feel-single-leg-calf-raises",
+     "id": "feel-heel-off-a-step",
      "text": "You should feel it in: Calf muscles"
     },
     "fix": {
-     "id": "fix-single-leg-calf-raises",
+     "id": "fix-heel-off-a-step",
      "text": "Should not feel, or fix: Sharp, stabbing, or pinching pain in a joint means stop that move."
     }
    }
@@ -3910,13 +4068,13 @@ window.CONTENT = {
    "key": "standing-chest-stretch",
    "name": "Standing Chest Stretch",
    "targets": "Chest, front of shoulders",
-   "how": "Start: stand with your feet hip-width apart, toes forward, arms at your sides. Move: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward.",
+   "how": "Set up: stand with your feet hip-width apart, toes forward, arms at your sides. Do it: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward.",
    "kind": "once",
    "row": "Standing Chest Stretch",
    "cues": {
     "how": {
      "id": "stretch-standing-chest-stretch-how",
-     "text": "Start: stand with your feet hip-width apart, toes forward, arms at your sides. Move: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward."
+     "text": "Set up: stand with your feet hip-width apart, toes forward, arms at your sides. Do it: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward."
     },
     "feel": {
      "id": "feel-standing-chest-stretch",
@@ -3927,19 +4085,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Your lower back arching or your chest pushed forward. Keep your belly tight."
     }
    },
-   "startLine": "Start: stand with your feet hip-width apart, toes forward, arms at your sides."
+   "startLine": "Set up: stand with your feet hip-width apart, toes forward, arms at your sides."
   },
   {
    "key": "cross-body-shoulder",
    "name": "Cross-Body Shoulder",
    "targets": "Back of shoulder",
-   "how": "Start: stand tall. Move: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms.",
+   "how": "Set up: stand tall. Do it: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms.",
    "kind": "sides",
    "row": "Cross-Body Shoulder",
    "cues": {
     "how": {
      "id": "stretch-cross-body-shoulder-how",
-     "text": "Start: stand tall. Move: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms."
+     "text": "Set up: stand tall. Do it: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms."
     },
     "feel": {
      "id": "feel-cross-body-shoulder",
@@ -3950,19 +4108,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: If it hurts, you've stretched too far."
     }
    },
-   "startLine": "Start: stand tall."
+   "startLine": "Set up: stand tall."
   },
   {
    "key": "standing-quad",
    "name": "Standing Quad",
    "targets": "Front of thigh",
-   "how": "Start: stand beside the counter, holding it for support. Move: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together.",
+   "how": "Set up: stand beside the counter, holding it for support. Do it: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together.",
    "kind": "sides",
    "row": "Standing Quad",
    "cues": {
     "how": {
      "id": "stretch-standing-quad-how",
-     "text": "Start: stand beside the counter, holding it for support. Move: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together."
+     "text": "Set up: stand beside the counter, holding it for support. Do it: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together."
     },
     "feel": {
      "id": "feel-standing-quad",
@@ -3973,19 +4131,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Stomach sagging. Tighten your abs and keep your knees together."
     }
    },
-   "startLine": "Start: stand beside the counter, holding it for support."
+   "startLine": "Set up: stand beside the counter, holding it for support."
   },
   {
    "key": "wall-calf-stretch",
    "name": "Wall Calf Stretch",
    "targets": "Calf",
-   "how": "Start: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Move: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward.",
+   "how": "Set up: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Do it: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward.",
    "kind": "sides",
    "row": "Wall Calf Stretch",
    "cues": {
     "how": {
      "id": "stretch-wall-calf-stretch-how",
-     "text": "Start: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Move: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward."
+     "text": "Set up: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Do it: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward."
     },
     "feel": {
      "id": "feel-wall-calf-stretch",
@@ -3996,19 +4154,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Back heel lifting or toes turning in or out. Press the heel down and point your toes forward."
     }
    },
-   "startLine": "Start: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat."
+   "startLine": "Set up: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat."
   },
   {
    "key": "seated-hamstring",
    "name": "Seated Hamstring",
    "targets": "Back of thigh",
-   "how": "Start: sit on the edge of a chair, one leg straight with the heel on the floor. Move: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs.",
+   "how": "Set up: sit on the edge of a chair, one leg straight with the heel on the floor. Do it: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs.",
    "kind": "sides",
    "row": "Seated Hamstring",
    "cues": {
     "how": {
      "id": "stretch-seated-hamstring-how",
-     "text": "Start: sit on the edge of a chair, one leg straight with the heel on the floor. Move: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs."
+     "text": "Set up: sit on the edge of a chair, one leg straight with the heel on the floor. Do it: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs."
     },
     "feel": {
      "id": "feel-seated-hamstring",
@@ -4019,19 +4177,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Pain. Bend your knee slightly."
     }
    },
-   "startLine": "Start: sit on the edge of a chair, one leg straight with the heel on the floor."
+   "startLine": "Set up: sit on the edge of a chair, one leg straight with the heel on the floor."
   },
   {
    "key": "knee-to-chest",
    "name": "Knee-to-Chest",
    "targets": "Lower back",
-   "how": "Start: lie on your back on a firm surface, knees bent and feet flat. Move: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs.",
+   "how": "Set up: lie on your back on a firm surface, knees bent and feet flat. Do it: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs.",
    "kind": "sides",
    "row": "Knee-to-Chest",
    "cues": {
     "how": {
      "id": "stretch-knee-to-chest-how",
-     "text": "Start: lie on your back on a firm surface, knees bent and feet flat. Move: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs."
+     "text": "Set up: lie on your back on a firm surface, knees bent and feet flat. Do it: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs."
     },
     "feel": {
      "id": "feel-knee-to-chest",
@@ -4042,7 +4200,7 @@ window.CONTENT = {
      "text": "Should not feel, or fix: If it hurts, you've stretched too far."
     }
    },
-   "startLine": "Start: lie on your back on a firm surface, knees bent and feet flat."
+   "startLine": "Set up: lie on your back on a firm surface, knees bent and feet flat."
   }
  ],
  "hip": [
@@ -4050,13 +4208,13 @@ window.CONTENT = {
    "key": "butterfly-stretch",
    "name": "Butterfly Stretch",
    "targets": "Inner thighs",
-   "how": "Start: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Move: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing.",
+   "how": "Set up: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Do it: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing.",
    "kind": "once",
    "row": "Butterfly Stretch",
    "cues": {
     "how": {
      "id": "hip-butterfly-stretch-how",
-     "text": "Start: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Move: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing."
+     "text": "Set up: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Do it: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing."
     },
     "feel": {
      "id": "feel-butterfly-stretch",
@@ -4067,19 +4225,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Your back rounding. Keep it straight as you lean."
     }
    },
-   "startLine": "Start: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides."
+   "startLine": "Set up: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides."
   },
   {
    "key": "kneeling-hip-flexor",
    "name": "Kneeling Hip Flexor",
    "targets": "Front of hip",
-   "how": "Start: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Move: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat.",
+   "how": "Set up: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Do it: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat.",
    "kind": "sides",
    "row": "Kneeling Hip Flexor",
    "cues": {
     "how": {
      "id": "hip-kneeling-hip-flexor-how",
-     "text": "Start: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Move: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat."
+     "text": "Set up: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Do it: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat."
     },
     "feel": {
      "id": "feel-kneeling-hip-flexor",
@@ -4090,19 +4248,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: Your lower back arching or the knee on the floor feeling sore. Tighten your belly, and add more padding under the knee."
     }
    },
-   "startLine": "Start: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh."
+   "startLine": "Set up: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh."
   },
   {
    "key": "seated-figure-4",
    "name": "Seated Figure-4",
    "targets": "Glutes, outer hip",
-   "how": "Start: sit on a chair. Move: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides.",
+   "how": "Set up: sit on a chair. Do it: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides.",
    "kind": "sides",
    "row": "Seated Figure-4",
    "cues": {
     "how": {
      "id": "hip-seated-figure-4-how",
-     "text": "Start: sit on a chair. Move: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides."
+     "text": "Set up: sit on a chair. Do it: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides."
     },
     "feel": {
      "id": "feel-seated-figure-4",
@@ -4113,19 +4271,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: If it hurts, you've stretched too far."
     }
    },
-   "startLine": "Start: sit on a chair."
+   "startLine": "Set up: sit on a chair."
   },
   {
    "key": "standing-adductor-stretch",
    "name": "Standing Adductor Stretch",
    "targets": "Inner thigh",
-   "how": "Start: stand with your feet wider than hip-width. Move: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides.",
+   "how": "Set up: stand with your feet wider than hip-width. Do it: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides.",
    "kind": "sides",
    "row": "Standing Adductor Stretch",
    "cues": {
     "how": {
      "id": "hip-standing-adductor-stretch-how",
-     "text": "Start: stand with your feet wider than hip-width. Move: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides."
+     "text": "Set up: stand with your feet wider than hip-width. Do it: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides."
     },
     "feel": {
      "id": "feel-standing-adductor-stretch",
@@ -4136,19 +4294,19 @@ window.CONTENT = {
      "text": "Should not feel, or fix: If it hurts, you've stretched too far."
     }
    },
-   "startLine": "Start: stand with your feet wider than hip-width."
+   "startLine": "Set up: stand with your feet wider than hip-width."
   },
   {
    "key": "standing-it-band-stretch",
    "name": "Standing IT Band Stretch",
    "targets": "Outer hip, side of your trunk",
-   "how": "Start: stand beside the counter for support. Move: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides.",
+   "how": "Set up: stand beside the counter for support. Do it: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides.",
    "kind": "sides",
    "row": "Standing IT Band Stretch",
    "cues": {
     "how": {
      "id": "hip-standing-it-band-stretch-how",
-     "text": "Start: stand beside the counter for support. Move: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides."
+     "text": "Set up: stand beside the counter for support. Do it: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides."
     },
     "feel": {
      "id": "feel-standing-it-band-stretch",
@@ -4159,7 +4317,7 @@ window.CONTENT = {
      "text": "Should not feel, or fix: If it hurts, you've stretched too far."
     }
    },
-   "startLine": "Start: stand beside the counter for support."
+   "startLine": "Set up: stand beside the counter for support."
   }
  ],
  "verses": [
@@ -4464,6 +4622,12 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "move-10",
+   "text": "Move 10",
+   "where": "Before each move (move number)",
+   "who": "Both"
+  },
+  {
    "id": "start",
    "text": "Start.",
    "where": "When a move or stretch begins",
@@ -4527,12 +4691,6 @@ window.CONTENT = {
    "id": "switch-legs",
    "text": "Switch legs.",
    "where": "Switch legs",
-   "who": "Both"
-  },
-  {
-   "id": "now-t",
-   "text": "Now T: arms out to the sides.",
-   "where": "Y-T raises: switch from Y to T",
    "who": "Both"
   },
   {
@@ -4854,6 +5012,18 @@ window.CONTENT = {
    "who": "Both"
   },
   {
+   "id": "how-bicep-1",
+   "text": "Set up: sit on a sturdy chair with your back against the chair back and your feet flat. Hold a dumbbell in each hand, palms facing forward, arms hanging close to your sides. Pull your shoulder blades down and back. First move: up. Do it: 1. Bend both elbows and bring the weights up toward your chest. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you curl, in as you lower. Keep: back against the chair, elbows by your sides, wrists straight. No shrugging.",
+   "where": "Biceps Curls ladder, step 1: how",
+   "who": "Both"
+  },
+  {
+   "id": "how-lateral-1",
+   "text": "Set up: stand with your feet slightly wider than hip-width, a dumbbell in each hand beside your thighs, palms facing your body, elbows slightly bent. Tighten your belly and pull your shoulders down and back. First move: up. Do it: 1. Slowly raise the weights out to your sides, elbows leading slightly, until your arms are level with your shoulders. About two-thirds of the way up, tip the front of each dumbbell slightly upward. 2. Lower slowly back to the start, tipping the dumbbells back as you pass the same point. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: body upright and still, lower back not arching, wrists straight.",
+   "where": "Lateral Raises ladder, step 1: how",
+   "who": "Both"
+  },
+  {
    "id": "how-calf-1",
    "text": "Set up: stand with your feet hip-width apart, one or both hands on the counter for balance. First move: up. Do it: 1. Push through the balls of your feet and lift your heels as high as is comfortable. 2. Pause, then lower your heels with control. One rep is: heels up and back down once.",
    "where": "Calf Raises ladder, step 1: how",
@@ -5095,7 +5265,7 @@ window.CONTENT = {
   },
   {
    "id": "how-glute-3",
-   "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. First move: up. Set that heel about 6–8 inches from your glutes. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
+   "text": "Set up: on your back with your knees bent and feet flat. Lift one knee toward your chest and hold the back of that thigh with both hands. Slide the other foot in toward the middle of your body. Set that heel about 6–8 inches from your glutes. First move: up. Do it: 1. Press that foot into the floor and lift your hips. 2. Lower slowly. 3. Do every rep on that side, then switch. One rep is: hips up and back down once. Breathe: out as you lift your hips, in as you lower. Keep: belly tight so your lower back stays flat. Don't push your hips too high. Push through your heel and squeeze your glutes. If the back of your thigh starts to cramp, finish the set with two-leg Glute Bridges.",
    "where": "Glute Bridges ladder, step 3: how",
    "who": "Both"
   },
@@ -5124,27 +5294,9 @@ window.CONTENT = {
    "who": "Both"
   },
   {
-   "id": "how-yt-1",
-   "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Lower slowly, with no hold at the top. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-   "where": "Prone Y-T Raises ladder, step 1: how",
-   "who": "Both"
-  },
-  {
-   "id": "how-yt-2",
-   "text": "Set up: lie face down with your forehead on a rolled towel, arms overhead in a Y (about 30–45° out from your body), thumbs up. First move: up. Do it: 1. Squeeze your shoulder blades down and back. 2. Lift your arms off the floor, elbows slightly bent, until they're level with the floor or as high as you can without shrugging or arching. 3. Hold 1–2 seconds, then lower slowly. 4. Do all your Y reps. Then move your arms straight out to the sides in a T, palms down, and do all your T reps, lifting 3–6 inches with your elbows straight. One rep is: arms up and back down once. Y reps and T reps count separately. Keep: chest on the floor. No shrugging, no arching your back.",
-   "where": "Prone Y-T Raises ladder, step 2: how",
-   "who": "Both"
-  },
-  {
-   "id": "how-yt-3",
-   "text": "Start with the lightest pair that lets you do 8–15 good reps. One rep is: arms up and back down once. Y reps and T reps count separately.",
-   "where": "Prone Y-T Raises ladder, step 3: how",
-   "who": "Both"
-  },
-  {
-   "id": "how-yt-4",
-   "text": "Make your last set one 30–45 second Y hold, then, after about 10 seconds to switch, one 30–45 second T hold.",
-   "where": "Prone Y-T Raises ladder, step 4: how",
+   "id": "how-rfly-1",
+   "text": "Set up: sit on the edge of a sturdy chair, feet flat, a dumbbell in each hand. Lean forward from your hips with your back flat, arms hanging down near your calves, elbows slightly bent. First move: up. Do it: 1. Slowly raise the weights out to the sides until your elbows are level with your shoulders, squeezing your shoulder blades together. 2. Lower slowly back to the start. One rep is: weights up and back down once. Breathe: out as you raise, in as you lower. Keep: back flat, not arched or hunched. No swinging; lift with your upper back.",
+   "where": "Seated Reverse Fly ladder, step 1: how",
    "who": "Both"
   },
   {
@@ -5256,15 +5408,15 @@ window.CONTENT = {
    "who": "Both"
   },
   {
-   "id": "feel-single-leg-calf-raises",
+   "id": "feel-heel-off-a-step",
    "text": "You should feel it in: Calf muscles",
-   "where": "What you should feel: Single-Leg Calf Raises",
+   "where": "What you should feel: Heel Off a Step",
    "who": "Both"
   },
   {
-   "id": "fix-single-leg-calf-raises",
+   "id": "fix-heel-off-a-step",
    "text": "Should not feel, or fix: Sharp, stabbing, or pinching pain in a joint means stop that move.",
-   "where": "Should not feel, or fix: Single-Leg Calf Raises",
+   "where": "Should not feel, or fix: Heel Off a Step",
    "who": "Both"
   },
   {
@@ -5280,15 +5432,15 @@ window.CONTENT = {
    "who": "Both"
   },
   {
-   "id": "feel-prone-y-t-raises",
-   "text": "You should feel it in: Mid-back and the back of your shoulders",
-   "where": "What you should feel: Prone Y-T Raises",
+   "id": "feel-seated-reverse-fly",
+   "text": "You should feel it in: Across your upper back and in your shoulders",
+   "where": "What you should feel: Seated Reverse Fly",
    "who": "Both"
   },
   {
-   "id": "fix-prone-y-t-raises",
-   "text": "Should not feel, or fix: Shrugging, arching your lower back, or neck or back strain. Raise your arms only as high as is pain-free.",
-   "where": "Should not feel, or fix: Prone Y-T Raises",
+   "id": "fix-seated-reverse-fly",
+   "text": "Should not feel, or fix: Your back arching or hunching, or the weights swinging. Keep your back flat and lift slowly with your upper back.",
+   "where": "Should not feel, or fix: Seated Reverse Fly",
    "who": "Both"
   },
   {
@@ -5313,6 +5465,30 @@ window.CONTENT = {
    "id": "fix-seated-overhead-press",
    "text": "Should not feel, or fix: Your lower back arching off the chair, your wrists bending, or the weights dropping. Keep your back against the chair, your wrists straight, and lower slowly.",
    "where": "Should not feel, or fix: Seated Overhead Press",
+   "who": "Both"
+  },
+  {
+   "id": "feel-biceps-curls",
+   "text": "You should feel it in: The front of your upper arms",
+   "where": "What you should feel: Biceps Curls",
+   "who": "Both"
+  },
+  {
+   "id": "fix-biceps-curls",
+   "text": "Should not feel, or fix: Your back arching, elbows moving forward, wrists bending, or shrugging. Keep your back against the chair and your elbows by your sides.",
+   "where": "Should not feel, or fix: Biceps Curls",
+   "who": "Both"
+  },
+  {
+   "id": "feel-lateral-raises",
+   "text": "You should feel it in: Your shoulders",
+   "where": "What you should feel: Lateral Raises",
+   "who": "Both"
+  },
+  {
+   "id": "fix-lateral-raises",
+   "text": "Should not feel, or fix: Your lower back arching, your wrists bending, or your body swinging. Stand tall and lift slowly.",
+   "where": "Should not feel, or fix: Lateral Raises",
    "who": "Both"
   },
   {
@@ -5490,9 +5666,9 @@ window.CONTENT = {
    "who": "Hers"
   },
   {
-   "id": "daya-m6-her-how",
+   "id": "daya-m8-her-how",
    "text": "Set up: on your back, one leg straight and the other knee bent with the foot flat. Slide your hands under your lower back to keep its natural arch. Do it: 1. Breathe out and lift your head, shoulders, and chest off the floor together, just enough to feel your abs work. 2. Hold, then lower slowly. 3. When all your holds are done, switch which knee is bent and do them again. One rep is: one 10-second hold. Keep: lower back still. Don't tuck your chin or tilt your head back.",
-   "where": "Day A move 6: how",
+   "where": "Day A move 8: how",
    "who": "Both"
   },
   {
@@ -5503,67 +5679,67 @@ window.CONTENT = {
   },
   {
    "id": "stretch-standing-chest-stretch-how",
-   "text": "Start: stand with your feet hip-width apart, toes forward, arms at your sides. Move: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward.",
+   "text": "Set up: stand with your feet hip-width apart, toes forward, arms at your sides. Do it: 1. Pull your shoulder blades down and back without arching your lower back. 2. Breathe out and lift your chest slightly up and out as you turn your arms outward and draw your shoulder blades together. 3. Hold. Keep: belly tight and back in its natural line. Don't force your chest forward.",
    "where": "Standing Chest Stretch: how",
    "who": "Both"
   },
   {
    "id": "stretch-cross-body-shoulder-how",
-   "text": "Start: stand tall. Move: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms.",
+   "text": "Set up: stand tall. Do it: 1. Bring one arm across your body. 2. Hold it with your other arm, above or below the elbow. 3. Hold, then switch arms.",
    "where": "Cross-Body Shoulder: how",
    "who": "Both"
   },
   {
    "id": "stretch-standing-quad-how",
-   "text": "Start: stand beside the counter, holding it for support. Move: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together.",
+   "text": "Set up: stand beside the counter, holding it for support. Do it: 1. Bend one knee, take hold of that ankle, and gently pull your heel up and back. If you can't reach your ankle, loop a towel around it. 2. Hold, then switch legs. Keep: belly tight and knees close together.",
    "where": "Standing Quad: how",
    "who": "Both"
   },
   {
    "id": "stretch-wall-calf-stretch-how",
-   "text": "Start: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Move: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward.",
+   "text": "Set up: stand facing the wall, an arm's length away, feet hip-width apart and toes forward. Put your palms on the wall slightly higher than your shoulders, then step one leg back, both feet flat. Do it: 1. Bend your front knee and move your body toward the wall, keeping your back leg straight and pressing that heel into the floor. 2. Hold, then switch legs. Keep: both heels down and toes pointing forward.",
    "where": "Wall Calf Stretch: how",
    "who": "Both"
   },
   {
    "id": "stretch-seated-hamstring-how",
-   "text": "Start: sit on the edge of a chair, one leg straight with the heel on the floor. Move: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs.",
+   "text": "Set up: sit on the edge of a chair, one leg straight with the heel on the floor. Do it: 1. Keep your back straight and lean forward from the hips. 2. Hold, then switch legs.",
    "where": "Seated Hamstring: how",
    "who": "Both"
   },
   {
    "id": "stretch-knee-to-chest-how",
-   "text": "Start: lie on your back on a firm surface, knees bent and feet flat. Move: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs.",
+   "text": "Set up: lie on your back on a firm surface, knees bent and feet flat. Do it: 1. Hold the back of one thigh and gently pull that knee toward your chest, as close as is comfortable. 2. Keep the other leg relaxed, bent or straight. 3. Hold, then switch legs.",
    "where": "Knee-to-Chest: how",
    "who": "Both"
   },
   {
    "id": "hip-butterfly-stretch-how",
-   "text": "Start: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Move: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing.",
+   "text": "Set up: sit on the floor with your back upright. Bring the soles of your feet together in front of you and let your knees fall out to the sides. Do it: 1. Hold your ankles or the tops of your feet. 2. Gently lean your body forward, keeping your back straight. 3. Hold. Keep: breathe deeply, with no bouncing.",
    "where": "Butterfly Stretch: how",
    "who": "Both"
   },
   {
    "id": "hip-kneeling-hip-flexor-how",
-   "text": "Start: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Move: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat.",
+   "text": "Set up: kneel on one knee on a folded towel, that knee under your hip. Put the other foot in front, with that knee over the ankle at 90°, and both hands on your front thigh. Do it: 1. Pull your shoulders down and back and tighten your belly. 2. Lean forward into your front hip, keeping your back knee on the floor, and squeeze the glute of your back leg. 3. Hold, then switch sides. Keep: hips level and lower back flat.",
    "where": "Kneeling Hip Flexor: how",
    "who": "Both"
   },
   {
    "id": "hip-seated-figure-4-how",
-   "text": "Start: sit on a chair. Move: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides.",
+   "text": "Set up: sit on a chair. Do it: 1. Cross one ankle over the other knee. 2. Keep your back straight and lean forward. 3. Hold, then switch sides.",
    "where": "Seated Figure-4: how",
    "who": "Both"
   },
   {
    "id": "hip-standing-adductor-stretch-how",
-   "text": "Start: stand with your feet wider than hip-width. Move: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides.",
+   "text": "Set up: stand with your feet wider than hip-width. Do it: 1. Shift your weight to one leg, bending that knee slightly, and keep the other leg straight. 2. Lower until you feel a stretch along the inner thigh of the straight leg. 3. Hold, then switch sides.",
    "where": "Standing Adductor Stretch: how",
    "who": "Both"
   },
   {
    "id": "hip-standing-it-band-stretch-how",
-   "text": "Start: stand beside the counter for support. Move: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides.",
+   "text": "Set up: stand beside the counter for support. Do it: 1. Cross one leg over the other at the ankle. 2. Raise the arm on the side of the crossed leg overhead and reach toward the other side. 3. Hold, then switch sides.",
    "where": "Standing IT Band Stretch: how",
    "who": "Both"
   },
@@ -5809,13 +5985,6 @@ window.CONTENT = {
    "his": 2
   },
   "tapSec": 2,
-  "ytLongOptions": [
-   30,
-   35,
-   40,
-   45
-  ],
-  "ytLongDefault": 30,
   "paceNames": [
    "Slower",
    "Normal",
@@ -5838,12 +6007,32 @@ window.CONTENT = {
   ],
   "roundsDefault": 1,
   "sets": [
-   1,
    2,
    3,
    4
   ],
-  "stretchRounds": 2
+  "setsDefault": 3,
+  "stretchRounds": 2,
+  "weights": {
+   "her": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "his": [
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ]
+  },
+  "weightDefault": {
+   "her": 2,
+   "his": 10
+  }
  },
  "cardio": {
   "mins": [
@@ -6068,13 +6257,6 @@ window.CONTENT = {
  },
  "plan": {
   "start": "2026-10-26",
-  "bracket": 4,
-  "setsByWeek": [
-   2,
-   2,
-   3,
-   3
-  ],
-  "setsAfter": 4
+  "bracket": 4
  }
 };
